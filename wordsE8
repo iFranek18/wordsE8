@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English E8 Trainer</title>
+<style>
+body{margin:0;font-family:system-ui;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh}
+.app{width:min(420px,95%);background:rgba(255,255,255,.08);backdrop-filter:blur(14px);border-radius:20px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+button,select,input,label{width:100%;padding:12px;border-radius:12px;border:none;font-size:1rem;margin-top:10px}
+button{background:#00ffd5;color:#000;font-weight:700;cursor:pointer}
+.small{font-size:.9rem;opacity:.8}
+.word{font-size:2rem;text-align:center;margin:20px 0;font-weight:700}
+.result{min-height:28px;text-align:center;font-weight:700}
+.good{color:#3cff00}.bad{color:#ff3c3c}
+.back{background:none;color:#fff;font-size:1.6rem;width:auto;padding:0;margin:0;cursor:pointer}
+.topbar{display:flex;align-items:center;margin-bottom:10px}
+.checkbox{display:flex;align-items:center;gap:10px}
+.checkbox input{width:auto;margin:0}
+.errors-list{max-height:200px;overflow-y:auto;margin-top:10px;padding:10px;background:rgba(0,0,0,0.3);border-radius:12px}
+.errors-list div{padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.2)}
+</style>
+</head>
+<body>
+
+<div class="app" id="menu">
+  <h2>English E8 Trainer</h2>
+  <p class="small">Wybierz zakres nauki</p>
+  <select id="mode">
+    <option value="all">Wszystko</option>
+    <option value="nouns">Rzeczowniki</option>
+    <option value="verbs">Czasowniki</option>
+    <option value="adjectives">Przymiotniki</option>
+    <option value="rest">Reszta</option>
+    <option value="wrong">Tylko wcześniejsze błędy</option>
+  </select>
+
+  <label class="checkbox">
+    <input type="checkbox" id="noPolish" checked>
+    Nie wymagaj polskich znaków (ą, ć, ę…)
+  </label>
+
+  <label class="checkbox">
+    <input type="checkbox" id="direction"> EN → PL (odznacz PL → EN)
+  </label>
+
+  <button id="startBtn">Start</button>
+  <hr>
+  <p>Błędy zapisane: <b id="wrongCount">0</b></p>
+  <button id="showErrorsBtn">Pokaż błędy</button>
+  <div class="errors-list" id="errorsList" style="display:none"></div>
+</div>
+
+<div class="app" id="learn" style="display:none">
+  <div class="topbar">
+    <button class="back" id="backArrow">←</button>
+  </div>
+  <div class="word" id="question"></div>
+  <input id="answer" placeholder="Wpisz tłumaczenie">
+  <button id="checkBtn">Sprawdź</button>
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+const data={
+  nouns:[{en:"mother",pl:"mama"},{en:"father",pl:"tata"},{en:"parents",pl:"rodzice"},{en:"sister",pl:"siostra"},{en:"brother",pl:"brat"},{en:"grandmother",pl:"babcia"},{en:"grandfather",pl:"dziadek"},{en:"aunt",pl:"ciocia"},{en:"uncle",pl:"wujek"},{en:"cousin",pl:"kuzyn"},{en:"child",pl:"dziecko"},{en:"children",pl:"dzieci"},{en:"friend",pl:"przyjaciel"},{en:"school",pl:"szkoła"},{en:"teacher",pl:"nauczyciel"},{en:"student",pl:"uczeń"},{en:"house",pl:"dom"},{en:"room",pl:"pokój"},{en:"food",pl:"jedzenie"},{en:"dog",pl:"pies"}],
+  verbs:[{en:"be",pl:"być"},{en:"have",pl:"mieć"},{en:"do",pl:"robić"},{en:"go",pl:"iść"},{en:"come",pl:"przychodzić"},{en:"make",pl:"robić"},{en:"take",pl:"brać"},{en:"give",pl:"dawać"},{en:"learn",pl:"uczyć się"},{en:"study",pl:"uczyć się"},{en:"see",pl:"widzieć"},{en:"watch",pl:"oglądać"},{en:"play",pl:"grać"},{en:"work",pl:"pracować"}],
+  adjectives:[{en:"happy",pl:"szczęśliwy"},{en:"sad",pl:"smutny"},{en:"angry",pl:"zły"},{en:"tired",pl:"zmęczony"},{en:"big",pl:"duży"},{en:"small",pl:"mały"},{en:"easy",pl:"łatwy"},{en:"difficult",pl:"trudny"},{en:"important",pl:"ważny"},{en:"interesting",pl:"interesujący"}],
+  rest:[
+    {en:"I",pl:"ja"},{en:"you",pl:"ty / wy"},{en:"he",pl:"on"},{en:"she",pl:"ona"},{en:"it",pl:"ono / to"},{en:"we",pl:"my"},{en:"they",pl:"oni / one"},{en:"me",pl:"mnie / mi"},{en:"him",pl:"jego / mu"},{en:"her",pl:"jej"},{en:"us",pl:"nas / nam"},{en:"them",pl:"ich / im"},{en:"my",pl:"mój"},{en:"your",pl:"twój / wasz"},{en:"his",pl:"jego"},{en:"its",pl:"jego / jej"},{en:"our",pl:"nasz"},{en:"their",pl:"ich"},
+    {en:"what",pl:"co"},{en:"which",pl:"który / która / które"},{en:"who",pl:"kto"},{en:"whom",pl:"kogo / komu"},{en:"whose",pl:"czyj / czyja / czyje"},{en:"where",pl:"gdzie"},{en:"when",pl:"kiedy"},{en:"why",pl:"dlaczego"},{en:"how",pl:"jak"},
+    {en:"in",pl:"w"},{en:"on",pl:"na"},{en:"at",pl:"przy / o (czas)"},{en:"to",pl:"do"},{en:"from",pl:"z / od"},{en:"with",pl:"z"},{en:"about",pl:"o"},{en:"for",pl:"dla / za"},{en:"of",pl:"(czegoś)"},{en:"into",pl:"do (wnętrza)"},{en:"out",pl:"na zewnątrz"},{en:"up",pl:"w górę"},{en:"down",pl:"w dół"},{en:"between",pl:"między"},{en:"among",pl:"wśród"},{en:"over",pl:"nad"},{en:"under",pl:"pod"},{en:"behind",pl:"za"},{en:"next to",pl:"obok"},{en:"near",pl:"blisko"},
+    {en:"and",pl:"i"},{en:"but",pl:"ale"},{en:"or",pl:"lub"},{en:"because",pl:"ponieważ"},{en:"so",pl:"więc"},{en:"if",pl:"jeśli"},{en:"although",pl:"chociaż"},{en:"while",pl:"podczas gdy"},{en:"then",pl:"potem"},{en:"after",pl:"po"},{en:"before",pl:"przed"},
+    {en:"here",pl:"tutaj"},{en:"there",pl:"tam"},{en:"now",pl:"teraz"},{en:"always",pl:"zawsze"},{en:"usually",pl:"zazwyczaj"},{en:"sometimes",pl:"czasami"},{en:"never",pl:"nigdy"},{en:"also",pl:"także"},{en:"too",pl:"też"},{en:"very",pl:"bardzo"},{en:"quite",pl:"całkiem"},{en:"really",pl:"naprawdę"},{en:"maybe",pl:"może"}
+  ]
+};
+
+let pool=[];
+let current=null;
+let wrong=JSON.parse(localStorage.getItem("wrong")||"[]");
+
+const menu=document.getElementById("menu");
+const learn=document.getElementById("learn");
+const question=document.getElementById("question");
+const answer=document.getElementById("answer");
+const result=document.getElementById("result");
+const wrongCount=document.getElementById("wrongCount");
+const noPolish=document.getElementById("noPolish");
+const direction=document.getElementById("direction");
+const errorsList=document.getElementById("errorsList");
+
+wrongCount.textContent=wrong.length;
+
+document.getElementById("startBtn").addEventListener("click",start);
+document.getElementById("checkBtn").addEventListener("click",check);
+document.getElementById("backArrow").addEventListener("click",backToMenu);
+document.getElementById("showErrorsBtn").addEventListener("click",()=>{
+  errorsList.style.display=errorsList.style.display==='none'?'block':'none';
+  errorsList.innerHTML=wrong.map(w=>`<div>${w.en} — ${w.pl}</div>`).join('');
+});
+
+answer.addEventListener("keydown",e=>{if(e.key==="Enter") check();});
+
+function start(){
+  const mode=document.getElementById("mode").value;
+  if(mode==="wrong") pool=[...wrong];
+  else if(mode==="all") pool=[...data.nouns,...data.verbs,...data.adjectives,...data.rest];
+  else pool=[...data[mode]];
+
+  if(pool.length===0){alert("Brak słówek w tym trybie"); return;}
+
+  menu.style.display="none";
+  learn.style.display="block";
+  next();
+}
+
+function next(){
+  current=pool[Math.floor(Math.random()*pool.length)];
+  question.textContent=direction.checked?current.en:current.pl;
+  answer.value="";
+  result.textContent="";
+  result.className="result";
+  answer.focus();
+}
+
+function normalize(text){
+  let t=text.toLowerCase();
+  if(noPolish.checked) t=t.normalize("NFD").replace(/[̀-ͯ]/g,"");
+  return t;
+}
+
+function check(){
+  if(!current) return;
+  const user=normalize(answer.value.trim());
+  const correctRaw=direction.checked?current.pl:current.en;
+  const correct=normalize(correctRaw);
+
+  if(user===correct){
+    result.textContent="✅ Dobrze";
+    result.className="result good";
+  }else{
+    result.textContent="❌ Poprawna odpowiedź: "+correctRaw;
+    result.className="result bad";
+    if(!wrong.find(w=>w.en===current.en)){wrong.push(current); localStorage.setItem("wrong",JSON.stringify(wrong)); wrongCount.textContent=wrong.length;}
+  }
+
+  setTimeout(next,1500);
+}
+
+function backToMenu(){
+  learn.style.display="none";
+  menu.style.display="block";
+}
+</script>
+</body>
+</html>
