@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English E8 Trainer</title>
+    <title>E8 Trainer - Full Vocabulary</title>
     <style>
         :root {
             --primary: #00ffd5;
             --bg: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
         }
         body{margin:0;font-family:system-ui;background:var(--bg);color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh}
-        .app{width:min(420px,95%);background:rgba(255,255,255,.08);backdrop-filter:blur(14px);border-radius:20px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+        .app{width:min(500px,95%);background:rgba(255,255,255,.08);backdrop-filter:blur(14px);border-radius:20px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.4)}
         button,select,input,label{width:100%;padding:12px;border-radius:12px;border:none;font-size:1rem;margin-top:10px;box-sizing: border-box}
         button{background:var(--primary);color:#000;font-weight:700;cursor:pointer;transition: transform 0.1s}
         button:active{transform: scale(0.98)}
         .small{font-size:.9rem;opacity:.8}
-        .word{font-size:2rem;text-align:center;margin:15px 0;font-weight:700;min-height: 40px}
+        .word{font-size:2.2rem;text-align:center;margin:15px 0;font-weight:700;min-height: 45px; color: var(--primary)}
         .result{min-height:28px;text-align:center;font-weight:700;margin-top: 10px}
         .good{color:#3cff00}.bad{color:#ff3c3c}
         .back{background:none;color:#fff;font-size:1.6rem;width:auto;padding:0;margin:0;cursor:pointer}
         .topbar{display:flex;align-items:center;justify-content: space-between;margin-bottom:10px}
         .checkbox{display:flex;align-items:center;gap:10px;cursor: pointer}
         .checkbox input{width:auto;margin:0}
-        .errors-list{max-height:200px;overflow-y:auto;margin-top:10px;padding:10px;background:rgba(0,0,0,0.3);border-radius:12px;font-size: 0.9rem}
+        .errors-list{max-height:200px;overflow-y:auto;margin-top:10px;padding:10px;background:rgba(0,0,0,0.3);border-radius:12px;font-size: 0.85rem}
         .stats-bar {display: flex; justify-content: space-between; font-size: 0.8rem; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px; margin-bottom: 10px}
         hr {border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0}
     </style>
@@ -30,15 +30,15 @@
 <body>
 
 <div class="app" id="menu">
-  <h2>English E8 Trainer</h2>
-  <p class="small">Wybierz zakres nauki</p>
+  <h2>E8 Vocab Master</h2>
+  <p class="small">Wybierz kategorię słówek:</p>
   <select id="mode">
-    <option value="all">Wszystko (mieszane)</option>
-    <option value="nouns">Rzeczowniki</option>
-    <option value="verbs">Czasowniki</option>
-    <option value="adjectives">Przymiotniki</option>
-    <option value="rest">Inne (zaimki, spójniki itp.)</option>
-    <option value="wrong">Tylko Twoje błędy</option>
+    <option value="all">Mieszane (wszystkie słowa)</option>
+    <option value="nouns">Rzeczowniki (Nouns)</option>
+    <option value="verbs">Czasowniki (Verbs)</option>
+    <option value="adjectives">Przymiotniki (Adjectives)</option>
+    <option value="rest">Gównienka-Reszta (Zaimki, Przyimki itp.)</option>
+    <option value="wrong">Tylko wcześniejsze błędy</option>
   </select>
 
   <label class="checkbox">
@@ -53,9 +53,10 @@
   <button id="startBtn">START</button>
   
   <hr>
-  <p class="small">Błędy w pamięci: <b id="wrongCount">0</b></p>
+  <p class="small">Zapisane błędy: <b id="wrongCount">0</b></p>
   <button id="showErrorsBtn" style="background: rgba(255,255,255,0.1); color: white;">Pokaż listę błędów</button>
   <div class="errors-list" id="errorsList" style="display:none"></div>
+  <button id="clearErrorsBtn" style="background: rgba(255,60,60,0.2); color: #ff3c3c; margin-top:5px; padding: 5px; font-size: 0.7rem">Usuń wszystkie błędy</button>
 </div>
 
 <div class="app" id="learn" style="display:none">
@@ -77,13 +78,45 @@
 
 <script>
 const data = {
-  nouns:[{en:"mother",pl:"mama"},{en:"father",pl:"tata"},{en:"parents",pl:"rodzice"},{en:"sister",pl:"siostra"},{en:"brother",pl:"brat"},{en:"grandmother",pl:"babcia"},{en:"grandfather",pl:"dziadek"},{en:"aunt",pl:"ciocia"},{en:"uncle",pl:"wujek"},{en:"cousin",pl:"kuzyn"},{en:"child",pl:"dziecko"},{en:"children",pl:"dzieci"},{en:"friend",pl:"przyjaciel"},{en:"school",pl:"szkoła"},{en:"teacher",pl:"nauczyciel"},{en:"student",pl:"uczeń"},{en:"house",pl:"dom"},{en:"room",pl:"pokój"},{en:"food",pl:"jedzenie"},{en:"dog",pl:"pies"}],
-  verbs:[{en:"be",pl:"być"},{en:"have",pl:"mieć"},{en:"do",pl:"robić"},{en:"go",pl:"iść"},{en:"come",pl:"przychodzić"},{en:"make",pl:"robić"},{en:"take",pl:"brać"},{en:"give",pl:"dawać"},{en:"learn",pl:"uczyć się"},{en:"study",pl:"uczyć się"},{en:"see",pl:"widzieć"},{en:"watch",pl:"oglądać"},{en:"play",pl:"grać"},{en:"work",pl:"pracować"}],
-  adjectives:[{en:"happy",pl:"szczęśliwy"},{en:"sad",pl:"smutny"},{en:"angry",pl:"zły"},{en:"tired",pl:"zmęczony"},{en:"big",pl:"duży"},{en:"small",pl:"mały"},{en:"easy",pl:"łatwy"},{en:"difficult",pl:"trudny"},{en:"important",pl:"ważny"},{en:"interesting",pl:"interesujący"}],
-  rest:[
-    {en:"I",pl:"ja"},{en:"you",pl:"ty / wy"},{en:"he",pl:"on"},{en:"she",pl:"ona"},{en:"it",pl:"ono / to"},{en:"we",pl:"my"},{en:"they",pl:"oni / one"},{en:"me",pl:"mnie / mi"},{en:"him",pl:"jego / mu"},{en:"her",pl:"jej"},{en:"us",pl:"nas / nam"},{en:"them",pl:"ich / im"},{en:"my",pl:"mój"},{en:"your",pl:"twój / wasz"},{en:"his",pl:"jego"},{en:"its",pl:"jego / jej"},{en:"our",pl:"nasz"},{en:"their",pl:"ich"},
-    {en:"what",pl:"co"},{en:"which",pl:"który / która / które"},{en:"who",pl:"kto"},{en:"where",pl:"gdzie"},{en:"when",pl:"kiedy"},{en:"why",pl:"dlaczego"},{en:"how",pl:"jak"},
-    {en:"in",pl:"w"},{en:"on",pl:"na"},{en:"at",pl:"przy / o"},{en:"to",pl:"do"},{en:"from",pl:"z / od"},{en:"with",pl:"z"},{en:"about",pl:"o"},{en:"for",pl:"dla / za"},{en:"and",pl:"i"},{en:"but",pl:"ale"},{en:"or",pl:"lub"},{en:"because",pl:"ponieważ"},{en:"so",pl:"więc"},{en:"if",pl:"jeśli"}
+  nouns: [
+    {en:"mother",pl:"mama"},{en:"father",pl:"tata"},{en:"parents",pl:"rodzice"},{en:"sister",pl:"siostra"},{en:"brother",pl:"brat"},{en:"grandmother",pl:"babcia"},{en:"grandfather",pl:"dziadek"},{en:"aunt",pl:"ciocia"},{en:"uncle",pl:"wujek"},{en:"cousin",pl:"kuzyn / kuzynka"},{en:"child",pl:"dziecko"},{en:"children",pl:"dzieci"},{en:"baby",pl:"niemowle"},{en:"friend",pl:"przyjaciel"},{en:"best friend",pl:"najlepszy przyjaciel"},{en:"neighbour",pl:"sasiad"},{en:"person",pl:"osoba"},{en:"people",pl:"ludzie"},{en:"teenager",pl:"nastolatek"},{en:"adult",pl:"dorosly"},
+    {en:"school",pl:"szkola"},{en:"class",pl:"klasa"},{en:"lesson",pl:"lekcja"},{en:"subject",pl:"przedmiot"},{en:"exam",pl:"egzamin"},{en:"test",pl:"test"},{en:"homework",pl:"praca domowa"},{en:"exercise",pl:"cwiczenie"},{en:"task",pl:"zadanie"},{en:"question",pl:"pytanie"},{en:"answer",pl:"odpowiedz"},{en:"break",pl:"przerwa"},{en:"teacher",pl:"nauczyciel"},{en:"student",pl:"uczen"},{en:"classmate",pl:"kolega z klasy"},{en:"headteacher",pl:"dyrektor"},{en:"book",pl:"ksiazka"},{en:"textbook",pl:"podrecznik"},{en:"notebook",pl:"zeszyt"},{en:"pen",pl:"dlugopis"},{en:"pencil",pl:"olowek"},{en:"desk",pl:"lawka / biurko"},{en:"chair",pl:"krzeslo"},{en:"board",pl:"tablica"},{en:"grade",pl:"ocena"},{en:"project",pl:"projekt"},
+    {en:"English",pl:"angielski"},{en:"Polish",pl:"polski"},{en:"maths",pl:"matematyka"},{en:"history",pl:"historia"},{en:"geography",pl:"geografia"},{en:"biology",pl:"biologia"},{en:"chemistry",pl:"chemia"},{en:"physics",pl:"fizyka"},{en:"music",pl:"muzyka"},{en:"art",pl:"plastyka"},{en:"PE",pl:"WF"},{en:"IT",pl:"informatyka"},
+    {en:"doctor",pl:"lekarz"},{en:"nurse",pl:"pielegniarka"},{en:"police officer",pl:"policjant"},{en:"firefighter",pl:"strazak"},{en:"soldier",pl:"zolnierz"},{en:"lawyer",pl:"prawnik"},{en:"judge",pl:"sedzia"},{en:"worker",pl:"pracownik"},{en:"office worker",pl:"pracownik biurowy"},{en:"manager",pl:"menedzer"},{en:"actor",pl:"aktor"},{en:"actress",pl:"aktorka"},{en:"musician",pl:"muzyk"},{en:"singer",pl:"piosenkarz"},{en:"artist",pl:"artysta"},{en:"driver",pl:"kierowca"},{en:"mechanic",pl:"mechanik"},{en:"engineer",pl:"inzynier"},{en:"builder",pl:"budowlaniec"},{en:"architect",pl:"architekt"},{en:"electrician",pl:"elektryk"},{en:"plumber",pl:"hydraulik"},{en:"shop assistant",pl:"sprzedawca"},{en:"cashier",pl:"kasjer"},{en:"cook",pl:"kucharz"},{en:"chef",pl:"szef kuchni"},{en:"waiter",pl:"kelner"},{en:"waitress",pl:"kelnerka"},{en:"farmer",pl:"rolnik"},{en:"gardener",pl:"ogrodnik"},{en:"vet",pl:"weterynarz"},{en:"scientist",pl:"naukowiec"},{en:"journalist",pl:"dziennikarz"},{en:"reporter",pl:"reporter"},{en:"photographer",pl:"fotograf"},{en:"translator",pl:"tlumacz"},{en:"volunteer",pl:"wolontariusz"},{en:"foundation",pl:"fundacja"},{en:"house",pl:"dom"},{en:"home",pl:"dom"},{en:"flat",pl:"mieszkanie"},{en:"apartment",pl:"mieszkanie"},{en:"building",pl:"budynek"},{en:"basement",pl:"piwnica"},{en:"floor",pl:"pietro / podloga"},{en:"room",pl:"pokoj"},{en:"living room",pl:"salon"},{en:"bedroom",pl:"sypialnia"},{en:"kitchen",pl:"kuchnia"},{en:"bathroom",pl:"lazienka"},{en:"hall",pl:"korytarz"},{en:"door",pl:"drzwi"},{en:"window",pl:"okno"},{en:"wall",pl:"sciana"},{en:"roof",pl:"dach"},{en:"stairs",pl:"schody"},{en:"garden",pl:"ogrod"},{en:"garage",pl:"garaz"},
+    {en:"table",pl:"stol"},{en:"bed",pl:"lozko"},{en:"wardrobe",pl:"szafa"},{en:"shelf",pl:"polka"},{en:"lamp",pl:"lampa"},{en:"mirror",pl:"lustro"},{en:"clock",pl:"zegar"},{en:"phone",pl:"telefon"},{en:"smartphone",pl:"smartfon"},{en:"computer",pl:"komputer"},{en:"laptop",pl:"laptop"},{en:"keyboard",pl:"klawiatura"},{en:"mouse",pl:"myszka"},{en:"screen",pl:"ekran"},{en:"TV",pl:"telewizor"},{en:"remote",pl:"pilot"},{en:"charger",pl:"ladowarka"},{en:"bag",pl:"torba"},{en:"backpack",pl:"plecak"},{en:"keys",pl:"klucze"},{en:"money",pl:"pieniadze"},{en:"wallet",pl:"portfel"},
+    {en:"food",pl:"jedzenie"},{en:"meal",pl:"posilek"},{en:"breakfast",pl:"sniadanie"},{en:"lunch",pl:"lunch"},{en:"dinner",pl:"obiad / kolacja"},{en:"snack",pl:"przekaska"},{en:"bread",pl:"chleb"},{en:"butter",pl:"maslo"},{en:"cheese",pl:"ser"},{en:"milk",pl:"mleko"},{en:"water",pl:"woda"},{en:"juice",pl:"sok"},{en:"tea",pl:"herbata"},{en:"coffee",pl:"kawa"},{en:"meat",pl:"mieso"},{en:"fish",pl:"ryba"},{en:"fruit",pl:"owoce"},{en:"vegetables",pl:"warzywa"},{en:"apple",pl:"jablko"},{en:"banana",pl:"banan"},{en:"cake",pl:"ciasto"},
+    {en:"animal",pl:"zwierze"},{en:"pet",pl:"zwierze domowe"},{en:"dog",pl:"pies"},{en:"cat",pl:"kot"},{en:"bird",pl:"ptak"},{en:"horse",pl:"kon"},{en:"cow",pl:"krowa"},{en:"pig",pl:"swinia"},{en:"sheep",pl:"owca"},{en:"goat",pl:"koza"},{en:"rabbit",pl:"krolik"},{en:"hamster",pl:"chomik"},{en:"mouse",pl:"mysz"},{en:"lion",pl:"lew"},{en:"tiger",pl:"tygrys"},{en:"bear",pl:"niedzwiedz"},{en:"elephant",pl:"slon"},{en:"wolf",pl:"wilk"},{en:"fox",pl:"lis"},
+    {en:"city",pl:"miasto"},{en:"town",pl:"miasteczko"},{en:"village",pl:"wies"},{en:"street",pl:"ulica"},{en:"road",pl:"droga"},{en:"square",pl:"rynek / plac"},{en:"park",pl:"park"},{en:"shop",pl:"sklep"},{en:"shopping centre",pl:"centrum handlowe"},{en:"market",pl:"targ"},{en:"restaurant",pl:"restauracja"},{en:"cafe",pl:"kawiarnia"},{en:"cinema",pl:"kino"},{en:"theatre",pl:"teatr"},{en:"museum",pl:"muzeum"},{en:"library",pl:"biblioteka"},{en:"hospital",pl:"szpital"},{en:"church",pl:"kosciol"},{en:"office",pl:"biuro"},{en:"post office",pl:"poczta"},{en:"station",pl:"stacja"},{en:"bus stop",pl:"przystanek"},{en:"airport",pl:"lotnisko"},
+    {en:"car",pl:"samochod"},{en:"bus",pl:"autobus"},{en:"train",pl:"pociag"},{en:"tram",pl:"tramwaj"},{en:"bike",pl:"rower"},{en:"motorbike",pl:"motocykl"},{en:"plane",pl:"samolot"},{en:"ship",pl:"statek"},{en:"boat",pl:"lodz"},{en:"ticket",pl:"bilet"},{en:"passenger",pl:"pasazer"},{en:"journey",pl:"podroz"},{en:"trip",pl:"wycieczka"},
+    {en:"time",pl:"czas"},{en:"day",pl:"dzien"},{en:"week",pl:"tydzien"},{en:"month",pl:"miesiac"},{en:"year",pl:"rok"},{en:"morning",pl:"rano"},{en:"afternoon",pl:"popoludnie"},{en:"evening",pl:"wieczor"},{en:"night",pl:"noc"},{en:"holiday",pl:"wakacje / swieto"},{en:"vacation",pl:"wakacje"},{en:"weekend",pl:"weekend"},
+    {en:"body",pl:"cialo"},{en:"head",pl:"glowa"},{en:"hair",pl:"wlosy"},{en:"face",pl:"twarz"},{en:"eye",pl:"oko"},{en:"ear",pl:"ucho"},{en:"nose",pl:"nos"},{en:"mouth",pl:"usta"},{en:"hand",pl:"reka"},{en:"arm",pl:"ramie"},{en:"leg",pl:"noga"},{en:"foot",pl:"stopa"},{en:"heart",pl:"serce"},{en:"medicine",pl:"lekarstwo"},{en:"illness",pl:"choroba"},{en:"pain",pl:"bol"},
+    {en:"nature",pl:"przyroda"},{en:"weather",pl:"pogoda"},{en:"sun",pl:"slonce"},{en:"rain",pl:"deszcz"},{en:"snow",pl:"snieg"},{en:"wind",pl:"wiatr"},{en:"cloud",pl:"chmura"},{en:"sky",pl:"niebo"},{en:"tree",pl:"drzewo"},{en:"flower",pl:"kwiat"},{en:"grass",pl:"trawa"},{en:"river",pl:"rzeka"},{en:"lake",pl:"jezioro"},{en:"sea",pl:"morze"},{en:"mountain",pl:"gora"},{en:"forest",pl:"las"},
+    {en:"hobby",pl:"hobby"},{en:"sport",pl:"sport"},{en:"game",pl:"gra"},{en:"video game",pl:"gra komputerowa"},{en:"song",pl:"piosenka"},{en:"concert",pl:"koncert"},{en:"film",pl:"film"},{en:"series",pl:"serial"},{en:"reading",pl:"czytanie"},{en:"football",pl:"pilka nozna"},{en:"basketball",pl:"koszykowka"},{en:"skiing",pl:"narciarstwo"},{en:"swimming",pl:"plywanie"},
+    {en:"problem",pl:"problem"},{en:"situation",pl:"sytuacja"},{en:"idea",pl:"pomysl"},{en:"information",pl:"informacja"},{en:"news",pl:"wiadomosci"},{en:"event",pl:"wydarzenie"},{en:"accident",pl:"wypadek"},{en:"help",pl:"pomoc"},{en:"support",pl:"wsparcie"},{en:"protection",pl:"ochrona"},{en:"education",pl:"edukacja"},{en:"culture",pl:"kultura"},{en:"future",pl:"przyszlosc"},{en:"past",pl:"przeszlosc"},{en:"success",pl:"sukces"},{en:"failure",pl:"porazka"}
+  ],
+  verbs: [
+    {en:"be",pl:"byc"},{en:"have",pl:"miec"},{en:"do",pl:"robic"},{en:"say",pl:"mowic"},{en:"tell",pl:"powiedziec"},{en:"ask",pl:"pytac"},{en:"answer",pl:"odpowiadac"},{en:"talk",pl:"rozmawiac"},{en:"speak",pl:"mowic"},{en:"listen",pl:"sluchac"},{en:"hear",pl:"slyszec"},{en:"see",pl:"widziec"},{en:"watch",pl:"ogladac"},{en:"look",pl:"patrzec"},{en:"read",pl:"czytac"},{en:"write",pl:"pisac"},{en:"learn",pl:"uczyc sie"},{en:"study",pl:"uczyc sie"},{en:"teach",pl:"uczyc"},{en:"know",pl:"wiedziec"},{en:"think",pl:"myslec"},{en:"understand",pl:"rozumiec"},{en:"remember",pl:"pamietac"},{en:"forget",pl:"zapominac"},
+    {en:"go",pl:"isc / jechac"},{en:"come",pl:"przychodzic"},{en:"get",pl:"dostac / stac sie"},{en:"make",pl:"robic"},{en:"take",pl:"brac"},{en:"give",pl:"dawac"},{en:"use",pl:"uzywac"},{en:"work",pl:"pracowac"},{en:"play",pl:"grac"},{en:"start",pl:"zaczynac"},{en:"begin",pl:"zaczynac"},{en:"finish",pl:"konczyc"},{en:"stop",pl:"zatrzymywac"},{en:"try",pl:"probowac"},{en:"help",pl:"pomagac"},{en:"wait",pl:"czekac"},{en:"stay",pl:"zostawac"},{en:"leave",pl:"wychodzic / opuszczac"},
+    {en:"like",pl:"lubic"},{en:"love",pl:"kochac"},{en:"hate",pl:"nienawidzic"},{en:"enjoy",pl:"cieszyc sie"},{en:"feel",pl:"czuc"},{en:"want",pl:"chciec"},{en:"need",pl:"potrzebowac"},{en:"prefer",pl:"wolec"},{en:"hope",pl:"miec nadzieje"},{en:"believe",pl:"wierzyc"},{en:"agree",pl:"zgadzac sie"},{en:"disagree",pl:"nie zgadzac sie"},{en:"meet",pl:"spotykac"},{en:"visit",pl:"odwiedzac"},
+    {en:"practice",pl:"cwiczyc"},{en:"pass",pl:"zdac"},{en:"fail",pl:"oblac"},{en:"prepare",pl:"przygotowywac"},{en:"check",pl:"sprawdzac"},{en:"correct",pl:"poprawiac"},{en:"choose",pl:"wybierac"},{en:"decide",pl:"decydowac"},{en:"plan",pl:"planowac"},
+    {en:"run",pl:"biegac"},{en:"walk",pl:"chodzic"},{en:"drive",pl:"prowadzic"},{en:"ride",pl:"jechac"},{en:"travel",pl:"podrozowac"},{en:"arrive",pl:"przyjezdzac"},{en:"return",pl:"wracac"},{en:"move",pl:"poruszac sie"},{en:"enter",pl:"wchodzic"},{en:"cross",pl:"przechodzic"},
+    {en:"live",pl:"mieszkac"},{en:"build",pl:"budowac"},{en:"clean",pl:"sprzatac"},{en:"cook",pl:"gotowac"},{en:"buy",pl:"kupowac"},{en:"sell",pl:"sprzedawac"},{en:"pay",pl:"placic"},{en:"order",pl:"zamawiac"},{en:"open",pl:"otwierac"},{en:"close",pl:"zamykac"},
+    {en:"hurt",pl:"bolec"},{en:"rest",pl:"odpoczywac"},{en:"exercise",pl:"cwiczyc"},{en:"sleep",pl:"spac"},{en:"wake up",pl:"budzic sie"},{en:"fall",pl:"upadac"},{en:"break",pl:"lamac"},{en:"cut",pl:"ciac"},
+    {en:"relax",pl:"relaksowac sie"},{en:"download",pl:"pobierac"},{en:"upload",pl:"wysylac"},{en:"send",pl:"wysylac"},{en:"receive",pl:"otrzymywac"},{en:"share",pl:"udostepniac"},{en:"search",pl:"szukac"}
+  ],
+  adjectives: [
+    {en:"happy",pl:"szczesliwy"},{en:"sad",pl:"smutny"},{en:"angry",pl:"zly"},{en:"tired",pl:"zmeczony"},{en:"bored",pl:"znudzony"},{en:"excited",pl:"podekscytowany"},{en:"nervous",pl:"zdenerwowany"},{en:"scared",pl:"przestraszony"},{en:"afraid",pl:"bojacy sie"},{en:"proud",pl:"dumny"},{en:"funny",pl:"zabawny"},{en:"interesting",pl:"interesujacy"},{en:"boring",pl:"nudny"},{en:"difficult",pl:"trudny"},{en:"easy",pl:"latwy"},
+    {en:"tall",pl:"wysoki"},{en:"short",pl:"niski / krotki"},{en:"big",pl:"duzy"},{en:"small",pl:"maly"},{en:"young",pl:"mlody"},{en:"old",pl:"stary"},{en:"beautiful",pl:"piekny"},{en:"handsome",pl:"przystojny"},{en:"pretty",pl:"ladna"},{en:"ugly",pl:"brzydki"},{en:"fat",pl:"gruby"},{en:"thin",pl:"chudy"},{en:"strong",pl:"silny"},{en:"weak",pl:"slaby"},{en:"friendly",pl:"przyjazny"},{en:"kind",pl:"mily"},{en:"mean",pl:"zlosliwy"},{en:"polite",pl:"uprzejmy"},{en:"rude",pl:"niegrzeczny"},
+    {en:"new",pl:"nowy"},{en:"clean",pl:"czysty"},{en:"dirty",pl:"brudny"},{en:"expensive",pl:"drogi"},{en:"cheap",pl:"tani"},{en:"fast",pl:"szybki"},{en:"slow",pl:"wolny"},{en:"hot",pl:"goracy"},{en:"cold",pl:"zimny"},{en:"warm",pl:"cieply"},{en:"cool",pl:"fajny / zimny"},
+    {en:"long",pl:"dlugi"},{en:"early",pl:"wczesny"},{en:"late",pl:"spozniony"},{en:"many",pl:"wiele"},{en:"much",pl:"duzo"},{en:"few",pl:"niewiele"},{en:"little",pl:"malo"},
+    {en:"good",pl:"dobry"},{en:"bad",pl:"zly"},{en:"right",pl:"poprawny / prawy"},{en:"wrong",pl:"bledny"},{en:"important",pl:"wazny"},{en:"fun",pl:"zabawny"}
+  ],
+  rest: [
+    {en:"I",pl:"ja"},{en:"you",pl:"ty / wy"},{en:"he",pl:"on"},{en:"she",pl:"ona"},{en:"it",pl:"ono / to"},{en:"we",pl:"my"},{en:"they",pl:"oni / one"},{en:"me",pl:"mnie / mi"},{en:"him",pl:"jego / mu"},{en:"her",pl:"jej"},{en:"us",pl:"nas / nam"},{en:"them",pl:"ich / im"},{en:"my",pl:"moj"},{en:"your",pl:"twoj / wasz"},{en:"his",pl:"jego"},{en:"its",pl:"jego / jej"},{en:"our",pl:"nasz"},{en:"their",pl:"ich"},
+    {en:"what",pl:"co"},{en:"which",pl:"ktory"},{en:"who",pl:"kto"},{en:"whom",pl:"kogo / komu"},{en:"whose",pl:"czyj"},{en:"where",pl:"gdzie"},{en:"when",pl:"kiedy"},{en:"why",pl:"dlaczego"},{en:"how",pl:"jak"},
+    {en:"in",pl:"w"},{en:"on",pl:"na"},{en:"at",pl:"przy / o"},{en:"to",pl:"do"},{en:"from",pl:"z / od"},{en:"with",pl:"z"},{en:"about",pl:"o"},{en:"for",pl:"dla / za"},{en:"of",pl:"czegos"},{en:"into",pl:"do wnetrza"},{en:"out",pl:"na zewnatrz"},{en:"up",pl:"w gore"},{en:"down",pl:"w dol"},{en:"between",pl:"miedzy"},{en:"among",pl:"wsrod"},{en:"over",pl:"nad"},{en:"under",pl:"pod"},{en:"behind",pl:"za"},{en:"next to",pl:"obok"},{en:"near",pl:"blisko"},
+    {en:"and",pl:"i"},{en:"but",pl:"ale"},{en:"or",pl:"lub"},{en:"because",pl:"poniewaz"},{en:"so",pl:"wiec"},{en:"if",pl:"jesli"},{en:"although",pl:"chociaz"},{en:"while",pl:"podczas gdy"},{en:"then",pl:"potem"},{en:"after",pl:"po"},{en:"before",pl:"przed"},
+    {en:"here",pl:"tutaj"},{en:"there",pl:"tam"},{en:"now",pl:"teraz"},{en:"always",pl:"zawsze"},{en:"usually",pl:"zazwyczaj"},{en:"sometimes",pl:"czasami"},{en:"never",pl:"nigdy"},{en:"also",pl:"takze"},{en:"too",pl:"tez"},{en:"very",pl:"bardzo"},{en:"quite",pl:"calkiem"},{en:"really",pl:"naprawde"},{en:"maybe",pl:"moze"},{en:"well",pl:"dobrze"}
   ]
 };
 
@@ -94,7 +127,6 @@ let sessionCorrect = 0;
 let sessionWrong = 0;
 let initialPoolSize = 0;
 
-// Elementy UI
 const menu = document.getElementById("menu");
 const learn = document.getElementById("learn");
 const question = document.getElementById("question");
@@ -105,7 +137,6 @@ const statCorrectText = document.getElementById("statCorrect");
 const statWrongText = document.getElementById("statWrong");
 const progressText = document.getElementById("progressText");
 
-// Inicjalizacja licznika błędów
 wrongCountText.textContent = wrong.length;
 
 document.getElementById("startBtn").addEventListener("click", start);
@@ -117,12 +148,20 @@ document.getElementById("showErrorsBtn").addEventListener("click", () => {
     list.innerHTML = wrong.length ? wrong.map(w => `<div>${w.en} — ${w.pl}</div>`).join('') : "Brak zapisanych błędów.";
 });
 
+document.getElementById("clearErrorsBtn").addEventListener("click", () => {
+    if(confirm("Czy na pewno chcesz usunąć wszystkie zapisane błędy?")) {
+        wrong = [];
+        localStorage.setItem("wrong", "[]");
+        wrongCountText.textContent = "0";
+        document.getElementById("errorsList").innerHTML = "Brak zapisanych błędów.";
+    }
+});
+
 answer.addEventListener("keydown", e => { if (e.key === "Enter") check(); });
 
 function start() {
     const mode = document.getElementById("mode").value;
     
-    // Tworzenie puli słówek (bez powtórek - będziemy je usuwać z tej tablicy)
     if (mode === "wrong") {
         pool = [...wrong];
     } else if (mode === "all") {
@@ -136,7 +175,6 @@ function start() {
         return;
     }
 
-    // Reset statystyk sesji
     initialPoolSize = pool.length;
     sessionCorrect = 0;
     sessionWrong = 0;
@@ -153,7 +191,6 @@ function next() {
         return;
     }
 
-    // Losowanie bez powtórek - wycinamy element z tablicy
     const index = Math.floor(Math.random() * pool.length);
     current = pool.splice(index, 1)[0];
 
@@ -181,7 +218,6 @@ function check() {
     const userVal = normalize(answer.value);
     const correctRaw = document.getElementById("direction").checked ? current.pl : current.en;
     
-    // Obsługa wielu poprawnych odpowiedzi (np. "ty / wy")
     const possibleAnswers = correctRaw.split(/[/,]/).map(a => normalize(a));
 
     answer.disabled = true;
@@ -195,7 +231,6 @@ function check() {
         result.textContent = "❌ Błąd! Poprawnie: " + correctRaw;
         result.className = "result bad";
         
-        // Zapisz do błędów jeśli jeszcze nie ma
         if (!wrong.some(w => w.en === current.en)) {
             wrong.push(current);
             localStorage.setItem("wrong", JSON.stringify(wrong));
@@ -223,7 +258,6 @@ function finishGame() {
     
     setTimeout(() => {
         backToMenu();
-        // Przywróć widoczność po powrocie
         answer.style.display = "block";
         document.getElementById("checkBtn").style.display = "block";
     }, 4000);
