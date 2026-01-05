@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>E8 CyberQuest: Ultimate</title>
+    <title>E8 CyberQuest: Mastery</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@400;800&display=swap" rel="stylesheet">
@@ -11,33 +11,33 @@
         :root { --p: #7289da; --neon: #00f2ff; --bg: #05050a; --card: rgba(25, 25, 45, 0.95); }
         body { margin:0; font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; overflow: hidden; height: 100vh; }
         .rgb-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: #000; overflow: hidden; }
-        .line { position: absolute; width: 2px; height: 40vh; filter: blur(2px); animation: move linear infinite; opacity: 0.3; }
+        .line { position: absolute; width: 2px; height: 40vh; filter: blur(2px); animation: move linear infinite; opacity: 0.2; }
         @keyframes move { 0% { transform: translateY(-110%) rotate(5deg); } 100% { transform: translateY(110vh) rotate(5deg); } }
 
-        .app { max-width: 480px; margin: 0 auto; padding: 15px; height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; position: relative; }
+        .app { max-width: 480px; margin: 0 auto; padding: 15px; height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; }
         .hidden { display: none !important; }
 
-        /* BRAWL ROAD */
-        .road-container { background: rgba(0,0,0,0.4); border-radius: 20px; border: 1px solid #333; margin-bottom: 15px; padding: 10px 0; }
-        .road-scroll { display: flex; overflow-x: auto; gap: 20px; padding: 10px 20px; scrollbar-width: none; }
-        .road-scroll::-webkit-scrollbar { display: none; }
-        .node { flex: 0 0 70px; text-align: center; cursor: pointer; }
-        .node-box { width: 60px; height: 60px; background: var(--card); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #444; margin-bottom: 5px; }
-        .unlocked .node-box { border-color: var(--neon); box-shadow: 0 0 10px var(--neon); }
-        .claimed .node-box { background: #00b894; border-color: #fff; }
+        /* ROAD */
+        .road-container { background: rgba(0,0,0,0.5); border-radius: 20px; border: 1px solid #333; margin-bottom: 10px; padding: 10px 0; }
+        .road-scroll { display: flex; overflow-x: auto; gap: 15px; padding: 10px; scrollbar-width: none; }
+        .node { flex: 0 0 65px; text-align: center; cursor: pointer; }
+        .node-box { width: 55px; height: 55px; background: var(--card); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 2px solid #444; margin-bottom: 4px; }
+        .unlocked .node-box { border-color: var(--neon); box-shadow: 0 0 8px var(--neon); }
+        .claimed { opacity: 0.4; filter: grayscale(1); }
 
-        /* PROFILE */
-        .profile-card { background: var(--card); padding: 12px; border-radius: 20px; border: 1px solid var(--p); display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-        
-        /* BUTTONS */
-        button { width: 100%; padding: 15px; border-radius: 14px; border: none; font-weight: 800; cursor: pointer; margin-top: 8px; font-family: 'Orbitron'; text-transform: uppercase; }
+        /* UI */
+        .profile-card { background: var(--card); padding: 10px; border-radius: 18px; border: 1px solid var(--p); display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        button { width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; font-family: 'Orbitron'; text-transform: uppercase; margin-top: 5px; }
         .btn-blue { background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: white; }
-        .btn-purple { background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; }
+        .btn-check { background: linear-gradient(135deg, #00b894, #55efc4); color: white; font-size: 1.2rem; margin-top: 15px; box-shadow: 0 4px 15px rgba(0,184,148,0.4); }
         .btn-ranked { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; }
-        .btn-spotify { background: #1DB954; color: white; font-size: 0.7rem; }
+        .btn-spotify { background: #1DB954; color: white; font-size: 0.6rem; padding: 8px; }
 
         input { width: 100%; padding: 16px; border-radius: 12px; border: 2px solid #333; background: #000; color: var(--neon); font-size: 1.1rem; text-align: center; font-family: 'Orbitron'; box-sizing: border-box; }
-        .pill { padding: 10px 15px; background: #1a1a2e; border: 1px solid var(--p); border-radius: 8px; margin: 4px; cursor: pointer; font-size: 0.9rem; display: inline-block; }
+        .pill { padding: 8px 12px; background: #1a1a2e; border: 1px solid var(--p); border-radius: 8px; margin: 3px; cursor: pointer; font-size: 0.8rem; display: inline-block; }
+        
+        #dict-list { overflow-y: auto; flex: 1; }
+        .dict-item { padding: 8px; border-bottom: 1px solid #222; font-size: 0.9rem; display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
@@ -46,125 +46,120 @@
 
 <div class="app" id="screen-menu">
     <div class="road-container">
-        <div style="text-align:center; font-size:0.6rem; font-family:'Orbitron'; color:#888; margin-bottom:5px">PRZESUŃ NAGRODY 🏆</div>
-        <div class="road-scroll" id="road-content"></div>
+        <div id="road-content" class="road-scroll"></div>
     </div>
 
     <div class="profile-card">
-        <div style="font-size:1.8rem; width:50px; height:50px; background:#111; border-radius:12px; display:flex; align-items:center; justify-content:center; border:2px solid var(--neon)" id="p-avatar">👶🏻</div>
+        <div style="font-size:1.5rem; width:45px; height:45px; background:#111; border-radius:10px; display:flex; align-items:center; justify-content:center; border:2px solid var(--neon)" id="p-avatar">👶🏻</div>
         <div style="flex:1">
-            <h2 id="p-name" style="margin:0; font-size:0.8rem; font-family:'Orbitron'">GRACZ</h2>
-            <div style="font-size:0.7rem">🏆 <span id="p-cups">0</span> | 💰 <span id="p-coins">0</span> | 💣 <span id="p-bombs">0</span></div>
+            <h2 id="p-name" style="margin:0; font-size:0.75rem; font-family:'Orbitron'">GRACZ</h2>
+            <div style="font-size:0.65rem">🏆 <span id="p-cups">0</span> | 💰 <span id="p-coins">0</span> | 💣 <span id="p-bombs">0</span> <span id="p-x2" style="color:yellow; display:none">x2!</span></div>
         </div>
-        <div onclick="showScreen('screen-settings')" style="cursor:pointer; font-size:1.2rem">⚙️</div>
+        <div onclick="showScreen('screen-settings')" style="cursor:pointer">⚙️</div>
     </div>
 
-    <button class="btn-blue" onclick="startMode('words')">SŁÓWKA 📖</button>
-    <button class="btn-purple" onclick="startMode('sentences')">UKŁADANIE ZDAŃ 🧩</button>
-    <button class="btn-ranked" onclick="startMode('ranked')">TRYB RANKINGOWY ⚔️</button>
+    <button class="btn-blue" onclick="startMode('words')">SŁÓWKA E8 📖</button>
+    <button class="btn-blue" style="background:#6c5ce7" onclick="startMode('sentences')">UKŁADANIE ZDAŃ 🧩</button>
+    <button class="btn-ranked" onclick="startMode('ranked')">MECZ RANKINGOWY ⚔️</button>
     
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:5px">
-        <button style="background:#2d3436; color:white" onclick="showScreen('screen-dictionary')">SŁOWNIK</button>
-        <button style="background:#e67e22; color:white" onclick="showScreen('screen-shop')">SKLEP 💰</button>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px">
+        <button style="background:#2d3436; color:white" onclick="openDictionary()">SŁOWNIK</button>
+        <button style="background:#e67e22; color:white" onclick="showScreen('screen-shop')">SKLEP</button>
     </div>
 
-    <button class="btn-spotify" onclick="window.open('https://open.spotify.com/', '_blank')">OTWÓRZ SPOTIFY 🎧</button>
+    <button class="btn-spotify" onclick="window.open('spotify:open', '_blank')">ODPALAJ SPOTIFY 🎧</button>
 
-    <div style="background:var(--card); border-radius:15px; padding:10px; margin-top:10px; flex:1; overflow-y:auto">
-        <h4 style="margin:0 0 5px 0; font-family:'Orbitron'; font-size:0.6rem; color:var(--neon)">RANKING</h4>
+    <div style="background:var(--card); border-radius:12px; padding:10px; margin-top:8px; flex:1; overflow-y:auto">
+        <h4 style="margin:0 0 5px 0; font-family:'Orbitron'; font-size:0.6rem; color:var(--neon)">TABELA LIDERÓW</h4>
         <div id="leader-list"></div>
     </div>
 </div>
 
 <div class="app hidden" id="screen-game">
-    <div style="display:flex; justify-content:space-between; color:var(--neon); font-family:'Orbitron'; font-size:0.8rem">
-        <span id="g-mode-title">TRYB</span>
+    <div style="display:flex; justify-content:space-between; color:var(--neon); font-family:'Orbitron'; font-size:0.7rem">
+        <span id="g-level-info">ETAP 1</span>
         <span>POSTĘP: <span id="g-progress">0/10</span></span>
     </div>
-    
-    <div id="g-word" style="font-size: 1.6rem; margin: 30px 0; font-weight:900; text-align:center; font-family:'Orbitron'; color:var(--neon)">SŁOWO</div>
-    
-    <div id="sentence-box" style="margin-bottom: 20px; text-align:center; min-height:50px"></div>
-    
+    <div id="g-word" style="font-size: 1.5rem; margin: 25px 0; font-weight:900; text-align:center; font-family:'Orbitron'; color:var(--neon)">SŁOWO</div>
+    <div id="sentence-box" style="margin-bottom: 15px; text-align:center; min-height:40px"></div>
     <input type="text" id="g-input" placeholder="WPISZ TŁUMACZENIE..." autocomplete="off">
-    <div id="g-feedback" style="margin: 15px 0; text-align:center; font-weight:bold; min-height:20px"></div>
     
-    <button class="btn-blue" style="background:#f1c40f; color:#000" onclick="useBomb()">POMOC 💣</button>
-    <button style="background:transparent; color:#555" onclick="exitGame()">WYJDŹ</button>
+    <button class="btn-check" onclick="checkAnswer()">SPRAWDŹ ✅</button>
+    
+    <div id="g-feedback" style="margin: 10px 0; text-align:center; font-weight:bold; min-height:20px"></div>
+    <button class="btn-blue" style="background:#f1c40f; color:#000; padding:10px" onclick="useBomb()">POMOC 💣</button>
+    <button style="background:transparent; color:#555; padding:5px" onclick="exitGame()">WYJDŹ</button>
 </div>
 
-<div class="app hidden" id="screen-shop">
+<div class="app hidden" id="screen-shop" style="overflow-y:auto">
     <button onclick="showScreen('screen-menu')">POWRÓT</button>
     <h2 style="font-family:'Orbitron'; text-align:center">SKLEP 💰</h2>
-    <div class="profile-card" onclick="buyItem('bomb', 50)">
-        <div style="font-size:1.5rem">💣</div>
-        <div style="flex:1">KUP BOMBĘ</div>
-        <div style="color:var(--neon)">50 💰</div>
-    </div>
+    <div id="shop-items" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px"></div>
 </div>
 
 <div class="app hidden" id="screen-dictionary">
     <button onclick="showScreen('screen-menu')">POWRÓT</button>
-    <h2 style="font-family:'Orbitron'; text-align:center">SŁOWNIK 📚</h2>
-    <div id="dict-list" style="overflow-y:auto"></div>
+    <h3 style="font-family:'Orbitron'; text-align:center" id="dict-title">SŁOWNIK ETAP 1</h3>
+    <div id="dict-list"></div>
 </div>
 
 <script>
 // --- FIREBASE ---
-const firebaseConfig = {
-    apiKey: "AIzaSyCREz6ZMk86TW-dASBLNIHUTr5XDXZrTPE",
-    authDomain: "english-game-d3ccd.firebaseapp.com",
-    databaseURL: "https://english-game-d3ccd-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "english-game-d3ccd",
-    storageBucket: "english-game-d3ccd.firebasestorage.app",
-    messagingSenderId: "314380492870",
-    appId: "1:314380492870:web:4efbbe6b98fe0ff45cea47"
-};
+const firebaseConfig = { apiKey: "AIzaSyCREz6ZMk86TW-dASBLNIHUTr5XDXZrTPE", authDomain: "english-game-d3ccd.firebaseapp.com", databaseURL: "https://english-game-d3ccd-default-rtdb.europe-west1.firebasedatabase.app", projectId: "english-game-d3ccd" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// --- BAZA DANYCH ---
-const ROAD_MAP = [
-    {cups: 0, v: "👶🏻"}, {cups: 50, v: "💰"}, {cups: 100, v: "💣"}, 
-    {cups: 150, v: "🎸"}, {cups: 200, v: "💰"}, {cups: 300, v: "🎮"},
-    {cups: 400, v: "💣"}, {cups: 500, v: "🔥"}, {cups: 600, v: "💰"},
-    {cups: 800, v: "💪🏽"}, {cups: 1000, v: "🏅"}
-];
-
-const WORDS = [
-    {en: "Apple", pl: "jabłko"}, {en: "Dog", pl: "pies"}, {en: "Cat", pl: "kot"},
-    {en: "Water", pl: "woda"}, {en: "School", pl: "szkoła"}, {en: "Friend", pl: "przyjaciel"}
-];
-
-const SENTENCES = [
-    {en: "I like apples", pl: "lubię jabłka", mix: ["apples", "I", "like"]},
-    {en: "This is my dog", pl: "to jest mój pies", mix: ["is", "dog", "this", "my"]},
-    {en: "I go to school", pl: "chodzę do szkoły", mix: ["to", "go", "I", "school"]}
-];
-
-// --- LOGIKA ---
-let user = JSON.parse(localStorage.getItem('e8_final_v1')) || {
-    name: "GRACZ", avatar: "👶🏻", cups: 0, coins: 100, bombs: 3, claimed: []
+// --- BAZA SŁÓWEK ---
+const STAGE_WORDS = {
+    1: [
+        {en:"I", pl:"ja"}, {en:"you", pl:"ty"}, {en:"he", pl:"on"}, {en:"she", pl:"ona"}, {en:"it", pl:"ono"}, {en:"we", pl:"my"}, {en:"they", pl:"oni"},
+        {en:"mother", pl:"mama"}, {en:"father", pl:"tata"}, {en:"sister", pl:"siostra"}, {en:"brother", pl:"brat"}, {en:"school", pl:"szkoła"},
+        {en:"dog", pl:"pies"}, {en:"cat", pl:"kot"}, {en:"apple", pl:"jabłko"}, {en:"water", pl:"woda"}, {en:"book", pl:"książka"}
+    ],
+    2: [
+        {en:"my", pl:"mój"}, {en:"your", pl:"twój"}, {en:"his", pl:"jego"}, {en:"our", pl:"nasz"}, {en:"their", pl:"ich"},
+        {en:"what", pl:"co"}, {en:"where", pl:"gdzie"}, {en:"when", pl:"kiedy"}, {en:"why", pl:"dlaczego"},
+        {en:"teacher", pl:"nauczyciel"}, {en:"doctor", pl:"lekarz"}, {en:"nurse", pl:"pielęgniarka"}, {en:"house", pl:"dom"},
+        {en:"kitchen", pl:"kuchnia"}, {en:"milk", pl:"mleko"}, {en:"bread", pl:"chleb"}
+    ],
+    3: [
+        {en:"between", pl:"między"}, {en:"behind", pl:"za"}, {en:"under", pl:"pod"}, {en:"always", pl:"zawsze"}, {en:"never", pl:"nigdy"},
+        {en:"beautiful", pl:"piękny"}, {en:"cheap", pl:"tani"}, {en:"expensive", pl:"drogi"}, {en:"important", pl:"ważny"},
+        {en:"understand", pl:"rozumieć"}, {en:"remember", pl:"pamiętać"}, {en:"weather", pl:"pogoda"}
+    ],
+    4: [
+        {en:"although", pl:"chociaż"}, {en:"usually", pl:"zazwyczaj"}, {en:"sometimes", pl:"czasami"},
+        {en:"description", pl:"opis"}, {en:"success", pl:"sukces"}, {en:"failure", pl:"porażka"},
+        {en:"engineer", pl:"inżynier"}, {en:"neighbor", pl:"sąsiad"}, {en:"government", pl:"rząd"}
+    ],
+    5: [
+        {en:"protection", pl:"ochrona"}, {en:"environment", pl:"środowisko"}, {en:"situation", pl:"sytuacja"},
+        {en:"irregular", pl:"nieregularny"}, {en:"thought", pl:"myśl"}, {en:"achieve", pl:"osiągnąć"}
+    ]
 };
 
-let game = { mode: '', pool: [], idx: 0, dir: 'en2pl' };
-
-function normalize(s) { 
-    if(!s) return "";
-    return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l").trim(); 
+// --- ROAD GENERATOR ---
+const ROAD_MAP = [];
+for(let i=0; i<=5000; i+= (i<1000?100: (i<3000?250:500))) {
+    let type = i % 200 === 0 ? '💰' : '💣';
+    if(i % 1000 === 0) type = '👑';
+    ROAD_MAP.push({cups: i, v: type});
 }
 
+// --- STATE ---
+let user = JSON.parse(localStorage.getItem('e8_master_v1')) || {
+    name: "GRACZ", avatar: "👶🏻", cups: 0, coins: 50, bombs: 2, claimed: [], mult: 1
+};
+let game = { idx: 0, pool: [], currentQ: null };
+
 function save() {
-    localStorage.setItem('e8_final_v1', JSON.stringify(user));
-    db.ref('players/' + (localStorage.getItem('e8_id') || 'u1')).set({
-        name: user.name, cups: user.cups, avatar: user.avatar
-    });
+    localStorage.setItem('e8_master_v1', JSON.stringify(user));
+    db.ref('players/'+(localStorage.getItem('e8_id')||'u1')).set({name:user.name, cups:user.cups, avatar:user.avatar});
     updateUI();
 }
 
 function updateUI() {
     document.getElementById('p-name').textContent = user.name;
-    document.getElementById('p-avatar').textContent = user.avatar;
     document.getElementById('p-cups').textContent = user.cups;
     document.getElementById('p-coins').textContent = user.coins;
     document.getElementById('p-bombs').textContent = user.bombs;
@@ -175,119 +170,121 @@ function renderRoad() {
     const road = document.getElementById('road-content');
     road.innerHTML = ROAD_MAP.map(n => `
         <div class="node ${user.cups >= n.cups ? 'unlocked' : ''} ${user.claimed.includes(n.cups) ? 'claimed' : ''}" onclick="claim(${n.cups})">
-            <div class="node-box">${user.claimed.includes(n.cups) ? '✅' : n.v}</div>
-            <div style="font-size:0.6rem; font-family:'Orbitron'">${n.cups} 🏆</div>
+            <div class="node-box">${n.v}</div>
+            <div style="font-size:0.5rem">${n.cups}🏆</div>
         </div>
     `).join('');
 }
 
 function claim(c) {
     if(user.cups >= c && !user.claimed.includes(c)) {
-        const item = ROAD_MAP.find(n => n.cups === c);
-        if(item.v === "💰") user.coins += 100;
-        else if(item.v === "💣") user.bombs += 1;
-        else user.avatar = item.v;
-        user.claimed.push(c);
-        save();
+        user.coins += 100; user.claimed.push(c); save();
     }
 }
 
+function getStage() {
+    if(user.cups < 500) return 1;
+    if(user.cups < 1500) return 2;
+    if(user.cups < 3000) return 3;
+    if(user.cups < 4500) return 4;
+    return 5;
+}
+
 function startMode(m) {
-    game.mode = m; game.idx = 0;
-    if(m === 'sentences') game.pool = [...SENTENCES].sort(() => 0.5 - Math.random());
-    else game.pool = [...WORDS].sort(() => 0.5 - Math.random());
+    const stage = getStage();
+    let words = [];
+    for(let i=1; i<=stage; i++) words = [...words, ...STAGE_WORDS[i]];
     
+    game.idx = 0;
+    game.pool = words.sort(() => 0.5 - Math.random()).slice(0, 10);
+    game.mode = m;
     showScreen('screen-game');
-    document.getElementById('g-mode-title').textContent = m.toUpperCase();
+    document.getElementById('g-level-info').textContent = "ETAP " + stage;
     loadQ();
 }
 
 function loadQ() {
-    let q = game.pool[game.idx];
+    game.currentQ = game.pool[game.idx];
     game.dir = Math.random() > 0.5 ? 'en2pl' : 'pl2en';
-    
-    document.getElementById('g-progress').textContent = `${game.idx+1}/${game.pool.length}`;
+    document.getElementById('g-word').textContent = (game.dir === 'en2pl' ? game.currentQ.en : game.currentQ.pl).toUpperCase();
     document.getElementById('g-input').value = "";
     document.getElementById('g-feedback').textContent = "";
+    document.getElementById('g-progress').textContent = `${game.idx+1}/10`;
     
-    const displayWord = game.dir === 'en2pl' ? q.en : q.pl;
-    document.getElementById('g-word').textContent = displayWord.toUpperCase();
-
     const sBox = document.getElementById('sentence-box');
     sBox.innerHTML = "";
     if(game.mode === 'sentences') {
-        const wordsToMix = game.dir === 'en2pl' ? q.pl.split(' ') : q.en.split(' ');
-        wordsToMix.sort(() => 0.5 - Math.random()).forEach(w => {
-            sBox.innerHTML += `<span class="pill" onclick="document.getElementById('g-input').value += '${w} '">${w}</span>`;
+        let parts = (game.dir === 'en2pl' ? game.currentQ.pl : game.currentQ.en).split(' ');
+        parts.sort(() => 0.5 - Math.random()).forEach(p => {
+            sBox.innerHTML += `<span class="pill" onclick="document.getElementById('g-input').value += '${p} '">${p}</span>`;
         });
     }
 }
 
-document.getElementById('g-input').onkeydown = e => {
-    if(e.key === 'Enter') {
-        let q = game.pool[game.idx];
-        let correct = game.dir === 'en2pl' ? q.pl : q.en;
-        
-        if(normalize(e.target.value) === normalize(correct)) {
-            game.idx++;
-            user.coins += 5;
-            if(game.idx >= game.pool.length) {
-                user.cups += (game.mode === 'ranked' ? 30 : 10);
-                alert("BRAWO! Zyskujesz pucharki!");
-                exitGame();
-            } else loadQ();
-        } else {
-            document.getElementById('g-feedback').textContent = "POPRAWNIE: " + correct.toUpperCase();
-            document.getElementById('g-feedback').style.color = "#ff416c";
-        }
-        save();
+function checkAnswer() {
+    const val = document.getElementById('g-input').value.toLowerCase().trim();
+    const correct = (game.dir === 'en2pl' ? game.currentQ.pl : game.currentQ.en).toLowerCase().trim();
+    
+    if(val === correct || val.replace('ł','l') === correct.replace('ł','l')) {
+        user.coins += 10; game.idx++;
+        if(game.idx >= 10) {
+            user.cups += 50; exitGame(); alert("WYGRANA! +50 🏆");
+        } else loadQ();
+    } else {
+        document.getElementById('g-feedback').textContent = "BŁĄD! POPRAWNIE: " + correct.toUpperCase();
+        document.getElementById('g-feedback').style.color = "#ff416c";
     }
+    save();
+}
+
+function openDictionary() {
+    const stage = getStage();
+    document.getElementById('dict-title').textContent = "SŁOWNIK ETAP " + stage;
+    let words = [];
+    for(let i=1; i<=stage; i++) words = [...words, ...STAGE_WORDS[i]];
+    document.getElementById('dict-list').innerHTML = words.map(w => `<div class="dict-item"><b>${w.en}</b> <span>${w.pl}</span></div>`).join('');
+    showScreen('screen-dictionary');
 }
 
 function useBomb() {
     if(user.bombs > 0) {
-        let q = game.pool[game.idx];
-        let correct = game.dir === 'en2pl' ? q.pl : q.en;
-        alert("PODPOWIEDŹ: " + correct.substring(0, 3) + "...");
         user.bombs--;
+        const correct = (game.dir === 'en2pl' ? game.currentQ.pl : game.currentQ.en);
+        alert("PIERWSZA LITERA: " + correct[0].toUpperCase());
         save();
-    }
-}
-
-function buyItem(type, price) {
-    if(user.coins >= price) {
-        user.coins -= price;
-        if(type === 'bomb') user.bombs++;
-        save();
-    }
-}
-
-function showScreen(id) {
-    document.querySelectorAll('.app').forEach(s => s.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
-    if(id === 'screen-dictionary') {
-        document.getElementById('dict-list').innerHTML = WORDS.map(w => `<div class="profile-card"><b>${w.en}</b> - ${w.pl}</div>`).join('');
     }
 }
 
 function exitGame() { showScreen('screen-menu'); }
+function showScreen(id) { document.querySelectorAll('.app').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
+
+// SKLEP
+const SHOP = [ {n:'1 BOMBA', p:50, v:'💣'}, {n:'5 BOMB', p:200, v:'💣5'}, {n:'NINJA', p:1000, v:'🥷'} ];
+document.getElementById('shop-items').innerHTML = SHOP.map(i => `
+    <div style="background:var(--card); padding:10px; border-radius:10px; text-align:center" onclick="buy('${i.n}', ${i.p}, '${i.v}')">
+        <div>${i.v}</div><small>${i.n}</small><br><b style="color:var(--neon)">${i.p}💰</b>
+    </div>
+`).join('');
+
+function buy(n,p,v) {
+    if(user.coins >= p) {
+        user.coins -= p;
+        if(v.includes('💣')) user.bombs += (v==='💣5'?5:1);
+        else user.avatar = v;
+        save();
+    }
+}
 
 // RANKING
-db.ref('players').orderByChild('cups').limitToLast(5).on('value', snap => {
-    let list = []; snap.forEach(s => list.push(s.val()));
-    document.getElementById('leader-list').innerHTML = list.reverse().map(p => `
-        <div style="font-size:0.7rem; margin-bottom:4px">${p.avatar} ${p.name} - ${p.cups}🏆</div>
-    `).join('');
+db.ref('players').orderByChild('cups').limitToLast(5).on('value', s => {
+    let l = []; s.forEach(x => l.push(x.val()));
+    document.getElementById('leader-list').innerHTML = l.reverse().map(p => `<div style="font-size:0.6rem; margin-bottom:3px">${p.avatar} ${p.name} - ${p.cups}🏆</div>`).join('');
 });
 
 // START
-const container = document.getElementById('rgb-container');
-for(let i=0; i<10; i++) {
-    let l = document.createElement('div'); l.className = 'line';
-    l.style.left = Math.random()*100+'%'; l.style.background = `linear-gradient(to bottom, transparent, #00f2ff, transparent)`;
-    l.style.animationDuration = (Math.random()*3+2)+'s'; container.appendChild(l);
-}
-if(!localStorage.getItem('e8_id')) localStorage.setItem('e8_id', 'u' + Date.now());
+if(!localStorage.getItem('e8_id')) localStorage.setItem('e8_id', 'u'+Date.now());
+const c = document.getElementById('rgb-container');
+for(let i=0; i<8; i++){ let l=document.createElement('div'); l.className='line'; l.style.left=Math.random()*100+'%'; l.style.background='linear-gradient(to bottom, transparent, #00f2ff, transparent)'; l.style.animationDuration=(Math.random()*3+2)+'s'; c.appendChild(l); }
 save();
 </script>
 </body>
