@@ -3,33 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>E8 CyberQuest: Ultimate Edition</title>
+    <title>E8 CyberQuest: Final Version</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@400;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #7289da; --neon: #00f2ff; --bg: #05050a; --card: rgba(25, 25, 45, 0.95); }
+        :root { --neon: #00f2ff; --bg: #05050a; --card: rgba(15, 15, 30, 0.98); }
         body { margin:0; font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; overflow: hidden; height: 100vh; }
         .rgb-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: #000; }
-        .line { position: absolute; width: 2px; height: 40vh; filter: blur(2px); animation: move linear infinite; opacity: 0.2; background: var(--neon); }
+        .line { position: absolute; width: 2px; height: 40vh; filter: blur(2px); animation: move linear infinite; opacity: 0.1; background: var(--neon); }
         @keyframes move { 0% { transform: translateY(-110%); } 100% { transform: translateY(110vh); } }
-        .app { max-width: 480px; margin: 0 auto; padding: 15px; height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; position: relative; }
+        
+        .app { max-width: 480px; margin: 0 auto; padding: 15px; height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; }
         .hidden { display: none !important; }
-        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--card); border: 2px solid var(--neon); padding: 20px; border-radius: 20px; z-index: 100; width: 80%; max-width: 350px; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 99; }
-        .road-container { background: rgba(0,0,0,0.5); border-radius: 20px; border: 1px solid #333; margin-bottom: 10px; padding: 10px 0; }
-        .road-scroll { display: flex; overflow-x: auto; gap: 15px; padding: 10px; scrollbar-width: none; }
-        .node-box { width: 55px; height: 55px; background: var(--card); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 2px solid #444; }
-        .unlocked .node-box { border-color: var(--neon); }
-        .profile-card { background: var(--card); padding: 10px; border-radius: 18px; border: 1px solid var(--p); display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-        button { width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; font-family: 'Orbitron'; text-transform: uppercase; margin-top: 5px; color: #fff; }
+        
+        .profile-card { background: var(--card); padding: 12px; border-radius: 18px; border: 1px solid #333; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        button { width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; font-family: 'Orbitron'; text-transform: uppercase; color: #fff; margin-bottom: 8px; }
         .btn-blue { background: linear-gradient(135deg, #00d2ff, #3a7bd5); }
-        .btn-check { background: linear-gradient(135deg, #00b894, #55efc4); margin-top: 15px; }
-        input { width: 100%; padding: 12px; border-radius: 10px; border: 2px solid #333; background: #000; color: #fff; text-align: center; margin: 10px 0; }
+        .btn-arena { background: #2d3436; border: 1px solid #444; font-size: 0.7rem; }
+        .active-arena { border-color: var(--neon); background: #1e3799; box-shadow: 0 0 10px var(--neon); }
+        
+        input { width: 100%; padding: 15px; border-radius: 10px; border: 2px solid #333; background: #000; color: #fff; text-align: center; font-size: 1.1rem; margin: 15px 0; box-sizing: border-box; }
+        
+        .list-container { overflow-y: auto; flex: 1; padding-right: 5px; }
+        .shop-item { display: flex; align-items: center; justify-content: space-between; background: #111; padding: 12px; border-radius: 12px; margin-bottom: 8px; border: 1px solid #222; }
         .grid-locker { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .locker-item { width: 50px; height: 50px; background: #111; border: 1px solid #333; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; }
-        .locker-item.active { border-color: var(--neon); box-shadow: 0 0 10px var(--neon); }
-        .dict-item { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #222; font-size: 0.8rem; }
+        .item-box { background: #111; border: 2px solid #333; border-radius: 12px; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; }
+        .item-box.active { border-color: var(--neon); background: rgba(0, 242, 255, 0.1); }
+
+        /* SŁOWNIK MODAL */
+        .arena-select { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -37,222 +40,255 @@
 <div class="rgb-bg" id="rgb-container"></div>
 
 <div class="app" id="screen-menu">
-    <div class="road-container"><div id="road-content" class="road-scroll"></div></div>
     <div class="profile-card">
-        <div style="font-size:1.5rem; width:45px; height:45px; background:#111; border-radius:10px; display:flex; align-items:center; justify-content:center; border:2px solid var(--neon)" id="p-avatar">👶🏻</div>
+        <div id="p-avatar" style="font-size:2rem; width:55px; height:55px; background:#000; border-radius:12px; display:flex; align-items:center; justify-content:center; border:2px solid var(--neon)">👶🏻</div>
         <div style="flex:1">
-            <h2 id="p-name" style="margin:0; font-size:0.75rem; font-family:'Orbitron'">GRACZ</h2>
-            <div style="font-size:0.6rem">🏆 <span id="p-cups">0</span> | 💰 <span id="p-coins">0</span> | 💣 <span id="p-bombs">0</span></div>
+            <h2 id="p-name" style="margin:0; font-size:0.9rem; font-family:'Orbitron'">GRACZ</h2>
+            <div style="font-size:0.7rem">🏆 <span id="p-cups">0</span> | 💰 <span id="p-coins">0</span></div>
+            <div style="font-size:0.6rem; color:var(--neon); margin-top:2px">WYBRANA: ARENA <span id="active-arena-label">1</span></div>
         </div>
-        <div onclick="toggleModal('modal-settings')" style="cursor:pointer; font-size:1.2rem">⚙️</div>
+        <div onclick="toggleModal('modal-settings')" style="cursor:pointer; font-size:1.5rem">⚙️</div>
     </div>
-    <button class="btn-blue" onclick="startMode()">START NAUKA 📖</button>
-    <button class="btn-blue" style="background:#6c5ce7" onclick="showScreen('screen-locker')">SZAFKA 👕</button>
-    <button class="btn-blue" style="background:#e67e22" onclick="showScreen('screen-shop')">SKLEP 💰</button>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px">
-        <button style="background:#2d3436" onclick="openDictionary()">SŁOWNIK</button>
-        <button style="background:#1DB954; font-size:0.6rem" onclick="window.open('spotify:open','_blank')">SPOTIFY 🎧</button>
-    </div>
-    <div style="background:var(--card); border-radius:12px; padding:10px; margin-top:8px; flex:1; overflow-y:auto">
-        <h4 style="margin:0 0 5px 0; font-family:'Orbitron'; font-size:0.6rem; color:var(--neon)">RANKING LIDERÓW</h4>
-        <div id="leader-list"></div>
+
+    <button class="btn-blue" onclick="startGame()">ROZPOCZNIJ LEKCJĘ (20 SŁÓW) 📖</button>
+    <button style="background:#6c5ce7" onclick="showScreen('screen-locker')">SZAFKA 👕</button>
+    <button style="background:#e67e22" onclick="showScreen('screen-shop')">MEGA SKLEP 💰</button>
+    <button style="background:#2d3436" onclick="showScreen('screen-dict')">SŁOWNIK I ARENY 🏟️</button>
+    
+    <div style="background:var(--card); border-radius:12px; padding:10px; margin-top:5px; flex:1; overflow-y:auto; border: 1px solid #222">
+        <h4 style="margin:0 0 8px 0; font-family:'Orbitron'; font-size:0.6rem; color:var(--neon)">RANKING GLOBALNY</h4>
+        <div id="leader-list" style="font-size:0.75rem"></div>
     </div>
 </div>
 
-<div class="app hidden" id="screen-dictionary">
+<div class="app hidden" id="screen-dict">
     <button onclick="showScreen('screen-menu')">POWRÓT</button>
-    <h3 style="font-family:'Orbitron'; text-align:center">TWOJE SŁÓWKA</h3>
-    <div id="dict-list" style="overflow-y:auto; flex:1"></div>
+    <h3 style="font-family:'Orbitron'; text-align:center; font-size:0.8rem">WYBIERZ ARENĘ DO NAUKI</h3>
+    <div class="arena-select" id="arena-btns"></div>
+    <div id="dict-list" class="list-container" style="font-size:0.8rem"></div>
 </div>
 
 <div class="app hidden" id="screen-locker">
     <button onclick="showScreen('screen-menu')">POWRÓT</button>
-    <h2 style="font-family:'Orbitron'; text-align:center">SZAFKA</h2>
+    <h3 style="font-family:'Orbitron'; text-align:center">TWOJA SZAFKA</h3>
     <div id="locker-grid" class="grid-locker"></div>
 </div>
 
 <div class="app hidden" id="screen-shop">
     <button onclick="showScreen('screen-menu')">POWRÓT</button>
-    <h2 style="font-family:'Orbitron'; text-align:center">MEGA SKLEP</h2>
-    <div id="shop-items" style="overflow-y:auto; flex:1"></div>
+    <h3 style="font-family:'Orbitron'; text-align:center">MEGA SKLEP</h3>
+    <div id="shop-list" class="list-container"></div>
 </div>
 
 <div class="app hidden" id="screen-game">
-    <div style="display:flex; justify-content:space-between; color:var(--neon); font-size:0.7rem">
-        <span id="g-level-info">ETAP 1</span>
-        <span>POSTĘP: <span id="g-progress">0/10</span></span>
+    <div style="display:flex; justify-content:space-between; color:var(--neon); font-family:'Orbitron'; font-size:0.7rem">
+        <span id="g-info">ARENA 1</span>
+        <span>BŁĘDY: <span id="g-err" style="color:#ff4d4d">0</span>/5</span>
     </div>
-    <div id="g-word" style="font-size: 1.5rem; margin: 30px 0; text-align:center; font-family:'Orbitron'">SŁOWO</div>
+    <div style="text-align:center; margin-top:10px; font-size:0.7rem">POSTĘP: <span id="g-count">1</span>/20</div>
+    
+    <div id="g-word" style="font-size: 2rem; margin: 40px 0; text-align:center; font-family:'Orbitron'; text-shadow: 0 0 10px var(--neon)">WORD</div>
     <input type="text" id="g-input" placeholder="TŁUMACZENIE..." autocomplete="off">
-    <button class="btn-check" onclick="checkAnswer()">SPRAWDŹ ✅</button>
-    <div id="g-feedback" style="margin: 10px 0; text-align:center; min-height:20px"></div>
-    <button style="background:transparent; color:#555" onclick="exitGame()">WYJDŹ</button>
+    <button class="btn-blue" style="background:#00b894" onclick="checkWord()">SPRAWDŹ ✅</button>
+    <div id="g-feedback" style="text-align:center; height:30px; font-weight:bold"></div>
 </div>
 
 <div id="modal-settings" class="hidden">
     <div class="overlay" onclick="toggleModal('modal-settings')"></div>
-    <div class="modal">
-        <h3 style="font-family:'Orbitron'; margin:0">USTAWIENIA</h3>
-        <input type="text" id="set-name-input" placeholder="WPISZ NICK">
-        <button class="btn-blue" onclick="changeName()">ZAPISZ</button>
+    <div class="modal" style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--card); padding:20px; border-radius:20px; border:2px solid var(--neon); z-index:101; width:80%">
+        <h3 style="font-family:'Orbitron'">ZMIEŃ NICK</h3>
+        <input type="text" id="input-nick" placeholder="WPISZ NAZWĘ...">
+        <button class="btn-blue" onclick="saveNick()">ZAPISZ</button>
     </div>
 </div>
 
 <script>
+// --- CONFIG & DATA ---
 const firebaseConfig = { apiKey: "AIzaSyCREz6ZMk86TW-dASBLNIHUTr5XDXZrTPE", authDomain: "english-game-d3ccd.firebaseapp.com", databaseURL: "https://english-game-d3ccd-default-rtdb.europe-west1.firebasedatabase.app", projectId: "english-game-d3ccd" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-const ALL_WORDS = {
-    1: [{en:"I", pl:"ja"}, {en:"you", pl:"ty"}, {en:"he", pl:"on"}, {en:"she", pl:"ona"}, {en:"it", pl:"ono"}, {en:"we", pl:"my"}, {en:"they", pl:"oni"}],
-    2: [{en:"what", pl:"co"}, {en:"where", pl:"gdzie"}, {en:"when", pl:"kiedy"}, {en:"why", pl:"dlaczego"}, {en:"how", pl:"jak"}],
-    3: [{en:"mother", pl:"mama"}, {en:"father", pl:"tata"}, {en:"sister", pl:"siostra"}, {en:"brother", pl:"brat"}],
-    4: [{en:"school", pl:"szkoła"}, {en:"book", pl:"książka"}, {en:"pen", pl:"długopis"}, {en:"desk", pl:"biurko"}],
-    5: [{en:"apple", pl:"jabłko"}, {en:"water", pl:"woda"}, {en:"bread", pl:"chleb"}, {en:"cheese", pl:"ser"}]
+const WORDS_DATA = {
+    1: [
+        {en:"I", pl:"ja"},{en:"you", pl:"ty"},{en:"he", pl:"on"},{en:"she", pl:"ona"},{en:"it", pl:"ono"},{en:"we", pl:"my"},{en:"they", pl:"oni"},
+        {en:"me", pl:"mnie"},{en:"him", pl:"jego"},{en:"her", pl:"jej"},{en:"us", pl:"nas"},{en:"them", pl:"ich"},{en:"my", pl:"mój"},{en:"your", pl:"twój"},
+        {en:"his", pl:"jego"},{en:"her", pl:"jej"},{en:"its", pl:"jego"},{en:"our", pl:"nasz"},{en:"their", pl:"ich"},{en:"what", pl:"co"},
+        {en:"which", pl:"który"},{en:"who", pl:"kto"},{en:"whom", pl:"kogo"},{en:"whose", pl:"czyj"},{en:"where", pl:"gdzie"},{en:"when", pl:"kiedy"},
+        {en:"why", pl:"dlaczego"},{en:"how", pl:"jak"},{en:"in", pl:"w"},{en:"on", pl:"na"},{en:"at", pl:"przy"},{en:"to", pl:"do"},{en:"from", pl:"z"},
+        {en:"with", pl:"z"},{en:"about", pl:"o"},{en:"for", pl:"dla"},{en:"of", pl:"czegoś"},{en:"into", pl:"do"},{en:"out", pl:"na zewnątrz"},
+        {en:"up", pl:"w górę"},{en:"down", pl:"w dół"},{en:"between", pl:"między"},{en:"among", pl:"wśród"},{en:"over", pl:"nad"},{en:"under", pl:"pod"},
+        {en:"and", pl:"i"},{en:"but", pl:"ale"},{en:"or", pl:"lub"},{en:"because", pl:"ponieważ"},{en:"so", pl:"więc"},{en:"if", pl:"jeśli"}
+    ],
+    2: [
+        {en:"become", pl:"stawać się"},{en:"seem", pl:"wydawać się"},{en:"change", pl:"zmieniać"},{en:"start", pl:"zaczynać"},{en:"finish", pl:"kończyć"},
+        {en:"help", pl:"pomagać"},{en:"wait", pl:"czekać"},{en:"stay", pl:"zostawać"},{en:"leave", pl:"opuszczać"},{en:"find", pl:"znajdować"},
+        {en:"lose", pl:"gubić"},{en:"win", pl:"wygrywać"},{en:"choose", pl:"wybierać"},{en:"try", pl:"próbować"},{en:"need", pl:"potrzebować"},
+        {en:"want", pl:"chcieć"},{en:"like", pl:"lubić"},{en:"love", pl:"kochać"},{en:"hate", pl:"nienawidzić"},{en:"enjoy", pl:"cieszyć się"},
+        {en:"think", pl:"myśleć"},{en:"know", pl:"wiedzieć"},{en:"learn", pl:"uczyć się"},{en:"remember", pl:"pamiętać"},{en:"forget", pl:"zapominać"},
+        {en:"hope", pl:"mieć nadzieję"},{en:"believe", pl:"wierzyć"},{en:"feel", pl:"czuć"},{en:"look", pl:"wyglądać"},{en:"sound", pl:"brzmieć"}
+    ],
+    3: [
+        {en:"decide", pl:"decydować"},{en:"plan", pl:"planować"},{en:"prepare", pl:"przygotowywać"},{en:"organize", pl:"organizować"},{en:"arrange", pl:"ustalać"},
+        {en:"manage", pl:"zarządzać"},{en:"control", pl:"kontrolować"},{en:"improve", pl:"poprawiać"},{en:"reduce", pl:"zmniejszać"},{en:"increase", pl:"zwiększać"},
+        {en:"create", pl:"tworzyć"},{en:"destroy", pl:"niszczyć"},{en:"build", pl:"budować"},{en:"repair", pl:"naprawiać"},{en:"replace", pl:"zastępować"},
+        {en:"protect", pl:"chronić"},{en:"allow", pl:"pozwalać"},{en:"prevent", pl:"zapobiegać"},{en:"refuse", pl:"odmawiać"},{en:"accept", pl:"akceptować"}
+    ],
+    4: [
+        {en:"appear", pl:"pojawiać się"},{en:"disappear", pl:"znikać"},{en:"remain", pl:"pozostawać"},{en:"belong", pl:"należeć"},{en:"include", pl:"zawierać"},
+        {en:"contain", pl:"zawierać"},{en:"affect", pl:"wpływać"},{en:"depend", pl:"zależeć"},{en:"realize", pl:"uświadamiać"},{en:"expect", pl:"oczekiwać"},
+        {en:"imagine", pl:"wyobrażać"},{en:"consider", pl:"rozważać"},{en:"admit", pl:"przyznawać się"},{en:"deny", pl:"zaprzeczać"},{en:"demand", pl:"żądać"}
+    ],
+    5: [
+        {en:"achieve", pl:"osiągać"},{en:"succeed", pl:"odnosić sukces"},{en:"fail", pl:"ponosić porażkę"},{en:"handle", pl:"radzić sobie"},{en:"avoid", pl:"unikać"},
+        {en:"influence", pl:"wpływ"},{en:"freedom", pl:"wolność"},{en:"justice", pl:"sprawiedliwość"},{en:"society", pl:"społeczeństwo"},{en:"community", pl:"społeczność"},
+        {en:"environment", pl:"środowisko"},{en:"pollution", pl:"zanieczyszczenie"},{en:"climate", pl:"klimat"},{en:"resource", pl:"zasób"},{en:"energy", pl:"energia"}
+    ]
 };
 
 const SHOP_ITEMS = [
-    {id:'c1', n:'ZŁOTY NICK', p:500, type:'color', val:'#ffd700'},
-    {id:'c2', n:'NEON BLUE', p:500, type:'color', val:'#00f2ff'},
-    {id:'c3', n:'KRWISTA CZERWIEŃ', p:600, type:'color', val:'#ff4d4d'},
-    {id:'c4', n:'MAGENTA', p:400, type:'color', val:'#ff00ff'},
-    {id:'c5', n:'TRAWIASTY', p:300, type:'color', val:'#2ecc71'},
-    {id:'e1', n:'NINJA', p:300, type:'emo', val:'🥷'},
-    {id:'e2', n:'KRÓL', p:1000, type:'emo', val:'👑'},
-    {id:'e3', n:'DUCH', p:200, type:'emo', val:'👻'},
-    {id:'e4', n:'ROBOT', p:400, type:'emo', val:'🤖'},
-    {id:'e5', n:'KOSMITA', p:500, type:'emo', val:'👽'},
-    {id:'e6', n:'CZASZKA', p:800, type:'emo', val:'💀'},
-    {id:'e7', n:'SMOK', p:1200, type:'emo', val:'🐲'},
-    {id:'e8', n:'DIAMENT', p:2000, type:'emo', val:'💎'},
-    {id:'e9', n:'REKIN', p:600, type:'emo', val:'🦈'},
-    {id:'e10', n:'WILK', p:700, type:'emo', val:'🐺'},
-    {id:'e11', n:'OGIEŃ', p:300, type:'emo', val:'🔥'},
-    {id:'e12', n:'PANDA', p:400, type:'emo', val:'🐼'},
-    {id:'e13', n:'TYGRYS', p:500, type:'emo', val:'🐯'},
-    {id:'e14', n:'PIŁKA', p:200, type:'emo', val:'⚽'},
-    {id:'e15', n:'GAMER', p:450, type:'emo', val:'🎮'},
-    {id:'e16', n:'MUZYKA', p:350, type:'emo', val:'🎧'},
-    {id:'e17', n:'PIENIĄDZE', p:1000, type:'emo', val:'💰'},
-    {id:'e18', n:'BŁYSKAWICA', p:600, type:'emo', val:'⚡'},
-    {id:'e19', n:'KOWBOJ', p:400, type:'emo', val:'🤠'},
-    {id:'e20', n:'WIKING', p:700, type:'emo', val:'🪓'},
-    {id:'e21', n:'MAŁPA', p:300, type:'emo', val:'🐵'},
-    {id:'e22', n:'KOT', p:250, type:'emo', val:'🐱'},
-    {id:'e23', n:'PIES', p:250, type:'emo', val:'🐶'},
-    {id:'e24', n:'RAKIETA', p:900, type:'emo', val:'🚀'},
-    {id:'e25', n:'UNIKORN', p:1100, type:'emo', val:'🦄'}
+    {id:'c1', n:'BŁĘKIT', p:200, type:'color', val:'#00f2ff'}, {id:'c2', n:'ZŁOTO', p:800, type:'color', val:'#ffd700'}, {id:'c3', n:'NEON RÓŻ', p:400, type:'color', val:'#ff00ff'},
+    {id:'e1', n:'NINJA', p:300, type:'emo', val:'🥷'}, {id:'e2', n:'KRÓL', p:1500, type:'emo', val:'👑'}, {id:'e3', n:'DUCH', p:200, type:'emo', val:'👻'},
+    {id:'e4', n:'ROBOT', p:500, type:'emo', val:'🤖'}, {id:'e5', n:'KOSMITA', p:600, type:'emo', val:'👽'}, {id:'e6', n:'CZASZKA', p:400, type:'emo', val:'💀'},
+    {id:'e7', n:'SMOK', p:1200, type:'emo', val:'🐲'}, {id:'e8', n:'DIAMENT', p:2000, type:'emo', val:'💎'}, {id:'e9', n:'REKIN', p:700, type:'emo', val:'🦈'},
+    {id:'e10', n:'WILK', p:850, type:'emo', val:'🐺'}, {id:'e11', n:'PANDA', p:500, type:'emo', val:'🐼'}, {id:'e12', n:'PIŁKA', p:150, type:'emo', val:'⚽'},
+    {id:'e13', n:'GAMER', p:400, type:'emo', val:'🎮'}, {id:'e14', n:'RAKIETA', p:1000, type:'emo', val:'🚀'}, {id:'e15', n:'KOT', p:200, type:'emo', val:'🐱'}
 ];
 
-let user = JSON.parse(localStorage.getItem('e8_v3')) || {
-    name: "GRACZ", avatar: "👶🏻", cups: 0, coins: 100, bombs: 3, 
-    owned_emos: ['👶🏻'], owned_colors: ['#ffffff'], current_color: '#ffffff'
+// --- STATE ---
+let user = JSON.parse(localStorage.getItem('e8_f')) || {
+    name: "GRACZ", avatar: "👶🏻", cups: 0, coins: 50, arena: 1,
+    owned_e: ['👶🏻'], owned_c: ['#ffffff'], cur_c: '#ffffff'
 };
-let game = { idx:0, pool:[], current:null };
+let game = { idx:0, err:0, pool:[], cur:null, dir:'' };
 
 function save() {
-    localStorage.setItem('e8_v3', JSON.stringify(user));
-    if(user.name !== "GRACZ") {
-        db.ref('players/' + (localStorage.getItem('e8_uid') || 'u1')).set(user);
-    }
+    localStorage.setItem('e8_f', JSON.stringify(user));
+    if(user.name !== "GRACZ") db.ref('players/' + (localStorage.getItem('e8_uid') || 'u1')).set(user);
     updateUI();
 }
 
 function updateUI() {
     document.getElementById('p-name').textContent = user.name;
-    document.getElementById('p-name').style.color = user.current_color;
+    document.getElementById('p-name').style.color = user.cur_c;
     document.getElementById('p-avatar').textContent = user.avatar;
     document.getElementById('p-cups').textContent = user.cups;
     document.getElementById('p-coins').textContent = user.coins;
-    document.getElementById('p-bombs').textContent = user.bombs;
+    document.getElementById('active-arena-label').textContent = user.arena;
     renderLocker();
     renderShop();
-    renderRoad();
+    renderDict();
 }
 
-function renderRoad() {
-    let road = document.getElementById('road-content'); road.innerHTML = '';
-    for(let i=0; i<=5000; i+=200) {
-        road.innerHTML += `<div class="node ${user.cups>=i?'unlocked':''}"><div class="node-box">${i%1000==0?'🎁':'💰'}</div><div style="font-size:0.5rem">${i}🏆</div></div>`;
+// --- LOGIKA AREN I SŁOWNIKA ---
+function renderDict() {
+    const btns = document.getElementById('arena-btns');
+    btns.innerHTML = '';
+    for(let i=1; i<=5; i++) {
+        btns.innerHTML += `<button class="btn-arena ${user.arena==i?'active-arena':''}" onclick="setArena(${i})">A${i}</button>`;
+    }
+    const list = document.getElementById('dict-list');
+    list.innerHTML = WORDS_DATA[user.arena].map(w => `<div style="display:flex; justify-content:space-between; padding:5px; border-bottom:1px solid #222"><span>${w.en}</span><b>${w.pl}</b></div>`).join('');
+}
+
+function setArena(a) { user.arena = a; save(); }
+
+// --- LEKCJA ---
+function startGame() {
+    // Łączymy słówka z obecnej areny i poprzednich
+    let combined = [];
+    for(let i=1; i<=user.arena; i++) combined = [...combined, ...WORDS_DATA[i]];
+    
+    game.pool = combined.sort(() => 0.5 - Math.random()).slice(0, 20);
+    game.idx = 0; game.err = 0;
+    showScreen('screen-game');
+    document.getElementById('g-info').textContent = "ARENA " + user.arena;
+    nextWord();
+}
+
+function nextWord() {
+    game.cur = game.pool[game.idx];
+    game.dir = Math.random() > 0.5 ? 'en' : 'pl';
+    document.getElementById('g-word').textContent = (game.dir == 'en' ? game.cur.en : game.cur.pl).toUpperCase();
+    document.getElementById('g-input').value = "";
+    document.getElementById('g-count').textContent = game.idx + 1;
+    document.getElementById('g-err').textContent = game.err;
+    document.getElementById('g-feedback').textContent = "";
+}
+
+function checkWord() {
+    let val = document.getElementById('g-input').value.toLowerCase().trim();
+    let ans = (game.dir == 'en' ? game.cur.pl : game.cur.en).toLowerCase().trim();
+    
+    if(val == ans) {
+        game.idx++;
+        user.coins += 5;
+        if(game.idx >= 20) finishGame(); else nextWord();
+    } else {
+        game.err++;
+        document.getElementById('g-feedback').textContent = "BŁĄD! POPRAWNIE: " + ans.toUpperCase();
+        document.getElementById('g-feedback').style.color = "#ff4d4d";
+        if(game.err > 5) {
+            alert("PRZEGRAŁEŚ! Ponad 5 błędów.");
+            showScreen('screen-menu');
+        } else {
+            // Po błędzie czekamy chwilę i dajemy następne słowo mimo błędu
+            setTimeout(() => { if(game.err <= 5) { game.idx++; if(game.idx >= 20) finishGame(); else nextWord(); } }, 1500);
+        }
     }
 }
 
-function openDictionary() {
-    let stage = Math.min(5, Math.floor(user.cups / 500) + 1);
-    let list = document.getElementById('dict-list'); list.innerHTML = '';
-    for(let i=1; i<=stage; i++) {
-        ALL_WORDS[i].forEach(w => {
-            list.innerHTML += `<div class="dict-item"><b>${w.en}</b><span>${w.pl}</span></div>`;
-        });
-    }
-    showScreen('screen-dictionary');
+function finishGame() {
+    let bonus = 0;
+    if(game.err <= 1) bonus = 30;
+    else if(game.err <= 3) bonus = 20;
+    else if(game.err <= 5) bonus = 10;
+    
+    user.cups += bonus;
+    save();
+    alert(`KONIEC! Błędy: ${game.err}. Zdobyte pucharki: ${bonus}🏆`);
+    showScreen('screen-menu');
 }
 
-function renderLocker() {
-    document.getElementById('locker-grid').innerHTML = user.owned_emos.map(e => `
-        <div class="locker-item ${user.avatar==e?'active':''}" onclick="user.avatar='${e}';save();">${e}</div>
-    `).join('');
-}
-
+// --- SKLEP I SZAFKA ---
 function renderShop() {
-    document.getElementById('shop-items').innerHTML = SHOP_ITEMS.map(i => `
-        <div class="profile-card" onclick="buyItem('${i.id}')">
-            <div style="font-size:1.5rem">${i.type=='color'?'🎨':i.val}</div>
-            <div style="flex:1"><b>${i.n}</b><br><small>${i.p} 💰</small></div>
+    document.getElementById('shop-list').innerHTML = SHOP_ITEMS.map(i => `
+        <div class="shop-item">
+            <span style="font-size:1.5rem; color:${i.type=='color'?i.val:'#fff'}">${i.type=='color'?'🎨':i.val}</span>
+            <div style="flex:1; margin-left:15px"><b>${i.n}</b><br><small>${i.p} 💰</small></div>
+            <button style="width:70px; padding:8px; font-size:0.6rem" class="btn-blue" onclick="buy('${i.id}')">KUP</button>
         </div>
     `).join('');
 }
 
-function buyItem(id) {
-    let i = SHOP_ITEMS.find(x => x.id == id);
-    if(user.coins >= i.p) {
-        user.coins -= i.p;
-        if(i.type == 'color') { 
-            if(!user.owned_colors.includes(i.val)) user.owned_colors.push(i.val);
-            user.current_color = i.val;
-        } else { if(!user.owned_emos.includes(i.val)) user.owned_emos.push(i.val); }
-        save(); alert("ZAKUPIONO!");
+function buy(id) {
+    let itm = SHOP_ITEMS.find(x => x.id == id);
+    if(user.coins >= itm.p) {
+        user.coins -= itm.p;
+        if(itm.type == 'color') user.owned_c.push(itm.val);
+        else user.owned_e.push(itm.val);
+        save(); alert("KUPIONO!");
     } else alert("BRAK MONET!");
 }
 
+function renderLocker() {
+    document.getElementById('locker-grid').innerHTML = 
+        user.owned_e.map(e => `<div class="item-box ${user.avatar==e?'active':''}" onclick="user.avatar='${e}';save()">${e}</div>`).join('') +
+        user.owned_c.map(c => `<div class="item-box ${user.cur_c==c?'active':''}" style="color:${c}" onclick="user.cur_c='${c}';save()">🎨</div>`).join('');
+}
+
+// --- SYSTEM ---
 function toggleModal(id) { document.getElementById(id).classList.toggle('hidden'); }
-function changeName() {
-    let n = document.getElementById('set-name-input').value;
-    if(n && n.toUpperCase() !== "GRACZ") { user.name = n.toUpperCase(); save(); toggleModal('modal-settings'); }
-}
-
-function startMode() {
-    let stage = Math.min(5, Math.floor(user.cups / 500) + 1);
-    let words = []; for(let i=1; i<=stage; i++) words = [...words, ...ALL_WORDS[i]];
-    game.pool = words.sort(() => 0.5 - Math.random()).slice(0, 10);
-    game.idx = 0; showScreen('screen-game'); loadQ();
-}
-
-function loadQ() {
-    game.current = game.pool[game.idx];
-    game.dir = Math.random() > 0.5 ? 'en2pl' : 'pl2en';
-    document.getElementById('g-word').textContent = (game.dir == 'en2pl' ? game.current.en : game.current.pl).toUpperCase();
-    document.getElementById('g-input').value = ""; document.getElementById('g-feedback').textContent = "";
-    document.getElementById('g-progress').textContent = (game.idx + 1) + "/10";
-}
-
-function checkAnswer() {
-    let v = document.getElementById('g-input').value.toLowerCase().trim();
-    let c = (game.dir == 'en2pl' ? game.current.pl : game.current.en).toLowerCase().trim();
-    if(v == c || v.replace('ł','l') == c.replace('ł','l')) {
-        game.idx++; user.coins += 10;
-        if(game.idx >= 10) { user.cups += 50; exitGame(); alert("+50🏆"); } else loadQ();
-    } else { document.getElementById('g-feedback').textContent = "ŹLE! POPRAWNIE: " + c.toUpperCase(); }
-    save();
-}
-
-function exitGame() { showScreen('screen-menu'); }
 function showScreen(id) { document.querySelectorAll('.app').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
+function saveNick() {
+    let n = document.getElementById('input-nick').value.trim().toUpperCase();
+    if(n && n !== "GRACZ") { user.name = n; save(); toggleModal('modal-settings'); }
+}
 
 db.ref('players').orderByChild('cups').limitToLast(10).on('value', snap => {
-    let h = ''; snap.forEach(child => {
-        let p = child.val();
-        if(p.name !== "GRACZ") h = `<div style="font-size:0.7rem; color:${p.current_color}">${p.avatar} ${p.name} - ${p.cups}🏆</div>` + h;
+    let h = '';
+    snap.forEach(c => {
+        let p = c.val();
+        if(p.name !== "GRACZ") h = `<div style="color:${p.cur_c}; margin-bottom:4px">${p.avatar} ${p.name} — ${p.cups}🏆</div>` + h;
     });
     document.getElementById('leader-list').innerHTML = h;
 });
