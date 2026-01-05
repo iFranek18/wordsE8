@@ -3,49 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>E8 CyberQuest</title>
+    <title>E8 CyberQuest: Battle Royale</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Inter:wght@400;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@400;800&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #7289da; --neon: #00f2ff; --bg: #05050a; --card: rgba(20, 25, 40, 0.9); }
+        :root { --p: #7289da; --neon: #00f2ff; --bg: #05050a; --card: rgba(25, 25, 45, 0.95); }
         body { margin:0; font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; overflow: hidden; height: 100vh; }
-        
-        /* RGB BACKGROUND */
         .rgb-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: #000; overflow: hidden; }
-        .line { position: absolute; width: 2px; height: 40vh; filter: blur(2px); animation: move linear infinite; opacity: 0.5; }
+        .line { position: absolute; width: 2px; height: 40vh; filter: blur(2px); animation: move linear infinite; opacity: 0.4; }
         @keyframes move { 0% { transform: translateY(-110%) rotate(5deg); } 100% { transform: translateY(110vh) rotate(5deg); } }
 
-        .app { max-width: 480px; margin: 0 auto; padding: 15px; height: 100vh; display: flex; flex-direction: column; position: relative; }
+        .app { max-width: 480px; margin: 0 auto; padding: 15px; height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; }
         .hidden { display: none !important; }
 
-        /* BATTLE PASS / OŚ NAGRÓD */
-        .trophy-road { 
-            background: var(--card); padding: 12px; border-radius: 15px; border: 1px solid var(--neon);
-            margin-bottom: 15px; cursor: pointer; position: relative; overflow: hidden;
-        }
-        .progress-container { background: #1a1a2e; height: 12px; border-radius: 10px; margin-top: 8px; position: relative; }
-        .progress-bar { background: linear-gradient(90deg, var(--neon), #a29bfe); height: 100%; border-radius: 10px; transition: 1s; width: 0%; }
+        /* TROPHY ROAD */
+        .road-scroll { display: flex; overflow-x: auto; gap: 15px; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 15px; border: 1px solid #333; margin-bottom: 15px; scrollbar-width: none; }
+        .node { flex: 0 0 65px; text-align: center; }
+        .node-box { width: 55px; height: 55px; background: var(--card); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; border: 2px solid #444; }
+        .unlocked .node-box { border-color: var(--neon); box-shadow: 0 0 10px var(--neon); }
+
+        /* UI BUTTONS */
+        button { width: 100%; padding: 16px; border-radius: 14px; border: none; font-weight: 800; cursor: pointer; margin-top: 8px; font-family: 'Orbitron'; text-transform: uppercase; }
+        .btn-blue { background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: white; }
+        .btn-multi { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; }
         
-        /* PROFILE CARD */
-        .profile-card { background: var(--card); padding: 15px; border-radius: 20px; border: 1px solid var(--p); display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
-        .avatar-box { font-size: 2rem; width: 55px; height: 55px; background: #1a1a2e; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 2px solid var(--neon); }
-        
-        button { width: 100%; padding: 16px; border-radius: 14px; border: none; font-weight: 800; cursor: pointer; margin-top: 10px; transition: 0.2s; text-transform: uppercase; font-family: 'Orbitron'; font-size: 0.8rem; letter-spacing: 1px; }
-        .btn-main { background: var(--p); color: white; box-shadow: 0 4px 0 #4a5da0; }
-        .btn-game { background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: white; }
-        .btn-ranked { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; }
+        /* MULTIPLAYER HUD */
+        .player-row { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; font-size: 0.8rem; }
+        .p-bar { flex: 1; height: 6px; background: #222; border-radius: 3px; overflow: hidden; }
+        .p-fill { height: 100%; background: var(--neon); transition: 0.3s; width: 0%; }
 
-        input { width: 100%; padding: 18px; border-radius: 12px; border: 2px solid #333; background: #000; color: var(--neon); font-size: 1.2rem; text-align: center; font-family: 'Orbitron'; box-sizing: border-box; }
-        input:focus { border-color: var(--neon); outline: none; }
-
-        /* POPUP ŚCIEŻKI NAGRÓD */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; padding: 20px; box-sizing: border-box; overflow-y: auto; }
-        .reward-step { display: flex; align-items: center; gap: 15px; padding: 15px; background: var(--card); margin-bottom: 10px; border-radius: 12px; border: 1px solid #333; }
-        .reward-step.unlocked { border-color: var(--neon); }
-        .reward-step.locked { opacity: 0.5; }
-
-        .pill { padding: 12px 18px; background: #1a1a2e; border: 1px solid var(--p); border-radius: 8px; margin: 5px; cursor: pointer; font-weight: bold; }
+        input { width: 100%; padding: 16px; border-radius: 12px; border: 2px solid #333; background: #000; color: var(--neon); font-size: 1.1rem; text-align: center; font-family: 'Orbitron'; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -53,85 +41,55 @@
 <div class="rgb-bg" id="rgb-container"></div>
 
 <div class="app" id="screen-menu">
-    <div class="trophy-road" onclick="toggleRewards(true)">
-        <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-family:'Orbitron'">
-            <span>NAGRODY 🏆</span>
-            <span id="next-goal">CEL: 500 🏆</span>
-        </div>
-        <div class="progress-container">
-            <div class="progress-bar" id="main-progress"></div>
-        </div>
-    </div>
-
-    <div class="profile-card">
-        <div class="avatar-box" id="p-avatar">👶🏻</div>
+    <div class="road-scroll" id="road-content"></div>
+    <div style="background:var(--card); padding:15px; border-radius:20px; border:1px solid var(--p); display:flex; align-items:center; gap:12px; margin-bottom:10px">
+        <div style="font-size:2rem; width:50px; height:50px; background:#111; border-radius:10px; display:flex; align-items:center; justify-content:center; border:2px solid var(--neon)" id="p-avatar">👶🏻</div>
         <div style="flex:1">
-            <h2 id="p-name" style="margin:0; font-family:'Orbitron'; font-size:1rem">GRACZ</h2>
-            <div style="display:flex; gap:10px; margin-top:5px">
-                <span>🏆 <span id="p-cups">0</span></span>
-                <span style="color:var(--neon)">LEVEL <span id="p-lvl">1</span></span>
-            </div>
+            <h2 id="p-name" style="margin:0; font-size:0.9rem; font-family:'Orbitron'">GRACZ</h2>
+            <div style="font-size:0.8rem">🏆 <span id="p-cups">0</span> | 💰 <span id="p-coins">0</span> | 💣 <span id="p-bombs">0</span></div>
         </div>
-        <div style="cursor:pointer; font-size:1.5rem" onclick="showScreen('screen-settings')">⚙️</div>
+        <div onclick="showScreen('screen-settings')" style="cursor:pointer">⚙️</div>
     </div>
-
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px">
-        <div class="profile-card" style="margin:0; justify-content:center">💰 <span id="p-coins">0</span></div>
-        <div class="profile-card" style="margin:0; justify-content:center">💣 <span id="p-bombs">0</span></div>
-    </div>
-
-    <button class="btn-game" onclick="startMode('practice')">NAUKA SŁÓWEK</button>
-    <button class="btn-game" style="background: #6c5ce7" onclick="startMode('sentence')">ZADANIA ZDANIA 🧩</button>
-    <button class="btn-ranked" onclick="startMode('ranked')">MECZ RANKINGOWY ⚔️</button>
-
-    <div style="background:var(--card); border-radius:15px; padding:12px; margin-top:15px; flex:1; overflow-y:auto">
-        <h4 style="margin:0 0 10px 0; color:var(--neon); font-family:'Orbitron'; font-size:0.7rem">GLOBALNY RANKING</h4>
+    <button class="btn-blue" onclick="startMode('practice')">NAUKA</button>
+    <button class="btn-multi" onclick="showScreen('screen-multi-lobby')">BATTLE ROYALE 🌐</button>
+    <div style="background:var(--card); border-radius:15px; padding:12px; margin-top:10px; flex:1; overflow-y:auto">
+        <h4 style="margin:0 0 10px 0; font-family:'Orbitron'; font-size:0.6rem; color:var(--neon)">RANKING LIDERÓW</h4>
         <div id="leader-list"></div>
     </div>
+</div>
 
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px">
-        <button style="background:#2d3436; color:white" onclick="showScreen('screen-words')">SŁOWNIK</button>
-        <button style="background:#00b894; color:white" onclick="toggleRewards(true)">SKLEP 🏆</button>
+<div class="app hidden" id="screen-multi-lobby">
+    <button onclick="exitGame()">POWRÓT</button>
+    <div id="setup-view">
+        <h2 style="font-family:'Orbitron'; text-align:center">POKÓJ GIER</h2>
+        <button class="btn-blue" onclick="createRoom()">STWÓRZ NOWY POKÓJ</button>
+        <div style="margin: 20px 0">
+            <input type="text" id="join-input" placeholder="WPISZ KOD">
+            <button class="btn-multi" style="margin-top:5px" onclick="joinRoom()">DOŁĄCZ DO EKIPY</button>
+        </div>
+    </div>
+
+    <div id="room-view" class="hidden">
+        <div style="text-align:center; background:var(--card); padding:15px; border-radius:15px; border:2px solid var(--neon)">
+            <small>KOD POKOJU:</small>
+            <h1 id="display-code" style="font-family:'Orbitron'; margin:5px 0; color:var(--neon)">----</h1>
+        </div>
+        <h4 style="font-family:'Orbitron'; margin:20px 0 10px 0">GRACZE W POKOJU:</h4>
+        <div id="player-list"></div>
+        <button id="start-btn" class="btn-blue hidden" onclick="startBattle()">START GRY! 🔥</button>
+        <p id="wait-msg" style="text-align:center; font-size:0.8rem; color:#888">Czekamy na Hosta...</p>
     </div>
 </div>
 
 <div class="app hidden" id="screen-game">
-    <div style="display:flex; justify-content:space-between; color:var(--neon); font-family:'Orbitron'; margin-bottom:30px">
-        <span>LVL: <span id="g-lvl">1</span></span>
-        <span>POSTĘP: <span id="g-progress">0/0</span></span>
+    <div id="battle-stats" style="margin-bottom:20px"></div>
+    <div id="g-word" style="font-size: 1.8rem; margin: 20px 0; font-weight:900; text-align:center; font-family:'Orbitron'">---</div>
+    <input type="text" id="g-input" placeholder="TŁUMACZ SZYBKO!" autocomplete="off">
+    <div id="g-feedback" style="margin: 15px 0; text-align:center; font-weight:bold; min-height:20px"></div>
+    <div style="display:flex; gap:10px">
+        <button class="btn-blue" style="background:#f1c40f" onclick="useBomb()">POMOC 💣</button>
+        <button style="background:transparent; color:#555" onclick="exitGame()">WYJDŹ</button>
     </div>
-    <div id="g-word" style="font-size: 1.8rem; margin: 20px 0; font-weight:900; text-align:center; font-family:'Orbitron'">SŁOWO</div>
-    <div id="sentence-box" style="margin-bottom: 25px; display:flex; flex-wrap:wrap; justify-content:center"></div>
-    <input type="text" id="g-input" placeholder="WPISZ ODPOWIEDŹ..." autocomplete="off">
-    <div id="g-feedback" style="margin: 20px 0; font-weight: bold; min-height: 25px; text-align:center"></div>
-    <button class="btn-game" style="background:#f1c40f" onclick="useBomb()">POMOC 💣</button>
-    <button style="background:transparent; color:#555" onclick="exitGame()">WYJDŹ</button>
-</div>
-
-<div id="reward-modal" class="modal hidden">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
-        <h2 style="font-family:'Orbitron'; color:var(--neon); margin:0">ŚCIEŻKA 🏆</h2>
-        <button style="width:auto; margin:0; padding:10px 20px" onclick="toggleRewards(false)">X</button>
-    </div>
-    <div id="full-reward-path"></div>
-</div>
-
-<div class="app hidden" id="screen-settings">
-    <button onclick="showScreen('screen-menu')">POWRÓT</button>
-    <h2 style="font-family:'Orbitron'">USTAWIENIA ⚙️</h2>
-    <div class="profile-card" style="flex-direction:column; align-items:flex-start">
-        <label>GŁOŚNOŚĆ MUZYKI:</label>
-        <input type="range" style="width:100%" min="0" max="100" oninput="updateVol('music', this.value)">
-        <label style="margin-top:15px">GŁOŚNOŚĆ SFX:</label>
-        <input type="range" style="width:100%" min="0" max="100" oninput="updateVol('sfx', this.value)">
-    </div>
-    <input type="text" id="set-name" placeholder="NOWY NICK" onchange="updateProfileName()" style="margin-top:20px">
-</div>
-
-<div class="app hidden" id="screen-words">
-    <button onclick="showScreen('screen-menu')">POWRÓT</button>
-    <h2 style="font-family:'Orbitron'">TWOJA WIEDZA 📚</h2>
-    <div id="dict-list" style="overflow-y:auto"></div>
 </div>
 
 <script>
@@ -148,48 +106,21 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// --- DANE ---
-const REWARDS = [
-    {cups: 0, icon: "👶🏻", name: "Początek"},
-    {cups: 500, icon: "🎸", name: "Gitarzysta"},
-    {cups: 1000, icon: "🎮", name: "Gamer"},
-    {cups: 1250, icon: "💪🏽", name: "Siłacz"},
-    {cups: 1500, icon: "🎅🏻", name: "Mikołaj"},
-    {cups: 2000, icon: "🖕🏼", name: "Buntownik"},
-    {cups: 3000, icon: "🏅", name: "Legenda"}
-];
+// --- DATA ---
+const WORDS = [{en:"I", pl:"ja"}, {en:"dog", pl:"pies"}, {en:"cat", pl:"kot"}, {en:"mother", pl:"mama"}, {en:"apple", pl:"jablko"}, {en:"water", pl:"woda"}, {en:"school", pl:"szkola"}, {en:"book", pl:"ksiazka"}, {en:"car", pl:"samochod"}, {en:"sun", pl:"slonce"}];
 
-const WORDS_LVL1 = [
-    {en:"I", pl:"ja"}, {en:"you", pl:"ty"}, {en:"he", pl:"on"}, {en:"she", pl:"ona"}, {en:"it", pl:"ono"},
-    {en:"we", pl:"my"}, {en:"they", pl:"oni"}, {en:"mother", pl:"mama"}, {en:"father", pl:"tata"},
-    {en:"who", pl:"kto"}, {en:"where", pl:"gdzie"}, {en:"when", pl:"kiedy"}, {en:"and", pl:"i"}
-];
-const SENTENCES_LVL1 = [
-    {en: "i love my mother", pl: "kocham moja mame", mix_en: ["love", "my", "mother", "i"], mix_pl: ["kocham", "mame", "moja"]}
-];
-
-// --- AUDIO ---
-const audio = {
-    bgm: new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3'),
-    win: new Audio('https://actions.google.com/sounds/v1/cartoon/clime_up_the_ladder.ogg'),
-    lose: new Audio('https://actions.google.com/sounds/v1/cartoon/boing.ogg'),
-    volMusic: 0.5, volSFX: 0.8
-};
-audio.bgm.loop = true;
-
-// --- LOGIKA ---
+// --- STATE ---
 let myId = localStorage.getItem('e8_uuid') || 'u_' + Math.random().toString(36).substr(2, 9);
 localStorage.setItem('e8_uuid', myId);
+let user = JSON.parse(localStorage.getItem('e8_br_v1')) || { name: "GRACZ", avatar: "👶🏻", cups: 0, coins: 50, bombs: 2, claimed: [] };
+let currentRoom = null;
+let gameIdx = 0;
+let isHost = false;
 
-let user = JSON.parse(localStorage.getItem('e8_v3')) || {
-    name: "GRACZ", avatar: "👶🏻", cups: 0, coins: 100, bombs: 2, lvl: 1
-};
-
-// Funkcja usuwająca polskie znaki do porównania
-const normalize = (str) => str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l").trim();
+function normalize(s) { return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l").trim(); }
 
 function save() {
-    localStorage.setItem('e8_v3', JSON.stringify(user));
+    localStorage.setItem('e8_br_v1', JSON.stringify(user));
     db.ref('players/' + myId).set({ name: user.name, avatar: user.avatar, cups: user.cups });
     updateUI();
 }
@@ -200,123 +131,119 @@ function updateUI() {
     document.getElementById('p-cups').textContent = user.cups;
     document.getElementById('p-coins').textContent = user.coins;
     document.getElementById('p-bombs').textContent = user.bombs;
-    document.getElementById('p-lvl').textContent = user.lvl;
+}
+
+// --- MULTI-BATTLE LOGIC ---
+function createRoom() {
+    isHost = true;
+    const code = Math.floor(1000 + Math.random() * 8999);
+    currentRoom = code;
+    db.ref('rooms/' + code).set({
+        host: myId,
+        status: 'lobby',
+        players: { [myId]: { name: user.name, avatar: user.avatar, prog: 0 } }
+    });
+    showRoomView(code);
+}
+
+function joinRoom() {
+    const code = document.getElementById('join-input').value;
+    if(!code) return;
+    db.ref('rooms/' + code).once('value', snap => {
+        if(snap.exists()) {
+            currentRoom = code;
+            db.ref(`rooms/${code}/players/${myId}`).set({ name: user.name, avatar: user.avatar, prog: 0 });
+            showRoomView(code);
+        } else alert("POKÓJ NIE ISTNIEJE!");
+    });
+}
+
+function showRoomView(code) {
+    document.getElementById('setup-view').classList.add('hidden');
+    document.getElementById('room-view').classList.remove('hidden');
+    document.getElementById('display-code').textContent = code;
     
-    // Oś postępu
-    const nextReward = REWARDS.find(r => r.cups > user.cups) || REWARDS[REWARDS.length-1];
-    const prevRewardCups = [...REWARDS].reverse().find(r => r.cups <= user.cups).cups;
-    const diff = nextReward.cups - prevRewardCups;
-    const progress = diff === 0 ? 100 : ((user.cups - prevRewardCups) / diff) * 100;
-    document.getElementById('main-progress').style.width = Math.min(progress, 100) + "%";
-    document.getElementById('next-goal').textContent = `CEL: ${nextReward.cups} 🏆`;
-}
-
-function toggleRewards(show) {
-    const modal = document.getElementById('reward-modal');
-    if(show) {
-        modal.classList.remove('hidden');
-        document.getElementById('full-reward-path').innerHTML = REWARDS.map(r => `
-            <div class="reward-step ${user.cups >= r.cups ? 'unlocked' : 'locked'}">
-                <div style="font-size:1.5rem">${user.cups >= r.cups ? r.icon : '🔒'}</div>
-                <div style="flex:1">
-                    <div style="font-weight:bold">${r.name}</div>
-                    <div style="font-size:0.8rem">${r.cups} 🏆</div>
-                </div>
-                ${user.cups >= r.cups ? `<button style="width:auto; padding:5px 10px; margin:0" onclick="setAv('${r.icon}')">WYBIERZ</button>` : ''}
-            </div>
+    db.ref('rooms/' + code).on('value', snap => {
+        const data = snap.val();
+        if(!data) return;
+        
+        // Lista graczy w lobby
+        const pList = Object.values(data.players || {});
+        document.getElementById('player-list').innerHTML = pList.map(p => `
+            <div class="player-row"><span>${p.avatar}</span> <b>${p.name}</b> <span style="margin-left:auto; color:lime">GOTOWY</span></div>
         `).join('');
-    } else modal.classList.add('hidden');
+
+        if(isHost) document.getElementById('start-btn').classList.remove('hidden');
+        
+        // Start gry
+        if(data.status === 'playing' && gameIdx === 0) {
+            showScreen('screen-game');
+            loadQ();
+        }
+
+        // Aktualizacja paska bitwy
+        if(data.status === 'playing') {
+            document.getElementById('battle-stats').innerHTML = Object.entries(data.players).map(([id, p]) => `
+                <div style="font-size:0.7rem; margin-top:5px">${p.name} (${p.prog}/10)</div>
+                <div class="p-bar"><div class="p-fill" style="width:${p.prog*10}%; background:${id===myId?'var(--neon)':'#ff416c'}"></div></div>
+            `).join('');
+            
+            // Sprawdź czy ktoś wygrał
+            Object.values(data.players).forEach(p => {
+                if(p.prog >= 10 && data.winner === undefined) {
+                    db.ref(`rooms/${currentRoom}`).update({ winner: p.name });
+                    alert("KONIEC! WYGRAŁ: " + p.name);
+                    exitGame();
+                }
+            });
+        }
+    });
 }
 
-// RANKING
-db.ref('players').orderByChild('cups').limitToLast(10).on('value', snap => {
-    const list = [];
-    snap.forEach(s => list.push(s.val()));
-    list.sort((a,b) => b.cups - a.cups);
-    document.getElementById('leader-list').innerHTML = list.map((p, i) => `
-        <div class="profile-card" style="padding:8px; margin-bottom:5px; border-color:${i<3?'var(--neon)':'#333'}">
-            <span style="width:20px">${i+1}.</span>
-            <span style="font-size:1.2rem">${p.avatar}</span>
-            <span style="flex:1; font-size:0.8rem">${p.name}</span>
-            <span>${p.cups} 🏆</span>
-        </div>
-    `).join('');
-});
-
-// GRA
-let game = { mode: '', pool: [], idx: 0, direction: 'en2pl' };
-function startMode(mode) {
-    if(audio.bgm.paused) audio.bgm.play();
-    game.mode = mode; game.idx = 0;
-    game.pool = mode === 'sentence' ? [...SENTENCES_LVL1] : [...WORDS_LVL1];
-    game.pool.sort(() => 0.5 - Math.random());
-    showScreen('screen-game');
-    loadQ();
+function startBattle() {
+    db.ref(`rooms/${currentRoom}`).update({ status: 'playing' });
 }
 
 function loadQ() {
-    let q = game.pool[game.idx];
-    game.direction = Math.random() > 0.5 ? 'en2pl' : 'pl2en';
-    document.getElementById('g-progress').textContent = `${game.idx+1}/${game.pool.length}`;
+    document.getElementById('g-word').textContent = WORDS[gameIdx].en.toUpperCase();
     document.getElementById('g-input').value = "";
     document.getElementById('g-feedback').textContent = "";
-    
-    const box = document.getElementById('sentence-box');
-    box.innerHTML = "";
-
-    if(game.mode === 'sentence') {
-        const quest = game.direction === 'en2pl' ? q.en : q.pl;
-        const mix = game.direction === 'en2pl' ? q.mix_pl : q.mix_en;
-        document.getElementById('g-word').textContent = quest.toUpperCase();
-        box.innerHTML = mix.sort(() => 0.5-Math.random()).map(w => `<span class="pill" onclick="addW('${w}')">${w}</span>`).join('');
-    } else {
-        document.getElementById('g-word').textContent = (game.direction === 'en2pl' ? q.en : q.pl).toUpperCase();
-    }
 }
-
-function addW(w) { document.getElementById('g-input').value += w + " "; }
 
 document.getElementById('g-input').onkeydown = e => {
     if(e.key === 'Enter') {
-        let q = game.pool[game.idx];
-        let correct = game.direction === 'en2pl' ? q.pl : q.en;
-        let input = document.getElementById('g-input').value;
-
-        if(normalize(input) === normalize(correct)) {
-            new Audio(audio.win.src).play();
-            user.coins += 10; game.idx++;
-            if(game.idx >= game.pool.length) { user.cups += 50; exitGame(); alert("WYGRANA! +50 🏆"); }
-            else loadQ();
+        if(normalize(e.target.value) === normalize(WORDS[gameIdx].pl)) {
+            gameIdx++;
+            db.ref(`rooms/${currentRoom}/players/${myId}`).update({ prog: gameIdx });
+            if(gameIdx < 10) loadQ();
+            else {
+                user.cups += 50;
+                save();
+            }
         } else {
-            document.getElementById('g-feedback').textContent = "BŁĄD! POPRAWNIE: " + correct.toUpperCase();
-            document.getElementById('g-feedback').style.color = "#ff416c";
+            document.getElementById('g-feedback').textContent = "BŁĄD!";
+            document.getElementById('g-feedback').style.color = "red";
         }
-        save();
     }
 }
 
-function initRGB() {
-    const container = document.getElementById('rgb-container');
-    const colors = ['#00f2ff', '#7289da', '#ff416c', '#00b894'];
-    for(let i=0; i<15; i++) {
-        let l = document.createElement('div');
-        l.className = 'line';
-        l.style.left = Math.random() * 100 + '%';
-        l.style.background = `linear-gradient(to bottom, transparent, ${colors[i%4]}, transparent)`;
-        l.style.animationDuration = (Math.random()*3+2)+'s';
-        container.appendChild(l);
-    }
+function exitGame() {
+    if(currentRoom) db.ref(`rooms/${currentRoom}/players/${myId}`).remove();
+    location.reload();
 }
 
-function updateVol(t, v) { if(t==='music') audio.bgm.volume = v/100; }
-function setAv(a) { user.avatar = a; save(); toggleRewards(false); }
 function showScreen(id) { document.querySelectorAll('.app').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
-function exitGame() { showScreen('screen-menu'); }
 function updateProfileName() { user.name = document.getElementById('set-name').value.toUpperCase(); save(); }
-function useBomb() { if(user.bombs > 0) { user.bombs--; alert("WSKAZÓWKA: " + (game.direction === 'en2pl' ? game.pool[game.idx].pl : game.pool[game.idx].en)[0]); save(); } }
+function useBomb() { if(user.bombs > 0) { user.bombs--; alert("START: " + WORDS[gameIdx].pl[0]); save(); } }
 
-initRGB();
-save();
+// --- INIT ---
+const container = document.getElementById('rgb-container');
+for(let i=0; i<15; i++) {
+    let l = document.createElement('div'); l.className = 'line';
+    l.style.left = Math.random()*100+'%'; l.style.background = `linear-gradient(to bottom, transparent, ${['#00f2ff','#f5576c','#7289da'][i%3]}, transparent)`;
+    l.style.animationDuration = (Math.random()*3+2)+'s'; container.appendChild(l);
+}
+updateUI();
 </script>
 </body>
 </html>
