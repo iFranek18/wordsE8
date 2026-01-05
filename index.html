@@ -3,41 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>E8 CyberQuest: Mastery</title>
+    <title>E8 CyberQuest: Ultimate Edition</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@400;800&display=swap" rel="stylesheet">
     <style>
         :root { --p: #7289da; --neon: #00f2ff; --bg: #05050a; --card: rgba(25, 25, 45, 0.95); }
         body { margin:0; font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; overflow: hidden; height: 100vh; }
-        .rgb-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: #000; overflow: hidden; }
-        .line { position: absolute; width: 2px; height: 40vh; filter: blur(2px); animation: move linear infinite; opacity: 0.2; }
-        @keyframes move { 0% { transform: translateY(-110%) rotate(5deg); } 100% { transform: translateY(110vh) rotate(5deg); } }
+        .rgb-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: #000; }
+        .line { position: absolute; width: 2px; height: 40vh; filter: blur(2px); animation: move linear infinite; opacity: 0.2; background: var(--neon); }
+        @keyframes move { 0% { transform: translateY(-110%); } 100% { transform: translateY(110vh); } }
 
-        .app { max-width: 480px; margin: 0 auto; padding: 15px; height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; }
+        .app { max-width: 480px; margin: 0 auto; padding: 15px; height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; position: relative; }
         .hidden { display: none !important; }
 
-        /* ROAD */
+        /* MODALE / OKNA */
+        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--card); border: 2px solid var(--neon); padding: 20px; border-radius: 20px; z-index: 100; width: 80%; max-width: 350px; box-shadow: 0 0 30px rgba(0,242,255,0.3); }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 99; }
+
+        /* UI ELEMENTS */
         .road-container { background: rgba(0,0,0,0.5); border-radius: 20px; border: 1px solid #333; margin-bottom: 10px; padding: 10px 0; }
         .road-scroll { display: flex; overflow-x: auto; gap: 15px; padding: 10px; scrollbar-width: none; }
-        .node { flex: 0 0 65px; text-align: center; cursor: pointer; }
-        .node-box { width: 55px; height: 55px; background: var(--card); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 2px solid #444; margin-bottom: 4px; }
-        .unlocked .node-box { border-color: var(--neon); box-shadow: 0 0 8px var(--neon); }
-        .claimed { opacity: 0.4; filter: grayscale(1); }
+        .node-box { width: 55px; height: 55px; background: var(--card); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 2px solid #444; margin-bottom: 4px; position: relative; }
+        .unlocked .node-box { border-color: var(--neon); }
 
-        /* UI */
         .profile-card { background: var(--card); padding: 10px; border-radius: 18px; border: 1px solid var(--p); display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-        button { width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; font-family: 'Orbitron'; text-transform: uppercase; margin-top: 5px; }
-        .btn-blue { background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: white; }
-        .btn-check { background: linear-gradient(135deg, #00b894, #55efc4); color: white; font-size: 1.2rem; margin-top: 15px; box-shadow: 0 4px 15px rgba(0,184,148,0.4); }
-        .btn-ranked { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; }
-        .btn-spotify { background: #1DB954; color: white; font-size: 0.6rem; padding: 8px; }
-
-        input { width: 100%; padding: 16px; border-radius: 12px; border: 2px solid #333; background: #000; color: var(--neon); font-size: 1.1rem; text-align: center; font-family: 'Orbitron'; box-sizing: border-box; }
-        .pill { padding: 8px 12px; background: #1a1a2e; border: 1px solid var(--p); border-radius: 8px; margin: 3px; cursor: pointer; font-size: 0.8rem; display: inline-block; }
+        button { width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; font-family: 'Orbitron'; text-transform: uppercase; margin-top: 5px; color: #fff; }
+        .btn-blue { background: linear-gradient(135deg, #00d2ff, #3a7bd5); }
+        .btn-check { background: linear-gradient(135deg, #00b894, #55efc4); margin-top: 15px; }
         
-        #dict-list { overflow-y: auto; flex: 1; }
-        .dict-item { padding: 8px; border-bottom: 1px solid #222; font-size: 0.9rem; display: flex; justify-content: space-between; }
+        input { width: 100%; padding: 12px; border-radius: 10px; border: 2px solid #333; background: #000; color: #fff; text-align: center; margin: 10px 0; }
+        
+        .grid-locker { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; }
+        .locker-item { width: 50px; height: 50px; background: #111; border: 1px solid #333; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; }
+        .locker-item.active { border-color: var(--neon); box-shadow: 0 0 10px var(--neon); }
     </style>
 </head>
 <body>
@@ -45,34 +44,42 @@
 <div class="rgb-bg" id="rgb-container"></div>
 
 <div class="app" id="screen-menu">
-    <div class="road-container">
-        <div id="road-content" class="road-scroll"></div>
-    </div>
+    <div class="road-container"><div id="road-content" class="road-scroll"></div></div>
 
     <div class="profile-card">
         <div style="font-size:1.5rem; width:45px; height:45px; background:#111; border-radius:10px; display:flex; align-items:center; justify-content:center; border:2px solid var(--neon)" id="p-avatar">👶🏻</div>
         <div style="flex:1">
             <h2 id="p-name" style="margin:0; font-size:0.75rem; font-family:'Orbitron'">GRACZ</h2>
-            <div style="font-size:0.65rem">🏆 <span id="p-cups">0</span> | 💰 <span id="p-coins">0</span> | 💣 <span id="p-bombs">0</span> <span id="p-x2" style="color:yellow; display:none">x2!</span></div>
+            <div style="font-size:0.6rem">🏆 <span id="p-cups">0</span> | 💰 <span id="p-coins">0</span> | 💣 <span id="p-bombs">0</span></div>
         </div>
-        <div onclick="showScreen('screen-settings')" style="cursor:pointer">⚙️</div>
+        <div onclick="toggleModal('modal-settings')" style="cursor:pointer; font-size:1.2rem">⚙️</div>
     </div>
 
-    <button class="btn-blue" onclick="startMode('words')">SŁÓWKA E8 📖</button>
-    <button class="btn-blue" style="background:#6c5ce7" onclick="startMode('sentences')">UKŁADANIE ZDAŃ 🧩</button>
-    <button class="btn-ranked" onclick="startMode('ranked')">MECZ RANKINGOWY ⚔️</button>
+    <button class="btn-blue" onclick="startMode('words')">START NAUKA 📖</button>
+    <button class="btn-blue" style="background:#6c5ce7" onclick="showScreen('screen-locker')">SZAFKA / EMOTKI 👕</button>
+    <button class="btn-blue" style="background:#e67e22" onclick="showScreen('screen-shop')">SKLEP 💰</button>
     
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px">
-        <button style="background:#2d3436; color:white" onclick="openDictionary()">SŁOWNIK</button>
-        <button style="background:#e67e22; color:white" onclick="showScreen('screen-shop')">SKLEP</button>
+        <button style="background:#2d3436" onclick="openDictionary()">SŁOWNIK</button>
+        <button style="background:#1DB954; font-size:0.6rem" onclick="window.open('spotify:open','_blank')">SPOTIFY 🎧</button>
     </div>
-
-    <button class="btn-spotify" onclick="window.open('spotify:open', '_blank')">ODPALAJ SPOTIFY 🎧</button>
 
     <div style="background:var(--card); border-radius:12px; padding:10px; margin-top:8px; flex:1; overflow-y:auto">
-        <h4 style="margin:0 0 5px 0; font-family:'Orbitron'; font-size:0.6rem; color:var(--neon)">TABELA LIDERÓW</h4>
+        <h4 style="margin:0 0 5px 0; font-family:'Orbitron'; font-size:0.6rem; color:var(--neon)">RANKING LIDERÓW</h4>
         <div id="leader-list"></div>
     </div>
+</div>
+
+<div class="app hidden" id="screen-locker">
+    <button onclick="showScreen('screen-menu')">POWRÓT</button>
+    <h2 style="font-family:'Orbitron'; text-align:center">TWOJA SZAFKA</h2>
+    <div id="locker-grid" class="grid-locker"></div>
+</div>
+
+<div class="app hidden" id="screen-shop">
+    <button onclick="showScreen('screen-menu')">POWRÓT</button>
+    <h2 style="font-family:'Orbitron'; text-align:center">SKLEP</h2>
+    <div id="shop-items" style="overflow-y:auto; flex:1"></div>
 </div>
 
 <div class="app hidden" id="screen-game">
@@ -80,211 +87,198 @@
         <span id="g-level-info">ETAP 1</span>
         <span>POSTĘP: <span id="g-progress">0/10</span></span>
     </div>
-    <div id="g-word" style="font-size: 1.5rem; margin: 25px 0; font-weight:900; text-align:center; font-family:'Orbitron'; color:var(--neon)">SŁOWO</div>
-    <div id="sentence-box" style="margin-bottom: 15px; text-align:center; min-height:40px"></div>
-    <input type="text" id="g-input" placeholder="WPISZ TŁUMACZENIE..." autocomplete="off">
-    
+    <div id="g-word" style="font-size: 1.5rem; margin: 30px 0; text-align:center; font-family:'Orbitron'">SŁOWO</div>
+    <input type="text" id="g-input" placeholder="TŁUMACZENIE..." autocomplete="off">
     <button class="btn-check" onclick="checkAnswer()">SPRAWDŹ ✅</button>
-    
-    <div id="g-feedback" style="margin: 10px 0; text-align:center; font-weight:bold; min-height:20px"></div>
-    <button class="btn-blue" style="background:#f1c40f; color:#000; padding:10px" onclick="useBomb()">POMOC 💣</button>
-    <button style="background:transparent; color:#555; padding:5px" onclick="exitGame()">WYJDŹ</button>
+    <div id="g-feedback" style="margin: 10px 0; text-align:center; min-height:20px"></div>
+    <button style="background:transparent; color:#555" onclick="exitGame()">WYJDŹ</button>
 </div>
 
-<div class="app hidden" id="screen-shop" style="overflow-y:auto">
-    <button onclick="showScreen('screen-menu')">POWRÓT</button>
-    <h2 style="font-family:'Orbitron'; text-align:center">SKLEP 💰</h2>
-    <div id="shop-items" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px"></div>
-</div>
-
-<div class="app hidden" id="screen-dictionary">
-    <button onclick="showScreen('screen-menu')">POWRÓT</button>
-    <h3 style="font-family:'Orbitron'; text-align:center" id="dict-title">SŁOWNIK ETAP 1</h3>
-    <div id="dict-list"></div>
+<div id="modal-settings" class="hidden">
+    <div class="overlay" onclick="toggleModal('modal-settings')"></div>
+    <div class="modal">
+        <h3 style="font-family:'Orbitron'; margin:0">USTAWIENIA</h3>
+        <input type="text" id="set-name-input" placeholder="NOWY NICK">
+        <button class="btn-blue" onclick="changeName()">ZAPISZ</button>
+    </div>
 </div>
 
 <script>
-// --- FIREBASE ---
+// --- KONFIGURACJA ---
 const firebaseConfig = { apiKey: "AIzaSyCREz6ZMk86TW-dASBLNIHUTr5XDXZrTPE", authDomain: "english-game-d3ccd.firebaseapp.com", databaseURL: "https://english-game-d3ccd-default-rtdb.europe-west1.firebasedatabase.app", projectId: "english-game-d3ccd" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// --- BAZA SŁÓWEK ---
-const STAGE_WORDS = {
+// --- SŁÓWKA ---
+const ALL_WORDS = {
     1: [
         {en:"I", pl:"ja"}, {en:"you", pl:"ty"}, {en:"he", pl:"on"}, {en:"she", pl:"ona"}, {en:"it", pl:"ono"}, {en:"we", pl:"my"}, {en:"they", pl:"oni"},
-        {en:"mother", pl:"mama"}, {en:"father", pl:"tata"}, {en:"sister", pl:"siostra"}, {en:"brother", pl:"brat"}, {en:"school", pl:"szkoła"},
-        {en:"dog", pl:"pies"}, {en:"cat", pl:"kot"}, {en:"apple", pl:"jabłko"}, {en:"water", pl:"woda"}, {en:"book", pl:"książka"}
+        {en:"me", pl:"mnie"}, {en:"him", pl:"jego"}, {en:"her", pl:"jej"}, {en:"us", pl:"nas"}, {en:"them", pl:"ich"},
+        {en:"mother", pl:"mama"}, {en:"father", pl:"tata"}, {en:"parents", pl:"rodzice"}, {en:"sister", pl:"siostra"}, {en:"brother", pl:"brat"},
+        {en:"grandmother", pl:"babcia"}, {en:"grandfather", pl:"dziadek"}, {en:"friend", pl:"przyjaciel"}, {en:"baby", pl:"niemowle"}
     ],
     2: [
-        {en:"my", pl:"mój"}, {en:"your", pl:"twój"}, {en:"his", pl:"jego"}, {en:"our", pl:"nasz"}, {en:"their", pl:"ich"},
-        {en:"what", pl:"co"}, {en:"where", pl:"gdzie"}, {en:"when", pl:"kiedy"}, {en:"why", pl:"dlaczego"},
-        {en:"teacher", pl:"nauczyciel"}, {en:"doctor", pl:"lekarz"}, {en:"nurse", pl:"pielęgniarka"}, {en:"house", pl:"dom"},
-        {en:"kitchen", pl:"kuchnia"}, {en:"milk", pl:"mleko"}, {en:"bread", pl:"chleb"}
+        {en:"what", pl:"co"}, {en:"who", pl:"kto"}, {en:"where", pl:"gdzie"}, {en:"when", pl:"kiedy"}, {en:"why", pl:"dlaczego"}, {en:"how", pl:"jak"},
+        {en:"in", pl:"w"}, {en:"on", pl:"na"}, {en:"at", pl:"przy"}, {en:"to", pl:"do"}, {en:"with", pl:"z"}, {en:"about", pl:"o"},
+        {en:"school", pl:"szkoła"}, {en:"exam", pl:"egzamin"}, {en:"homework", pl:"praca domowa"}, {en:"book", pl:"książka"}, {en:"pen", pl:"długopis"}
     ],
     3: [
-        {en:"between", pl:"między"}, {en:"behind", pl:"za"}, {en:"under", pl:"pod"}, {en:"always", pl:"zawsze"}, {en:"never", pl:"nigdy"},
-        {en:"beautiful", pl:"piękny"}, {en:"cheap", pl:"tani"}, {en:"expensive", pl:"drogi"}, {en:"important", pl:"ważny"},
-        {en:"understand", pl:"rozumieć"}, {en:"remember", pl:"pamiętać"}, {en:"weather", pl:"pogoda"}
+        {en:"English", pl:"angielski"}, {en:"maths", pl:"matematyka"}, {en:"history", pl:"historia"},
+        {en:"teacher", pl:"nauczyciel"}, {en:"doctor", pl:"lekarz"}, {en:"nurse", pl:"pielęgniarka"}, {en:"police officer", pl:"policjant"},
+        {en:"house", pl:"dom"}, {en:"flat", pl:"mieszkanie"}, {en:"kitchen", pl:"kuchnia"}, {en:"bathroom", pl:"łazienka"}, {en:"door", pl:"drzwi"}
     ],
     4: [
-        {en:"although", pl:"chociaż"}, {en:"usually", pl:"zazwyczaj"}, {en:"sometimes", pl:"czasami"},
-        {en:"description", pl:"opis"}, {en:"success", pl:"sukces"}, {en:"failure", pl:"porażka"},
-        {en:"engineer", pl:"inżynier"}, {en:"neighbor", pl:"sąsiad"}, {en:"government", pl:"rząd"}
+        {en:"table", pl:"stół"}, {en:"bed", pl:"łóżko"}, {en:"mirror", pl:"lustro"}, {en:"phone", pl:"telefon"}, {en:"computer", pl:"komputer"},
+        {en:"bread", pl:"chleb"}, {en:"butter", pl:"masło"}, {en:"cheese", pl:"ser"}, {en:"apple", pl:"jabłko"}, {en:"water", pl:"woda"},
+        {en:"dog", pl:"pies"}, {en:"cat", pl:"kot"}, {en:"bird", pl:"ptak"}, {en:"lion", pl:"lew"}
     ],
     5: [
-        {en:"protection", pl:"ochrona"}, {en:"environment", pl:"środowisko"}, {en:"situation", pl:"sytuacja"},
-        {en:"irregular", pl:"nieregularny"}, {en:"thought", pl:"myśl"}, {en:"achieve", pl:"osiągnąć"}
+        {en:"city", pl:"miasto"}, {en:"street", pl:"ulica"}, {en:"shop", pl:"sklep"}, {en:"restaurant", pl:"restauracja"},
+        {en:"car", pl:"samochód"}, {en:"bus", pl:"autobus"}, {en:"train", pl:"pociąg"}, {en:"plane", pl:"samolot"},
+        {en:"time", pl:"czas"}, {en:"day", pl:"dzień"}, {en:"week", pl:"tydzień"}, {en:"morning", pl:"rano"}, {en:"night", pl:"noc"}
     ]
 };
 
-// --- ROAD GENERATOR ---
-const ROAD_MAP = [];
-for(let i=0; i<=5000; i+= (i<1000?100: (i<3000?250:500))) {
-    let type = i % 200 === 0 ? '💰' : '💣';
-    if(i % 1000 === 0) type = '👑';
-    ROAD_MAP.push({cups: i, v: type});
-}
+// --- SKLEP ---
+const SHOP_ITEMS = [
+    {id:'nick_gold', n:'ZŁOTY NICK', p:1000, type:'color', val:'#ffd700'},
+    {id:'nick_neon', n:'NEONOWY NICK', p:1500, type:'color', val:'#00f2ff'},
+    {id:'nick_pink', n:'RÓŻOWY NICK', p:800, type:'color', val:'#ff00ff'},
+    {id:'emo_ninja', n:'EMOTKA NINJA', p:500, type:'emo', val:'🥷'},
+    {id:'emo_king', n:'EMOTKA KRÓL', p:2000, type:'emo', val:'👑'},
+    {id:'emo_ghost', n:'EMOTKA DUCH', p:600, type:'emo', val:'👻'},
+    {id:'emo_alien', n:'EMOTKA KOSMITA', p:700, type:'emo', val:'👽'},
+    {id:'emo_robot', n:'EMOTKA ROBOT', p:900, type:'emo', val:'🤖'}
+];
 
-// --- STATE ---
-let user = JSON.parse(localStorage.getItem('e8_master_v1')) || {
-    name: "GRACZ", avatar: "👶🏻", cups: 0, coins: 50, bombs: 2, claimed: [], mult: 1
+// --- LOGIKA ---
+let user = JSON.parse(localStorage.getItem('e8_v2')) || {
+    name: "GRACZ", avatar: "👶🏻", cups: 0, coins: 100, bombs: 3, 
+    owned_emos: ['👶🏻'], owned_colors: ['#ffffff'], current_color: '#ffffff'
 };
-let game = { idx: 0, pool: [], currentQ: null };
+let game = { idx:0, pool:[], current:null };
 
 function save() {
-    localStorage.setItem('e8_master_v1', JSON.stringify(user));
-    db.ref('players/'+(localStorage.getItem('e8_id')||'u1')).set({name:user.name, cups:user.cups, avatar:user.avatar});
+    localStorage.setItem('e8_v2', JSON.stringify(user));
+    db.ref('players/' + (localStorage.getItem('e8_uid') || 'u1')).set(user);
     updateUI();
 }
 
 function updateUI() {
     document.getElementById('p-name').textContent = user.name;
+    document.getElementById('p-name').style.color = user.current_color;
+    document.getElementById('p-avatar').textContent = user.avatar;
     document.getElementById('p-cups').textContent = user.cups;
     document.getElementById('p-coins').textContent = user.coins;
     document.getElementById('p-bombs').textContent = user.bombs;
+    renderLocker();
+    renderShop();
     renderRoad();
 }
 
 function renderRoad() {
-    const road = document.getElementById('road-content');
-    road.innerHTML = ROAD_MAP.map(n => `
-        <div class="node ${user.cups >= n.cups ? 'unlocked' : ''} ${user.claimed.includes(n.cups) ? 'claimed' : ''}" onclick="claim(${n.cups})">
-            <div class="node-box">${n.v}</div>
-            <div style="font-size:0.5rem">${n.cups}🏆</div>
+    let road = document.getElementById('road-content');
+    road.innerHTML = '';
+    for(let i=0; i<=5000; i+=200) {
+        road.innerHTML += `<div class="node ${user.cups>=i?'unlocked':''}"><div class="node-box">${i%1000==0?'🎁':'💰'}</div><div style="font-size:0.5rem">${i}🏆</div></div>`;
+    }
+}
+
+function renderLocker() {
+    let grid = document.getElementById('locker-grid');
+    grid.innerHTML = user.owned_emos.map(e => `
+        <div class="locker-item ${user.avatar==e?'active':''}" onclick="setAvatar('${e}')">${e}</div>
+    `).join('');
+}
+
+function setAvatar(e) { user.avatar = e; save(); }
+
+function renderShop() {
+    let container = document.getElementById('shop-items');
+    container.innerHTML = SHOP_ITEMS.map(item => `
+        <div class="profile-card" onclick="buyItem('${item.id}')">
+            <div style="font-size:1.5rem">${item.type=='color'?'🎨':item.val}</div>
+            <div style="flex:1"><b>${item.n}</b><br><small>${item.p} 💰</small></div>
         </div>
     `).join('');
 }
 
-function claim(c) {
-    if(user.cups >= c && !user.claimed.includes(c)) {
-        user.coins += 100; user.claimed.push(c); save();
-    }
+function buyItem(id) {
+    let item = SHOP_ITEMS.find(x => x.id == id);
+    if(user.coins >= item.p) {
+        user.coins -= item.p;
+        if(item.type == 'color') {
+            if(!user.owned_colors.includes(item.val)) user.owned_colors.push(item.val);
+            user.current_color = item.val;
+        } else {
+            if(!user.owned_emos.includes(item.val)) user.owned_emos.push(item.val);
+        }
+        save();
+        alert("ZAKUPIONO!");
+    } else alert("ZA MAŁO KASY!");
 }
 
-function getStage() {
-    if(user.cups < 500) return 1;
-    if(user.cups < 1500) return 2;
-    if(user.cups < 3000) return 3;
-    if(user.cups < 4500) return 4;
-    return 5;
+function toggleModal(id) { document.getElementById(id).classList.toggle('hidden'); }
+
+function changeName() {
+    let newName = document.getElementById('set-name-input').value;
+    if(newName) { user.name = newName.toUpperCase(); save(); toggleModal('modal-settings'); }
 }
 
 function startMode(m) {
-    const stage = getStage();
+    let stage = Math.min(5, Math.floor(user.cups / 500) + 1);
     let words = [];
-    for(let i=1; i<=stage; i++) words = [...words, ...STAGE_WORDS[i]];
-    
-    game.idx = 0;
+    for(let i=1; i<=stage; i++) words = [...words, ...ALL_WORDS[i]];
     game.pool = words.sort(() => 0.5 - Math.random()).slice(0, 10);
-    game.mode = m;
+    game.idx = 0;
     showScreen('screen-game');
     document.getElementById('g-level-info').textContent = "ETAP " + stage;
     loadQ();
 }
 
 function loadQ() {
-    game.currentQ = game.pool[game.idx];
+    game.current = game.pool[game.idx];
     game.dir = Math.random() > 0.5 ? 'en2pl' : 'pl2en';
-    document.getElementById('g-word').textContent = (game.dir === 'en2pl' ? game.currentQ.en : game.currentQ.pl).toUpperCase();
+    document.getElementById('g-word').textContent = (game.dir == 'en2pl' ? game.current.en : game.current.pl).toUpperCase();
     document.getElementById('g-input').value = "";
     document.getElementById('g-feedback').textContent = "";
-    document.getElementById('g-progress').textContent = `${game.idx+1}/10`;
-    
-    const sBox = document.getElementById('sentence-box');
-    sBox.innerHTML = "";
-    if(game.mode === 'sentences') {
-        let parts = (game.dir === 'en2pl' ? game.currentQ.pl : game.currentQ.en).split(' ');
-        parts.sort(() => 0.5 - Math.random()).forEach(p => {
-            sBox.innerHTML += `<span class="pill" onclick="document.getElementById('g-input').value += '${p} '">${p}</span>`;
-        });
-    }
+    document.getElementById('g-progress').textContent = (game.idx + 1) + "/10";
 }
 
 function checkAnswer() {
-    const val = document.getElementById('g-input').value.toLowerCase().trim();
-    const correct = (game.dir === 'en2pl' ? game.currentQ.pl : game.currentQ.en).toLowerCase().trim();
-    
-    if(val === correct || val.replace('ł','l') === correct.replace('ł','l')) {
-        user.coins += 10; game.idx++;
-        if(game.idx >= 10) {
-            user.cups += 50; exitGame(); alert("WYGRANA! +50 🏆");
-        } else loadQ();
+    let val = document.getElementById('g-input').value.toLowerCase().trim();
+    let correct = (game.dir == 'en2pl' ? game.current.pl : game.current.en).toLowerCase().trim();
+    if(val == correct || val.replace('ł','l') == correct.replace('ł','l')) {
+        game.idx++;
+        user.coins += 10;
+        if(game.idx >= 10) { user.cups += 50; exitGame(); alert("KONIEC ETAPU! +50🏆"); } else loadQ();
     } else {
-        document.getElementById('g-feedback').textContent = "BŁĄD! POPRAWNIE: " + correct.toUpperCase();
-        document.getElementById('g-feedback').style.color = "#ff416c";
+        document.getElementById('g-feedback').textContent = "ŹLE! POPRAWNIE: " + correct.toUpperCase();
+        document.getElementById('g-feedback').style.color = "red";
     }
     save();
-}
-
-function openDictionary() {
-    const stage = getStage();
-    document.getElementById('dict-title').textContent = "SŁOWNIK ETAP " + stage;
-    let words = [];
-    for(let i=1; i<=stage; i++) words = [...words, ...STAGE_WORDS[i]];
-    document.getElementById('dict-list').innerHTML = words.map(w => `<div class="dict-item"><b>${w.en}</b> <span>${w.pl}</span></div>`).join('');
-    showScreen('screen-dictionary');
-}
-
-function useBomb() {
-    if(user.bombs > 0) {
-        user.bombs--;
-        const correct = (game.dir === 'en2pl' ? game.currentQ.pl : game.currentQ.en);
-        alert("PIERWSZA LITERA: " + correct[0].toUpperCase());
-        save();
-    }
 }
 
 function exitGame() { showScreen('screen-menu'); }
 function showScreen(id) { document.querySelectorAll('.app').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
 
-// SKLEP
-const SHOP = [ {n:'1 BOMBA', p:50, v:'💣'}, {n:'5 BOMB', p:200, v:'💣5'}, {n:'NINJA', p:1000, v:'🥷'} ];
-document.getElementById('shop-items').innerHTML = SHOP.map(i => `
-    <div style="background:var(--card); padding:10px; border-radius:10px; text-align:center" onclick="buy('${i.n}', ${i.p}, '${i.v}')">
-        <div>${i.v}</div><small>${i.n}</small><br><b style="color:var(--neon)">${i.p}💰</b>
-    </div>
-`).join('');
-
-function buy(n,p,v) {
-    if(user.coins >= p) {
-        user.coins -= p;
-        if(v.includes('💣')) user.bombs += (v==='💣5'?5:1);
-        else user.avatar = v;
-        save();
-    }
-}
-
 // RANKING
-db.ref('players').orderByChild('cups').limitToLast(5).on('value', s => {
-    let l = []; s.forEach(x => l.push(x.val()));
-    document.getElementById('leader-list').innerHTML = l.reverse().map(p => `<div style="font-size:0.6rem; margin-bottom:3px">${p.avatar} ${p.name} - ${p.cups}🏆</div>`).join('');
+db.ref('players').orderByChild('cups').limitToLast(10).on('value', snap => {
+    let html = '';
+    snap.forEach(child => {
+        let p = child.val();
+        html = `<div style="font-size:0.7rem; color:${p.current_color || '#fff'}">${p.avatar} ${p.name} - ${p.cups}🏆</div>` + html;
+    });
+    document.getElementById('leader-list').innerHTML = html;
 });
 
-// START
-if(!localStorage.getItem('e8_id')) localStorage.setItem('e8_id', 'u'+Date.now());
-const c = document.getElementById('rgb-container');
-for(let i=0; i<8; i++){ let l=document.createElement('div'); l.className='line'; l.style.left=Math.random()*100+'%'; l.style.background='linear-gradient(to bottom, transparent, #00f2ff, transparent)'; l.style.animationDuration=(Math.random()*3+2)+'s'; c.appendChild(l); }
+// INIT
+if(!localStorage.getItem('e8_uid')) localStorage.setItem('e8_uid', 'u' + Date.now());
+for(let i=0; i<15; i++) {
+    let l = document.createElement('div'); l.className = 'line';
+    l.style.left = Math.random()*100+'%'; l.style.animationDuration = (Math.random()*3+2)+'s';
+    document.getElementById('rgb-container').appendChild(l);
+}
 save();
 </script>
 </body>
