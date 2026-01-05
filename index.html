@@ -13,30 +13,23 @@
         .rgb-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: #000; }
         .line { position: absolute; width: 2px; height: 40vh; filter: blur(2px); animation: move linear infinite; opacity: 0.2; background: var(--neon); }
         @keyframes move { 0% { transform: translateY(-110%); } 100% { transform: translateY(110vh); } }
-
         .app { max-width: 480px; margin: 0 auto; padding: 15px; height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; position: relative; }
         .hidden { display: none !important; }
-
-        /* MODALE / OKNA */
-        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--card); border: 2px solid var(--neon); padding: 20px; border-radius: 20px; z-index: 100; width: 80%; max-width: 350px; box-shadow: 0 0 30px rgba(0,242,255,0.3); }
+        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--card); border: 2px solid var(--neon); padding: 20px; border-radius: 20px; z-index: 100; width: 80%; max-width: 350px; }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 99; }
-
-        /* UI ELEMENTS */
         .road-container { background: rgba(0,0,0,0.5); border-radius: 20px; border: 1px solid #333; margin-bottom: 10px; padding: 10px 0; }
         .road-scroll { display: flex; overflow-x: auto; gap: 15px; padding: 10px; scrollbar-width: none; }
-        .node-box { width: 55px; height: 55px; background: var(--card); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 2px solid #444; margin-bottom: 4px; position: relative; }
+        .node-box { width: 55px; height: 55px; background: var(--card); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 2px solid #444; }
         .unlocked .node-box { border-color: var(--neon); }
-
         .profile-card { background: var(--card); padding: 10px; border-radius: 18px; border: 1px solid var(--p); display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
         button { width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; font-family: 'Orbitron'; text-transform: uppercase; margin-top: 5px; color: #fff; }
         .btn-blue { background: linear-gradient(135deg, #00d2ff, #3a7bd5); }
         .btn-check { background: linear-gradient(135deg, #00b894, #55efc4); margin-top: 15px; }
-        
         input { width: 100%; padding: 12px; border-radius: 10px; border: 2px solid #333; background: #000; color: #fff; text-align: center; margin: 10px 0; }
-        
-        .grid-locker { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; }
+        .grid-locker { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
         .locker-item { width: 50px; height: 50px; background: #111; border: 1px solid #333; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; }
         .locker-item.active { border-color: var(--neon); box-shadow: 0 0 10px var(--neon); }
+        .dict-item { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #222; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -45,7 +38,6 @@
 
 <div class="app" id="screen-menu">
     <div class="road-container"><div id="road-content" class="road-scroll"></div></div>
-
     <div class="profile-card">
         <div style="font-size:1.5rem; width:45px; height:45px; background:#111; border-radius:10px; display:flex; align-items:center; justify-content:center; border:2px solid var(--neon)" id="p-avatar">👶🏻</div>
         <div style="flex:1">
@@ -54,36 +46,39 @@
         </div>
         <div onclick="toggleModal('modal-settings')" style="cursor:pointer; font-size:1.2rem">⚙️</div>
     </div>
-
-    <button class="btn-blue" onclick="startMode('words')">START NAUKA 📖</button>
-    <button class="btn-blue" style="background:#6c5ce7" onclick="showScreen('screen-locker')">SZAFKA / EMOTKI 👕</button>
+    <button class="btn-blue" onclick="startMode()">START NAUKA 📖</button>
+    <button class="btn-blue" style="background:#6c5ce7" onclick="showScreen('screen-locker')">SZAFKA 👕</button>
     <button class="btn-blue" style="background:#e67e22" onclick="showScreen('screen-shop')">SKLEP 💰</button>
-    
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px">
         <button style="background:#2d3436" onclick="openDictionary()">SŁOWNIK</button>
         <button style="background:#1DB954; font-size:0.6rem" onclick="window.open('spotify:open','_blank')">SPOTIFY 🎧</button>
     </div>
-
     <div style="background:var(--card); border-radius:12px; padding:10px; margin-top:8px; flex:1; overflow-y:auto">
         <h4 style="margin:0 0 5px 0; font-family:'Orbitron'; font-size:0.6rem; color:var(--neon)">RANKING LIDERÓW</h4>
         <div id="leader-list"></div>
     </div>
 </div>
 
+<div class="app hidden" id="screen-dictionary">
+    <button onclick="showScreen('screen-menu')">POWRÓT</button>
+    <h3 style="font-family:'Orbitron'; text-align:center">TWOJE SŁÓWKA</h3>
+    <div id="dict-list" style="overflow-y:auto; flex:1"></div>
+</div>
+
 <div class="app hidden" id="screen-locker">
     <button onclick="showScreen('screen-menu')">POWRÓT</button>
-    <h2 style="font-family:'Orbitron'; text-align:center">TWOJA SZAFKA</h2>
+    <h2 style="font-family:'Orbitron'; text-align:center">SZAFKA</h2>
     <div id="locker-grid" class="grid-locker"></div>
 </div>
 
 <div class="app hidden" id="screen-shop">
     <button onclick="showScreen('screen-menu')">POWRÓT</button>
-    <h2 style="font-family:'Orbitron'; text-align:center">SKLEP</h2>
+    <h2 style="font-family:'Orbitron'; text-align:center">MEGA SKLEP</h2>
     <div id="shop-items" style="overflow-y:auto; flex:1"></div>
 </div>
 
 <div class="app hidden" id="screen-game">
-    <div style="display:flex; justify-content:space-between; color:var(--neon); font-family:'Orbitron'; font-size:0.7rem">
+    <div style="display:flex; justify-content:space-between; color:var(--neon); font-size:0.7rem">
         <span id="g-level-info">ETAP 1</span>
         <span>POSTĘP: <span id="g-progress">0/10</span></span>
     </div>
@@ -98,69 +93,68 @@
     <div class="overlay" onclick="toggleModal('modal-settings')"></div>
     <div class="modal">
         <h3 style="font-family:'Orbitron'; margin:0">USTAWIENIA</h3>
-        <input type="text" id="set-name-input" placeholder="NOWY NICK">
+        <input type="text" id="set-name-input" placeholder="WPISZ NICK">
         <button class="btn-blue" onclick="changeName()">ZAPISZ</button>
     </div>
 </div>
 
 <script>
-// --- KONFIGURACJA ---
 const firebaseConfig = { apiKey: "AIzaSyCREz6ZMk86TW-dASBLNIHUTr5XDXZrTPE", authDomain: "english-game-d3ccd.firebaseapp.com", databaseURL: "https://english-game-d3ccd-default-rtdb.europe-west1.firebasedatabase.app", projectId: "english-game-d3ccd" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// --- SŁÓWKA ---
 const ALL_WORDS = {
-    1: [
-        {en:"I", pl:"ja"}, {en:"you", pl:"ty"}, {en:"he", pl:"on"}, {en:"she", pl:"ona"}, {en:"it", pl:"ono"}, {en:"we", pl:"my"}, {en:"they", pl:"oni"},
-        {en:"me", pl:"mnie"}, {en:"him", pl:"jego"}, {en:"her", pl:"jej"}, {en:"us", pl:"nas"}, {en:"them", pl:"ich"},
-        {en:"mother", pl:"mama"}, {en:"father", pl:"tata"}, {en:"parents", pl:"rodzice"}, {en:"sister", pl:"siostra"}, {en:"brother", pl:"brat"},
-        {en:"grandmother", pl:"babcia"}, {en:"grandfather", pl:"dziadek"}, {en:"friend", pl:"przyjaciel"}, {en:"baby", pl:"niemowle"}
-    ],
-    2: [
-        {en:"what", pl:"co"}, {en:"who", pl:"kto"}, {en:"where", pl:"gdzie"}, {en:"when", pl:"kiedy"}, {en:"why", pl:"dlaczego"}, {en:"how", pl:"jak"},
-        {en:"in", pl:"w"}, {en:"on", pl:"na"}, {en:"at", pl:"przy"}, {en:"to", pl:"do"}, {en:"with", pl:"z"}, {en:"about", pl:"o"},
-        {en:"school", pl:"szkoła"}, {en:"exam", pl:"egzamin"}, {en:"homework", pl:"praca domowa"}, {en:"book", pl:"książka"}, {en:"pen", pl:"długopis"}
-    ],
-    3: [
-        {en:"English", pl:"angielski"}, {en:"maths", pl:"matematyka"}, {en:"history", pl:"historia"},
-        {en:"teacher", pl:"nauczyciel"}, {en:"doctor", pl:"lekarz"}, {en:"nurse", pl:"pielęgniarka"}, {en:"police officer", pl:"policjant"},
-        {en:"house", pl:"dom"}, {en:"flat", pl:"mieszkanie"}, {en:"kitchen", pl:"kuchnia"}, {en:"bathroom", pl:"łazienka"}, {en:"door", pl:"drzwi"}
-    ],
-    4: [
-        {en:"table", pl:"stół"}, {en:"bed", pl:"łóżko"}, {en:"mirror", pl:"lustro"}, {en:"phone", pl:"telefon"}, {en:"computer", pl:"komputer"},
-        {en:"bread", pl:"chleb"}, {en:"butter", pl:"masło"}, {en:"cheese", pl:"ser"}, {en:"apple", pl:"jabłko"}, {en:"water", pl:"woda"},
-        {en:"dog", pl:"pies"}, {en:"cat", pl:"kot"}, {en:"bird", pl:"ptak"}, {en:"lion", pl:"lew"}
-    ],
-    5: [
-        {en:"city", pl:"miasto"}, {en:"street", pl:"ulica"}, {en:"shop", pl:"sklep"}, {en:"restaurant", pl:"restauracja"},
-        {en:"car", pl:"samochód"}, {en:"bus", pl:"autobus"}, {en:"train", pl:"pociąg"}, {en:"plane", pl:"samolot"},
-        {en:"time", pl:"czas"}, {en:"day", pl:"dzień"}, {en:"week", pl:"tydzień"}, {en:"morning", pl:"rano"}, {en:"night", pl:"noc"}
-    ]
+    1: [{en:"I", pl:"ja"}, {en:"you", pl:"ty"}, {en:"he", pl:"on"}, {en:"she", pl:"ona"}, {en:"it", pl:"ono"}, {en:"we", pl:"my"}, {en:"they", pl:"oni"}],
+    2: [{en:"what", pl:"co"}, {en:"where", pl:"gdzie"}, {en:"when", pl:"kiedy"}, {en:"why", pl:"dlaczego"}, {en:"how", pl:"jak"}],
+    3: [{en:"mother", pl:"mama"}, {en:"father", pl:"tata"}, {en:"sister", pl:"siostra"}, {en:"brother", pl:"brat"}],
+    4: [{en:"school", pl:"szkoła"}, {en:"book", pl:"książka"}, {en:"pen", pl:"długopis"}, {en:"desk", pl:"biurko"}],
+    5: [{en:"apple", pl:"jabłko"}, {en:"water", pl:"woda"}, {en:"bread", pl:"chleb"}, {en:"cheese", pl:"ser"}]
 };
 
-// --- SKLEP ---
 const SHOP_ITEMS = [
-    {id:'nick_gold', n:'ZŁOTY NICK', p:1000, type:'color', val:'#ffd700'},
-    {id:'nick_neon', n:'NEONOWY NICK', p:1500, type:'color', val:'#00f2ff'},
-    {id:'nick_pink', n:'RÓŻOWY NICK', p:800, type:'color', val:'#ff00ff'},
-    {id:'emo_ninja', n:'EMOTKA NINJA', p:500, type:'emo', val:'🥷'},
-    {id:'emo_king', n:'EMOTKA KRÓL', p:2000, type:'emo', val:'👑'},
-    {id:'emo_ghost', n:'EMOTKA DUCH', p:600, type:'emo', val:'👻'},
-    {id:'emo_alien', n:'EMOTKA KOSMITA', p:700, type:'emo', val:'👽'},
-    {id:'emo_robot', n:'EMOTKA ROBOT', p:900, type:'emo', val:'🤖'}
+    {id:'c1', n:'ZŁOTY NICK', p:500, type:'color', val:'#ffd700'},
+    {id:'c2', n:'NEON BLUE', p:500, type:'color', val:'#00f2ff'},
+    {id:'c3', n:'KRWISTA CZERWIEŃ', p:600, type:'color', val:'#ff4d4d'},
+    {id:'c4', n:'MAGENTA', p:400, type:'color', val:'#ff00ff'},
+    {id:'c5', n:'TRAWIASTY', p:300, type:'color', val:'#2ecc71'},
+    {id:'e1', n:'NINJA', p:300, type:'emo', val:'🥷'},
+    {id:'e2', n:'KRÓL', p:1000, type:'emo', val:'👑'},
+    {id:'e3', n:'DUCH', p:200, type:'emo', val:'👻'},
+    {id:'e4', n:'ROBOT', p:400, type:'emo', val:'🤖'},
+    {id:'e5', n:'KOSMITA', p:500, type:'emo', val:'👽'},
+    {id:'e6', n:'CZASZKA', p:800, type:'emo', val:'💀'},
+    {id:'e7', n:'SMOK', p:1200, type:'emo', val:'🐲'},
+    {id:'e8', n:'DIAMENT', p:2000, type:'emo', val:'💎'},
+    {id:'e9', n:'REKIN', p:600, type:'emo', val:'🦈'},
+    {id:'e10', n:'WILK', p:700, type:'emo', val:'🐺'},
+    {id:'e11', n:'OGIEŃ', p:300, type:'emo', val:'🔥'},
+    {id:'e12', n:'PANDA', p:400, type:'emo', val:'🐼'},
+    {id:'e13', n:'TYGRYS', p:500, type:'emo', val:'🐯'},
+    {id:'e14', n:'PIŁKA', p:200, type:'emo', val:'⚽'},
+    {id:'e15', n:'GAMER', p:450, type:'emo', val:'🎮'},
+    {id:'e16', n:'MUZYKA', p:350, type:'emo', val:'🎧'},
+    {id:'e17', n:'PIENIĄDZE', p:1000, type:'emo', val:'💰'},
+    {id:'e18', n:'BŁYSKAWICA', p:600, type:'emo', val:'⚡'},
+    {id:'e19', n:'KOWBOJ', p:400, type:'emo', val:'🤠'},
+    {id:'e20', n:'WIKING', p:700, type:'emo', val:'🪓'},
+    {id:'e21', n:'MAŁPA', p:300, type:'emo', val:'🐵'},
+    {id:'e22', n:'KOT', p:250, type:'emo', val:'🐱'},
+    {id:'e23', n:'PIES', p:250, type:'emo', val:'🐶'},
+    {id:'e24', n:'RAKIETA', p:900, type:'emo', val:'🚀'},
+    {id:'e25', n:'UNIKORN', p:1100, type:'emo', val:'🦄'}
 ];
 
-// --- LOGIKA ---
-let user = JSON.parse(localStorage.getItem('e8_v2')) || {
+let user = JSON.parse(localStorage.getItem('e8_v3')) || {
     name: "GRACZ", avatar: "👶🏻", cups: 0, coins: 100, bombs: 3, 
     owned_emos: ['👶🏻'], owned_colors: ['#ffffff'], current_color: '#ffffff'
 };
 let game = { idx:0, pool:[], current:null };
 
 function save() {
-    localStorage.setItem('e8_v2', JSON.stringify(user));
-    db.ref('players/' + (localStorage.getItem('e8_uid') || 'u1')).set(user);
+    localStorage.setItem('e8_v3', JSON.stringify(user));
+    if(user.name !== "GRACZ") {
+        db.ref('players/' + (localStorage.getItem('e8_uid') || 'u1')).set(user);
+    }
     updateUI();
 }
 
@@ -177,102 +171,92 @@ function updateUI() {
 }
 
 function renderRoad() {
-    let road = document.getElementById('road-content');
-    road.innerHTML = '';
+    let road = document.getElementById('road-content'); road.innerHTML = '';
     for(let i=0; i<=5000; i+=200) {
         road.innerHTML += `<div class="node ${user.cups>=i?'unlocked':''}"><div class="node-box">${i%1000==0?'🎁':'💰'}</div><div style="font-size:0.5rem">${i}🏆</div></div>`;
     }
 }
 
+function openDictionary() {
+    let stage = Math.min(5, Math.floor(user.cups / 500) + 1);
+    let list = document.getElementById('dict-list'); list.innerHTML = '';
+    for(let i=1; i<=stage; i++) {
+        ALL_WORDS[i].forEach(w => {
+            list.innerHTML += `<div class="dict-item"><b>${w.en}</b><span>${w.pl}</span></div>`;
+        });
+    }
+    showScreen('screen-dictionary');
+}
+
 function renderLocker() {
-    let grid = document.getElementById('locker-grid');
-    grid.innerHTML = user.owned_emos.map(e => `
-        <div class="locker-item ${user.avatar==e?'active':''}" onclick="setAvatar('${e}')">${e}</div>
+    document.getElementById('locker-grid').innerHTML = user.owned_emos.map(e => `
+        <div class="locker-item ${user.avatar==e?'active':''}" onclick="user.avatar='${e}';save();">${e}</div>
     `).join('');
 }
 
-function setAvatar(e) { user.avatar = e; save(); }
-
 function renderShop() {
-    let container = document.getElementById('shop-items');
-    container.innerHTML = SHOP_ITEMS.map(item => `
-        <div class="profile-card" onclick="buyItem('${item.id}')">
-            <div style="font-size:1.5rem">${item.type=='color'?'🎨':item.val}</div>
-            <div style="flex:1"><b>${item.n}</b><br><small>${item.p} 💰</small></div>
+    document.getElementById('shop-items').innerHTML = SHOP_ITEMS.map(i => `
+        <div class="profile-card" onclick="buyItem('${i.id}')">
+            <div style="font-size:1.5rem">${i.type=='color'?'🎨':i.val}</div>
+            <div style="flex:1"><b>${i.n}</b><br><small>${i.p} 💰</small></div>
         </div>
     `).join('');
 }
 
 function buyItem(id) {
-    let item = SHOP_ITEMS.find(x => x.id == id);
-    if(user.coins >= item.p) {
-        user.coins -= item.p;
-        if(item.type == 'color') {
-            if(!user.owned_colors.includes(item.val)) user.owned_colors.push(item.val);
-            user.current_color = item.val;
-        } else {
-            if(!user.owned_emos.includes(item.val)) user.owned_emos.push(item.val);
-        }
-        save();
-        alert("ZAKUPIONO!");
-    } else alert("ZA MAŁO KASY!");
+    let i = SHOP_ITEMS.find(x => x.id == id);
+    if(user.coins >= i.p) {
+        user.coins -= i.p;
+        if(i.type == 'color') { 
+            if(!user.owned_colors.includes(i.val)) user.owned_colors.push(i.val);
+            user.current_color = i.val;
+        } else { if(!user.owned_emos.includes(i.val)) user.owned_emos.push(i.val); }
+        save(); alert("ZAKUPIONO!");
+    } else alert("BRAK MONET!");
 }
 
 function toggleModal(id) { document.getElementById(id).classList.toggle('hidden'); }
-
 function changeName() {
-    let newName = document.getElementById('set-name-input').value;
-    if(newName) { user.name = newName.toUpperCase(); save(); toggleModal('modal-settings'); }
+    let n = document.getElementById('set-name-input').value;
+    if(n && n.toUpperCase() !== "GRACZ") { user.name = n.toUpperCase(); save(); toggleModal('modal-settings'); }
 }
 
-function startMode(m) {
+function startMode() {
     let stage = Math.min(5, Math.floor(user.cups / 500) + 1);
-    let words = [];
-    for(let i=1; i<=stage; i++) words = [...words, ...ALL_WORDS[i]];
+    let words = []; for(let i=1; i<=stage; i++) words = [...words, ...ALL_WORDS[i]];
     game.pool = words.sort(() => 0.5 - Math.random()).slice(0, 10);
-    game.idx = 0;
-    showScreen('screen-game');
-    document.getElementById('g-level-info').textContent = "ETAP " + stage;
-    loadQ();
+    game.idx = 0; showScreen('screen-game'); loadQ();
 }
 
 function loadQ() {
     game.current = game.pool[game.idx];
     game.dir = Math.random() > 0.5 ? 'en2pl' : 'pl2en';
     document.getElementById('g-word').textContent = (game.dir == 'en2pl' ? game.current.en : game.current.pl).toUpperCase();
-    document.getElementById('g-input').value = "";
-    document.getElementById('g-feedback').textContent = "";
+    document.getElementById('g-input').value = ""; document.getElementById('g-feedback').textContent = "";
     document.getElementById('g-progress').textContent = (game.idx + 1) + "/10";
 }
 
 function checkAnswer() {
-    let val = document.getElementById('g-input').value.toLowerCase().trim();
-    let correct = (game.dir == 'en2pl' ? game.current.pl : game.current.en).toLowerCase().trim();
-    if(val == correct || val.replace('ł','l') == correct.replace('ł','l')) {
-        game.idx++;
-        user.coins += 10;
-        if(game.idx >= 10) { user.cups += 50; exitGame(); alert("KONIEC ETAPU! +50🏆"); } else loadQ();
-    } else {
-        document.getElementById('g-feedback').textContent = "ŹLE! POPRAWNIE: " + correct.toUpperCase();
-        document.getElementById('g-feedback').style.color = "red";
-    }
+    let v = document.getElementById('g-input').value.toLowerCase().trim();
+    let c = (game.dir == 'en2pl' ? game.current.pl : game.current.en).toLowerCase().trim();
+    if(v == c || v.replace('ł','l') == c.replace('ł','l')) {
+        game.idx++; user.coins += 10;
+        if(game.idx >= 10) { user.cups += 50; exitGame(); alert("+50🏆"); } else loadQ();
+    } else { document.getElementById('g-feedback').textContent = "ŹLE! POPRAWNIE: " + c.toUpperCase(); }
     save();
 }
 
 function exitGame() { showScreen('screen-menu'); }
 function showScreen(id) { document.querySelectorAll('.app').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
 
-// RANKING
 db.ref('players').orderByChild('cups').limitToLast(10).on('value', snap => {
-    let html = '';
-    snap.forEach(child => {
+    let h = ''; snap.forEach(child => {
         let p = child.val();
-        html = `<div style="font-size:0.7rem; color:${p.current_color || '#fff'}">${p.avatar} ${p.name} - ${p.cups}🏆</div>` + html;
+        if(p.name !== "GRACZ") h = `<div style="font-size:0.7rem; color:${p.current_color}">${p.avatar} ${p.name} - ${p.cups}🏆</div>` + h;
     });
-    document.getElementById('leader-list').innerHTML = html;
+    document.getElementById('leader-list').innerHTML = h;
 });
 
-// INIT
 if(!localStorage.getItem('e8_uid')) localStorage.setItem('e8_uid', 'u' + Date.now());
 for(let i=0; i<15; i++) {
     let l = document.createElement('div'); l.className = 'line';
