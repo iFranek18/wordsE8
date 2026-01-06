@@ -12,7 +12,12 @@
         body { margin:0; font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; overflow: hidden; height: 100vh; }
         .app { max-width: 480px; margin: 0 auto; padding: 10px; height: calc(100vh - 70px); display: flex; flex-direction: column; box-sizing: border-box; overflow-y: auto; }
         .hidden { display: none !important; }
-        
+        /* Styl okna chatu AI */
+        #ai-section { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-top: 10px; border: 1px solid #333; }
+        #ai-chat-window { height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; padding: 5px; }
+        .msg { padding: 8px 12px; border-radius: 10px; font-size: 0.8rem; max-width: 85%; line-height: 1.4; }
+        .ai-msg { background: #2d3436; align-self: flex-start; color: #00f2ff; border: 1px solid #444; }
+        .user-msg { background: #00f2ff; align-self: flex-end; color: #000; font-weight: bold; }
         /* Pasek dolny */
         .navbar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; height: 70px; background: #0a0a15; display: flex; justify-content: space-around; align-items: center; border-top: 2px solid #222; z-index: 100; }
         .nav-item { font-size: 1.8rem; cursor: pointer; color: #555; transition: 0.3s; }
@@ -67,7 +72,16 @@
     
     <button class="btn-online" style="background:#e67e22; margin-bottom:10px" onclick="showScreen('screen-shop')">MEGA SKLEP 💰</button>
     <button class="btn-online" onclick="alert('Gra Online wkrótce!')">GRA ONLINE 🌐</button>
-    
+    <div id="ai-section">
+    <h4 style="margin:0 0 10px 0; font-family:'Orbitron'; font-size:0.7rem; color:#00f2ff">AI ENGLISH COACH 🤖</h4>
+    <div id="ai-chat-window">
+        <div class="msg ai-msg">Hello! I am your AI Coach. Let's talk in English! Write something.</div>
+    </div>
+    <div style="display:flex; gap:5px">
+        <input type="text" id="ai-input" placeholder="Say something..." style="margin:0; flex:1; padding:10px; font-size:0.8rem">
+        <button onclick="sendMessageToAI()" style="width:60px; padding:0; background:#00f2ff; color:#000">SEND</button>
+    </div>
+</div>
     <div style="margin-top:20px; background:rgba(255,255,255,0.05); border-radius:15px; padding:10px; flex:1; overflow-y:auto">
         <h4 style="margin:0 0 10px 0; font-family:'Orbitron'; font-size:0.7rem">RANKING GRACZY</h4>
         <div id="leader-list"></div>
@@ -204,6 +218,42 @@ function showScreen(id) {
 
 function goBack() {
     switchTab('home');
+}
+    // --- LOGIKA AI CHAT ---
+function sendMessageToAI() {
+    const input = document.getElementById('ai-input');
+    const message = input.value.trim();
+    if (!message) return;
+
+    // Dodaj wiadomość użytkownika do okna
+    addChatMessage(message, 'user-msg');
+    input.value = '';
+
+    // Odpowiedź bota po krótkiej chwili
+    setTimeout(() => {
+        const response = generateAIResponse(message);
+        addChatMessage(response, 'ai-msg');
+    }, 1000);
+}
+
+function addChatMessage(text, className) {
+    const chatWindow = document.getElementById('ai-chat-window');
+    const div = document.createElement('div');
+    div.className = 'msg ' + className;
+    div.innerText = text;
+    chatWindow.appendChild(div);
+    chatWindow.scrollTop = chatWindow.scrollHeight; // Automatyczne przewijanie
+}
+
+function generateAIResponse(text) {
+    const t = text.toLowerCase();
+    // Prosta symulacja AI - bot reaguje na słowa klucze
+    if (t.includes("hello") || t.includes("hi")) return "Hi! I'm your English Coach. Ready for some practice?";
+    if (t.includes("how are you")) return "I'm great, thank you! How about you? Are you learning today?";
+    if (t.includes("help")) return "Sure! You can ask me about words from your current Arena. For example, do you know what 'achieve' means?";
+    if (t.includes("arena")) return "Arenas are a great way to level up! Which one are you currently on?";
+    
+    return "That sounds interesting! Try to use more English words in our conversation.";
 }
 
 // Inicjalizacja nagród i UI
