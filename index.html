@@ -2,349 +2,271 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>E8 CYBERQUEST: GOD MODE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E8 Trainer - Full Vocabulary</title>
     <style>
-        :root { --neon: #00f2ff; --purple: #bc13fe; --gold: #ffd700; --red: #ff2e63; --bg: #030308; }
-        body { margin:0; font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff; overflow: hidden; height: 100vh; }
-        .app { max-width: 500px; margin: 0 auto; height: 100vh; display: flex; flex-direction: column; position: relative; border: 1px solid #111; }
-        .hidden { display: none !important; }
-
-        /* HUD */
-        .hud { padding: 10px 15px; background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--neon); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; box-shadow: 0 0 20px rgba(0,242,255,0.2); }
-        .p-stat { text-align: center; font-family: 'Orbitron'; font-size: 0.6rem; }
-        .p-stat b { display: block; color: var(--neon); font-size: 1rem; text-shadow: 0 0 10px var(--neon); }
-        .avatar-frame { width: 55px; height: 55px; border-radius: 50%; border: 3px solid var(--neon); display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; background: #000; transition: 0.3s; box-shadow: inset 0 0 10px var(--neon); }
-
-        /* Scrollable Area */
-        .main-container { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 90px; scroll-behavior: smooth; }
-
-        /* Arena Cards */
-        .arena-card { background: linear-gradient(135deg, #0a0a15, #151525); border: 1px solid #222; border-radius: 15px; padding: 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; position: relative; transition: 0.2s; }
-        .arena-card.locked { opacity: 0.4; filter: grayscale(1); }
-        .arena-card:not(.locked):hover { border-color: var(--neon); transform: scale(1.02); }
-        .arena-title b { display: block; font-family: 'Orbitron'; color: var(--neon); font-size: 1.1rem; }
-        .arena-badge { font-size: 0.6rem; background: var(--purple); padding: 2px 6px; border-radius: 4px; font-weight: 900; }
-
-        /* Game UI */
-        .game-header { display: flex; justify-content: space-between; padding: 10px; font-family: 'Orbitron'; font-size: 0.8rem; background: #000; }
-        .game-core { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        #word-target { font-family: 'Orbitron'; font-size: 3rem; text-align: center; margin-bottom: 5px; text-shadow: 0 0 20px var(--neon); animation: glow 2s infinite; }
-        @keyframes glow { 0%, 100% {opacity: 1} 50% {opacity: 0.7} }
-        #correction-bar { height: 25px; color: var(--red); font-weight: 900; font-family: 'Orbitron'; text-align: center; margin-bottom: 15px; }
-        .cyber-input { width: 90%; background: #000; border: 2px solid #333; border-radius: 15px; color: #fff; font-family: 'Orbitron'; font-size: 1.6rem; text-align: center; padding: 15px; box-shadow: inset 0 0 15px rgba(255,255,255,0.05); }
-
-        /* Shop & Grid */
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .shop-item { background: #0a0a0a; border: 1px solid #222; border-radius: 12px; padding: 10px; text-align: center; transition: 0.2s; }
-        .shop-item:hover { border-color: var(--gold); }
-        .price-tag { background: var(--gold); color: #000; font-size: 0.7rem; font-weight: 900; padding: 2px 5px; border-radius: 4px; margin-top: 5px; display: inline-block; }
-
-        /* Navbar */
-        .navbar { position: absolute; bottom: 0; width: 100%; height: 75px; background: rgba(0,0,0,0.95); border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; z-index: 50; }
-        .nav-btn { font-size: 1.8rem; opacity: 0.3; transition: 0.3s; cursor: pointer; }
-        .nav-btn.active { opacity: 1; color: var(--neon); transform: translateY(-5px); }
-
-        /* Search Bar */
-        .search-box { width: 100%; padding: 10px; background: #111; border: 1px solid #333; border-radius: 10px; color: #fff; margin-bottom: 15px; font-family: 'Rajdhani'; }
-
-        /* Overlay */
-        .overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; display: flex; flex-direction: column; padding: 30px; }
-        .cyber-btn { background: var(--neon); color: #000; border: none; padding: 15px; border-radius: 10px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; margin: 10px 0; font-size: 1rem; }
+        :root {
+            --primary: #00ffd5;
+            --bg: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+        }
+        body{margin:0;font-family:system-ui;background:var(--bg);color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh}
+        .app{width:min(500px,95%);background:rgba(255,255,255,.08);backdrop-filter:blur(14px);border-radius:20px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+        button,select,input,label{width:100%;padding:12px;border-radius:12px;border:none;font-size:1rem;margin-top:10px;box-sizing: border-box}
+        button{background:var(--primary);color:#000;font-weight:700;cursor:pointer;transition: transform 0.1s}
+        button:active{transform: scale(0.98)}
+        .small{font-size:.9rem;opacity:.8}
+        .word{font-size:2.2rem;text-align:center;margin:15px 0;font-weight:700;min-height: 45px; color: var(--primary)}
+        .result{min-height:28px;text-align:center;font-weight:700;margin-top: 10px}
+        .good{color:#3cff00}.bad{color:#ff3c3c}
+        .back{background:none;color:#fff;font-size:1.6rem;width:auto;padding:0;margin:0;cursor:pointer}
+        .topbar{display:flex;align-items:center;justify-content: space-between;margin-bottom:10px}
+        .checkbox{display:flex;align-items:center;gap:10px;cursor: pointer}
+        .checkbox input{width:auto;margin:0}
+        .errors-list{max-height:200px;overflow-y:auto;margin-top:10px;padding:10px;background:rgba(0,0,0,0.3);border-radius:12px;font-size: 0.85rem}
+        .stats-bar {display: flex; justify-content: space-between; font-size: 0.8rem; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px; margin-bottom: 10px}
+        hr {border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0}
     </style>
 </head>
 <body>
 
-<div class="app">
-    <div class="hud">
-        <div class="p-stat">🏆 <b id="h-cups">0</b><small>Trophies</small></div>
-        <div class="avatar-frame" id="h-av" onclick="tab('locker')">🥷</div>
-        <div class="p-stat">💰 <b id="h-coins">0</b><small>CyberCoins</small></div>
-    </div>
+<div class="app" id="menu">
+  <h2>E8 Vocab Master</h2>
+  <p class="small">Wybierz kategorię słówek:</p>
+  <select id="mode">
+    <option value="all">Mieszane (wszystkie słowa)</option>
+    <option value="nouns">Rzeczowniki (Nouns)</option>
+    <option value="verbs">Czasowniki (Verbs)</option>
+    <option value="adjectives">Przymiotniki (Adjectives)</option>
+    <option value="rest">Gównienka-Reszta (Zaimki, Przyimki itp.)</option>
+    <option value="wrong">Tylko wcześniejsze błędy</option>
+  </select>
 
-    <div id="scr-home" class="main-container">
-        <h2 style="font-family:'Orbitron'; text-align:center; color:var(--gold); font-size:0.9rem; letter-spacing:3px">SELECT BATTLEGROUND</h2>
-        <div id="arenas-list"></div>
-        <div class="arena-card" style="border: 2px solid var(--purple)" onclick="showMulti()">
-            <div class="arena-title"><b>MULTIPLAYER 1VS1</b><small>Kodowe wyzwanie ze znajomym</small></div>
-            <div style="font-size:1.5rem">🌐</div>
-        </div>
-    </div>
+  <label class="checkbox">
+    <input type="checkbox" id="noPolish" checked>
+    Ignoruj polskie znaki (ą, ć, ę...)
+  </label>
 
-    <div id="scr-game" class="app hidden">
-        <div class="game-header">
-            <span style="color:var(--neon)">ME: <b id="g-score">0</b></span>
-            <span id="g-timer" style="color:var(--gold)">60s</span>
-            <span id="g-opp-wrap" class="hidden" style="color:var(--red)">OPP: <b id="g-opp-score">0</b></span>
-        </div>
-        <div class="game-core">
-            <div id="correction-bar"></div>
-            <div id="word-target">READY?</div>
-            <input type="text" id="g-input" class="cyber-input" placeholder="TŁUMACZENIE..." autocomplete="off">
-            <button class="cyber-btn" style="width:100%; margin-top:20px" onclick="submit()">CONFIRM</button>
-        </div>
-    </div>
+  <label class="checkbox">
+    <input type="checkbox" id="direction"> Tryb EN → PL
+  </label>
 
-    <div id="scr-shop" class="main-container hidden">
-        <h2 style="font-family:'Orbitron'; text-align:center">TECH MARKET</h2>
-        <div class="grid-3" id="shop-box"></div>
-    </div>
+  <button id="startBtn">START</button>
+  
+  <hr>
+  <p class="small">Zapisane błędy: <b id="wrongCount">0</b></p>
+  <button id="showErrorsBtn" style="background: rgba(255,255,255,0.1); color: white;">Pokaż listę błędów</button>
+  <div class="errors-list" id="errorsList" style="display:none"></div>
+  <button id="clearErrorsBtn" style="background: rgba(255,60,60,0.2); color: #ff3c3c; margin-top:5px; padding: 5px; font-size: 0.7rem">Usuń wszystkie błędy</button>
+</div>
 
-    <div id="scr-locker" class="main-container hidden">
-        <h2 style="font-family:'Orbitron'; text-align:center">MY GEAR</h2>
-        <div class="grid-3" id="locker-box"></div>
-    </div>
+<div class="app" id="learn" style="display:none">
+  <div class="topbar">
+    <button class="back" id="backArrow">←</button>
+    <div id="progressText" class="small">0 / 0</div>
+  </div>
+  
+  <div class="stats-bar">
+    <span>Poprawne: <b id="statCorrect" class="good">0</b></span>
+    <span>Błędy: <b id="statWrong" class="bad">0</b></span>
+  </div>
 
-    <div id="scr-dict" class="main-container hidden">
-        <input type="text" id="dict-search" class="search-box" placeholder="Szukaj słówka..." oninput="renderDict()">
-        <div id="dict-results"></div>
-    </div>
-
-    <div id="scr-settings" class="main-container hidden">
-        <h2 style="font-family:'Orbitron'">SYSTEM</h2>
-        <button class="cyber-btn" style="background:var(--red); color:#fff; width:100%" onclick="resetGame()">FACTORY RESET</button>
-    </div>
-
-    <div id="overlay-multi" class="overlay hidden">
-        <h1 style="font-family:'Orbitron'; text-align:center">1VS1 LINK</h1>
-        <div id="multi-setup">
-            <button class="cyber-btn" style="width:100%" onclick="hostMatch()">GENERATE ROOM CODE</button>
-            <p style="text-align:center; color:#555">OR</p>
-            <input type="text" id="join-code" class="cyber-input" style="width:100%; box-sizing:border-box" placeholder="CODE">
-            <button class="cyber-btn" style="width:100%; background:var(--purple)" onclick="joinMatch()">JOIN SESSION</button>
-        </div>
-        <div id="multi-lobby" class="hidden" style="text-align:center">
-            <p>SHARE THIS CODE:</p>
-            <h1 id="room-code-display" style="color:var(--gold); font-size:4rem">----</h1>
-            <p id="room-status">Waiting for Rival...</p>
-            <button id="btn-start-multi" class="cyber-btn hidden" onclick="beginMulti()">START BATTLE</button>
-        </div>
-        <button onclick="hideMulti()" style="background:none; border:none; color:#444; margin-top:30px">CANCEL</button>
-    </div>
-
-    <div class="navbar">
-        <div class="nav-btn active" id="n-home" onclick="tab('home')">🏟️</div>
-        <div class="nav-btn" id="n-shop" onclick="tab('shop')">🛒</div>
-        <div class="nav-btn" id="n-dict" onclick="tab('dict')">📚</div>
-        <div class="nav-btn" id="n-settings" onclick="tab('settings')">⚙️</div>
-    </div>
+  <div class="word" id="question"></div>
+  <input id="answer" placeholder="Wpisz tłumaczenie..." autocomplete="off">
+  <button id="checkBtn">Sprawdź</button>
+  <div class="result" id="result"></div>
 </div>
 
 <script>
-// ==========================================
-// 📚 PEŁNA BAZA SŁÓW (300+)
-// ==========================================
-const DB = {
-    1: [
-        {en:"I", pl:"ja"}, {en:"you", pl:"ty / wy"}, {en:"he", pl:"on"}, {en:"she", pl:"ona"}, {en:"it", pl:"ono"}, {en:"we", pl:"my"}, {en:"they", pl:"oni"}, {en:"me", pl:"mnie"}, {en:"him", pl:"jego"}, {en:"her", pl:"jej"}, {en:"us", pl:"nas"}, {en:"them", pl:"ich"}, {en:"my", pl:"mój"}, {en:"your", pl:"twój"}, {en:"his", pl:"jego"}, {en:"its", pl:"jego"}, {en:"our", pl:"nasz"}, {en:"their", pl:"ich"}, {en:"what", pl:"co"}, {en:"who", pl:"kto"}, {en:"where", pl:"gdzie"}, {en:"when", pl:"kiedy"}, {en:"why", pl:"dlaczego"}, {en:"how", pl:"jak"}, {en:"in", pl:"w"}, {en:"on", pl:"na"}, {en:"at", pl:"o / przy"}, {en:"to", pl:"do"}, {en:"from", pl:"z"}, {en:"with", pl:"z"}, {en:"about", pl:"o"}, {en:"for", pl:"dla"}, {en:"and", pl:"i"}, {en:"but", pl:"ale"}, {en:"or", pl:"lub"}, {en:"because", pl:"ponieważ"}, {en:"so", pl:"więc"}, {en:"if", pl:"jeśli"}, {en:"mother", pl:"mama"}, {en:"father", pl:"tata"}, {en:"sister", pl:"siostra"}, {en:"brother", pl:"brat"}, {en:"friend", pl:"przyjaciel"}, {en:"school", pl:"szkoła"}, {en:"teacher", pl:"nauczyciel"}, {en:"book", pl:"książka"}, {en:"pen", pl:"długopis"}, {en:"desk", pl:"biurko"}, {en:"apple", pl:"jabłko"}, {en:"water", pl:"woda"}, {en:"bread", pl:"chleb"}, {en:"cat", pl:"kot"}, {en:"dog", pl:"pies"}, {en:"house", pl:"dom"}, {en:"car", pl:"samochód"}, {en:"city", pl:"miasto"}, {en:"sun", pl:"słońce"}, {en:"day", pl:"dzień"}, {en:"night", pl:"noc"}, {en:"happy", pl:"szczęśliwy"}, {en:"sad", pl:"smutny"}, {en:"big", pl:"duży"}, {en:"small", pl:"mały"}, {en:"good", pl:"dobry"}, {en:"bad", pl:"zły"}
-    ],
-    2: [
-        {en:"become", pl:"stawać się"}, {en:"seem", pl:"wydawać się"}, {en:"change", pl:"zmieniać"}, {en:"start", pl:"zaczynać"}, {en:"finish", pl:"kończyć"}, {en:"help", pl:"pomagać"}, {en:"wait", pl:"czekać"}, {en:"stay", pl:"zostawać"}, {en:"leave", pl:"opuszczać"}, {en:"find", pl:"znajdować"}, {en:"lose", pl:"tracić"}, {en:"win", pl:"wygrywać"}, {en:"choose", pl:"wybierać"}, {en:"try", pl:"próbować"}, {en:"need", pl:"potrzebować"}, {en:"want", pl:"chcieć"}, {en:"remember", pl:"pamiętać"}, {en:"forget", pl:"zapominać"}, {en:"believe", pl:"wierzyć"}, {en:"travel", pl:"podróżować"}, {en:"arrive", pl:"przyjeżdżać"}, {en:"return", pl:"wracać"}, {en:"buy", pl:"kupować"}, {en:"sell", pl:"sprzedawać"}, {en:"pay", pl:"płacić"}, {en:"cost", pl:"kosztować"}, {en:"spend", pl:"wydawać"}, {en:"save", pl:"oszczędzać"}, {en:"share", pl:"dzielić się"}, {en:"meet", pl:"spotykać"}, {en:"visit", pl:"odwiedzać"}
-    ],
-    3: [
-        {en:"decide", pl:"decydować"}, {en:"plan", pl:"planować"}, {en:"prepare", pl:"przygotowywać"}, {en:"organize", pl:"organizować"}, {en:"manage", pl:"zarządzać"}, {en:"improve", pl:"poprawiać"}, {en:"reduce", pl:"zmniejszać"}, {en:"increase", pl:"zwiększać"}, {en:"create", pl:"tworzyć"}, {en:"destroy", pl:"niszczyć"}, {en:"repair", pl:"naprawiać"}, {en:"protect", pl:"chronić"}, {en:"allow", pl:"pozwalać"}, {en:"prevent", pl:"zapobiegać"}, {en:"refuse", pl:"odmawiać"}, {en:"accept", pl:"akceptować"}, {en:"explain", pl:"wyjaśniać"}, {en:"describe", pl:"opisywać"}, {en:"complain", pl:"narzekać"}, {en:"promise", pl:"obiecywać"}, {en:"warn", pl:"ostrzegać"}, {en:"suggest", pl:"sugerować"}, {en:"agree", pl:"zgadzać się"}, {en:"support", pl:"wspierać"}, {en:"trust", pl:"ufać"}, {en:"blame", pl:"obwiniać"}, {en:"punish", pl:"karać"}, {en:"reward", pl:"nagradzać"}
-    ],
-    4: [
-        {en:"appear", pl:"pojawiać się"}, {en:"disappear", pl:"znikać"}, {en:"belong", pl:"należeć"}, {en:"include", pl:"zawierać"}, {en:"affect", pl:"wpływać"}, {en:"depend", pl:"zależeć"}, {en:"realize", pl:"uświadamiać sobie"}, {en:"expect", pl:"oczekiwać"}, {en:"imagine", pl:"wyobrażać sobie"}, {en:"consider", pl:"rozważać"}, {en:"admit", pl:"przyznawać się"}, {en:"deny", pl:"zaprzeczać"}, {en:"demand", pl:"żądać"}, {en:"encourage", pl:"zachęcać"}, {en:"discover", pl:"odkrywać"}, {en:"invent", pl:"wynajdywać"}, {en:"explore", pl:"eksplorować"}, {en:"research", pl:"badać"}, {en:"prove", pl:"udowadniać"}, {en:"doubt", pl:"wątpić"}, {en:"notice", pl:"zauważać"}, {en:"compare", pl:"porównywać"}, {en:"connect", pl:"łączyć"}, {en:"separate", pl:"oddzielać"}, {en:"collect", pl:"zbierać"}, {en:"waste", pl:"marnować"}, {en:"earn", pl:"zarabiać"}, {en:"borrow", pl:"pożyczać"}, {en:"lend", pl:"pożyczać komuś"}
-    ],
-    5: [
-        {en:"achieve", pl:"osiągać"}, {en:"succeed", pl:"odnosić sukces"}, {en:"fail", pl:"ponosić porażkę"}, {en:"handle", pl:"radzić sobie"}, {en:"avoid", pl:"unikać"}, {en:"influence", pl:"wpływ"}, {en:"responsibility", pl:"odpowiedzialność"}, {en:"freedom", pl:"wolność"}, {en:"justice", pl:"sprawiedliwość"}, {en:"society", pl:"społeczeństwo"}, {en:"environment", pl:"środowisko"}, {en:"pollution", pl:"zanieczyszczenie"}, {en:"climate", pl:"klimat"}, {en:"resource", pl:"zasób"}, {en:"technology", pl:"technologia"}, {en:"device", pl:"urządzenie"}, {en:"system", pl:"system"}, {en:"impact", pl:"wpływ"}, {en:"result", pl:"rezultat"}, {en:"solution", pl:"rozwiązanie"}, {en:"priority", pl:"priorytet"}, {en:"quality", pl:"jakość"}, {en:"value", pl:"wartość"}, {en:"profit", pl:"zysk"}, {en:"habit", pl:"nawyk"}, {en:"culture", pl:"kultura"}, {en:"meaning", pl:"znaczenie"}, {en:"experience", pl:"doświadczenie"}, {en:"effort", pl:"wysiłek"}, {en:"goal", pl:"cel"}, {en:"accident", pl:"wypadek"}
-    ]
+const data = {
+  nouns: [
+    {en:"mother",pl:"mama"},{en:"father",pl:"tata"},{en:"parents",pl:"rodzice"},{en:"sister",pl:"siostra"},{en:"brother",pl:"brat"},{en:"grandmother",pl:"babcia"},{en:"grandfather",pl:"dziadek"},{en:"aunt",pl:"ciocia"},{en:"uncle",pl:"wujek"},{en:"cousin",pl:"kuzyn / kuzynka"},{en:"child",pl:"dziecko"},{en:"children",pl:"dzieci"},{en:"baby",pl:"niemowle"},{en:"friend",pl:"przyjaciel"},{en:"best friend",pl:"najlepszy przyjaciel"},{en:"neighbour",pl:"sasiad"},{en:"person",pl:"osoba"},{en:"people",pl:"ludzie"},{en:"teenager",pl:"nastolatek"},{en:"adult",pl:"dorosly"},
+    {en:"school",pl:"szkola"},{en:"class",pl:"klasa"},{en:"lesson",pl:"lekcja"},{en:"subject",pl:"przedmiot"},{en:"exam",pl:"egzamin"},{en:"test",pl:"test"},{en:"homework",pl:"praca domowa"},{en:"exercise",pl:"cwiczenie"},{en:"task",pl:"zadanie"},{en:"question",pl:"pytanie"},{en:"answer",pl:"odpowiedz"},{en:"break",pl:"przerwa"},{en:"teacher",pl:"nauczyciel"},{en:"student",pl:"uczen"},{en:"classmate",pl:"kolega z klasy"},{en:"headteacher",pl:"dyrektor"},{en:"book",pl:"ksiazka"},{en:"textbook",pl:"podrecznik"},{en:"notebook",pl:"zeszyt"},{en:"pen",pl:"dlugopis"},{en:"pencil",pl:"olowek"},{en:"desk",pl:"lawka / biurko"},{en:"chair",pl:"krzeslo"},{en:"board",pl:"tablica"},{en:"grade",pl:"ocena"},{en:"project",pl:"projekt"},
+    {en:"English",pl:"angielski"},{en:"Polish",pl:"polski"},{en:"maths",pl:"matematyka"},{en:"history",pl:"historia"},{en:"geography",pl:"geografia"},{en:"biology",pl:"biologia"},{en:"chemistry",pl:"chemia"},{en:"physics",pl:"fizyka"},{en:"music",pl:"muzyka"},{en:"art",pl:"plastyka"},{en:"PE",pl:"WF"},{en:"IT",pl:"informatyka"},
+    {en:"doctor",pl:"lekarz"},{en:"nurse",pl:"pielegniarka"},{en:"police officer",pl:"policjant"},{en:"firefighter",pl:"strazak"},{en:"soldier",pl:"zolnierz"},{en:"lawyer",pl:"prawnik"},{en:"judge",pl:"sedzia"},{en:"worker",pl:"pracownik"},{en:"office worker",pl:"pracownik biurowy"},{en:"manager",pl:"menedzer"},{en:"actor",pl:"aktor"},{en:"actress",pl:"aktorka"},{en:"musician",pl:"muzyk"},{en:"singer",pl:"piosenkarz"},{en:"artist",pl:"artysta"},{en:"driver",pl:"kierowca"},{en:"mechanic",pl:"mechanik"},{en:"engineer",pl:"inzynier"},{en:"builder",pl:"budowlaniec"},{en:"architect",pl:"architekt"},{en:"electrician",pl:"elektryk"},{en:"plumber",pl:"hydraulik"},{en:"shop assistant",pl:"sprzedawca"},{en:"cashier",pl:"kasjer"},{en:"cook",pl:"kucharz"},{en:"chef",pl:"szef kuchni"},{en:"waiter",pl:"kelner"},{en:"waitress",pl:"kelnerka"},{en:"farmer",pl:"rolnik"},{en:"gardener",pl:"ogrodnik"},{en:"vet",pl:"weterynarz"},{en:"scientist",pl:"naukowiec"},{en:"journalist",pl:"dziennikarz"},{en:"reporter",pl:"reporter"},{en:"photographer",pl:"fotograf"},{en:"translator",pl:"tlumacz"},{en:"volunteer",pl:"wolontariusz"},{en:"foundation",pl:"fundacja"},{en:"house",pl:"dom"},{en:"home",pl:"dom"},{en:"flat",pl:"mieszkanie"},{en:"apartment",pl:"mieszkanie"},{en:"building",pl:"budynek"},{en:"basement",pl:"piwnica"},{en:"floor",pl:"pietro / podloga"},{en:"room",pl:"pokoj"},{en:"living room",pl:"salon"},{en:"bedroom",pl:"sypialnia"},{en:"kitchen",pl:"kuchnia"},{en:"bathroom",pl:"lazienka"},{en:"hall",pl:"korytarz"},{en:"door",pl:"drzwi"},{en:"window",pl:"okno"},{en:"wall",pl:"sciana"},{en:"roof",pl:"dach"},{en:"stairs",pl:"schody"},{en:"garden",pl:"ogrod"},{en:"garage",pl:"garaz"},
+    {en:"table",pl:"stol"},{en:"bed",pl:"lozko"},{en:"wardrobe",pl:"szafa"},{en:"shelf",pl:"polka"},{en:"lamp",pl:"lampa"},{en:"mirror",pl:"lustro"},{en:"clock",pl:"zegar"},{en:"phone",pl:"telefon"},{en:"smartphone",pl:"smartfon"},{en:"computer",pl:"komputer"},{en:"laptop",pl:"laptop"},{en:"keyboard",pl:"klawiatura"},{en:"mouse",pl:"myszka"},{en:"screen",pl:"ekran"},{en:"TV",pl:"telewizor"},{en:"remote",pl:"pilot"},{en:"charger",pl:"ladowarka"},{en:"bag",pl:"torba"},{en:"backpack",pl:"plecak"},{en:"keys",pl:"klucze"},{en:"money",pl:"pieniadze"},{en:"wallet",pl:"portfel"},
+    {en:"food",pl:"jedzenie"},{en:"meal",pl:"posilek"},{en:"breakfast",pl:"sniadanie"},{en:"lunch",pl:"lunch"},{en:"dinner",pl:"obiad / kolacja"},{en:"snack",pl:"przekaska"},{en:"bread",pl:"chleb"},{en:"butter",pl:"maslo"},{en:"cheese",pl:"ser"},{en:"milk",pl:"mleko"},{en:"water",pl:"woda"},{en:"juice",pl:"sok"},{en:"tea",pl:"herbata"},{en:"coffee",pl:"kawa"},{en:"meat",pl:"mieso"},{en:"fish",pl:"ryba"},{en:"fruit",pl:"owoce"},{en:"vegetables",pl:"warzywa"},{en:"apple",pl:"jablko"},{en:"banana",pl:"banan"},{en:"cake",pl:"ciasto"},
+    {en:"animal",pl:"zwierze"},{en:"pet",pl:"zwierze domowe"},{en:"dog",pl:"pies"},{en:"cat",pl:"kot"},{en:"bird",pl:"ptak"},{en:"horse",pl:"kon"},{en:"cow",pl:"krowa"},{en:"pig",pl:"swinia"},{en:"sheep",pl:"owca"},{en:"goat",pl:"koza"},{en:"rabbit",pl:"krolik"},{en:"hamster",pl:"chomik"},{en:"mouse",pl:"mysz"},{en:"lion",pl:"lew"},{en:"tiger",pl:"tygrys"},{en:"bear",pl:"niedzwiedz"},{en:"elephant",pl:"slon"},{en:"wolf",pl:"wilk"},{en:"fox",pl:"lis"},
+    {en:"city",pl:"miasto"},{en:"town",pl:"miasteczko"},{en:"village",pl:"wies"},{en:"street",pl:"ulica"},{en:"road",pl:"droga"},{en:"square",pl:"rynek / plac"},{en:"park",pl:"park"},{en:"shop",pl:"sklep"},{en:"shopping centre",pl:"centrum handlowe"},{en:"market",pl:"targ"},{en:"restaurant",pl:"restauracja"},{en:"cafe",pl:"kawiarnia"},{en:"cinema",pl:"kino"},{en:"theatre",pl:"teatr"},{en:"museum",pl:"muzeum"},{en:"library",pl:"biblioteka"},{en:"hospital",pl:"szpital"},{en:"church",pl:"kosciol"},{en:"office",pl:"biuro"},{en:"post office",pl:"poczta"},{en:"station",pl:"stacja"},{en:"bus stop",pl:"przystanek"},{en:"airport",pl:"lotnisko"},
+    {en:"car",pl:"samochod"},{en:"bus",pl:"autobus"},{en:"train",pl:"pociag"},{en:"tram",pl:"tramwaj"},{en:"bike",pl:"rower"},{en:"motorbike",pl:"motocykl"},{en:"plane",pl:"samolot"},{en:"ship",pl:"statek"},{en:"boat",pl:"lodz"},{en:"ticket",pl:"bilet"},{en:"passenger",pl:"pasazer"},{en:"journey",pl:"podroz"},{en:"trip",pl:"wycieczka"},
+    {en:"time",pl:"czas"},{en:"day",pl:"dzien"},{en:"week",pl:"tydzien"},{en:"month",pl:"miesiac"},{en:"year",pl:"rok"},{en:"morning",pl:"rano"},{en:"afternoon",pl:"popoludnie"},{en:"evening",pl:"wieczor"},{en:"night",pl:"noc"},{en:"holiday",pl:"wakacje / swieto"},{en:"vacation",pl:"wakacje"},{en:"weekend",pl:"weekend"},
+    {en:"body",pl:"cialo"},{en:"head",pl:"glowa"},{en:"hair",pl:"wlosy"},{en:"face",pl:"twarz"},{en:"eye",pl:"oko"},{en:"ear",pl:"ucho"},{en:"nose",pl:"nos"},{en:"mouth",pl:"usta"},{en:"hand",pl:"reka"},{en:"arm",pl:"ramie"},{en:"leg",pl:"noga"},{en:"foot",pl:"stopa"},{en:"heart",pl:"serce"},{en:"medicine",pl:"lekarstwo"},{en:"illness",pl:"choroba"},{en:"pain",pl:"bol"},
+    {en:"nature",pl:"przyroda"},{en:"weather",pl:"pogoda"},{en:"sun",pl:"slonce"},{en:"rain",pl:"deszcz"},{en:"snow",pl:"snieg"},{en:"wind",pl:"wiatr"},{en:"cloud",pl:"chmura"},{en:"sky",pl:"niebo"},{en:"tree",pl:"drzewo"},{en:"flower",pl:"kwiat"},{en:"grass",pl:"trawa"},{en:"river",pl:"rzeka"},{en:"lake",pl:"jezioro"},{en:"sea",pl:"morze"},{en:"mountain",pl:"gora"},{en:"forest",pl:"las"},
+    {en:"hobby",pl:"hobby"},{en:"sport",pl:"sport"},{en:"game",pl:"gra"},{en:"video game",pl:"gra komputerowa"},{en:"song",pl:"piosenka"},{en:"concert",pl:"koncert"},{en:"film",pl:"film"},{en:"series",pl:"serial"},{en:"reading",pl:"czytanie"},{en:"football",pl:"pilka nozna"},{en:"basketball",pl:"koszykowka"},{en:"skiing",pl:"narciarstwo"},{en:"swimming",pl:"plywanie"},
+    {en:"problem",pl:"problem"},{en:"situation",pl:"sytuacja"},{en:"idea",pl:"pomysl"},{en:"information",pl:"informacja"},{en:"news",pl:"wiadomosci"},{en:"event",pl:"wydarzenie"},{en:"accident",pl:"wypadek"},{en:"help",pl:"pomoc"},{en:"support",pl:"wsparcie"},{en:"protection",pl:"ochrona"},{en:"education",pl:"edukacja"},{en:"culture",pl:"kultura"},{en:"future",pl:"przyszlosc"},{en:"past",pl:"przeszlosc"},{en:"success",pl:"sukces"},{en:"failure",pl:"porazka"}
+  ],
+  verbs: [
+    {en:"be",pl:"byc"},{en:"have",pl:"miec"},{en:"do",pl:"robic"},{en:"say",pl:"mowic"},{en:"tell",pl:"powiedziec"},{en:"ask",pl:"pytac"},{en:"answer",pl:"odpowiadac"},{en:"talk",pl:"rozmawiac"},{en:"speak",pl:"mowic"},{en:"listen",pl:"sluchac"},{en:"hear",pl:"slyszec"},{en:"see",pl:"widziec"},{en:"watch",pl:"ogladac"},{en:"look",pl:"patrzec"},{en:"read",pl:"czytac"},{en:"write",pl:"pisac"},{en:"learn",pl:"uczyc sie"},{en:"study",pl:"uczyc sie"},{en:"teach",pl:"uczyc"},{en:"know",pl:"wiedziec"},{en:"think",pl:"myslec"},{en:"understand",pl:"rozumiec"},{en:"remember",pl:"pamietac"},{en:"forget",pl:"zapominac"},
+    {en:"go",pl:"isc / jechac"},{en:"come",pl:"przychodzic"},{en:"get",pl:"dostac / stac sie"},{en:"make",pl:"robic"},{en:"take",pl:"brac"},{en:"give",pl:"dawac"},{en:"use",pl:"uzywac"},{en:"work",pl:"pracowac"},{en:"play",pl:"grac"},{en:"start",pl:"zaczynac"},{en:"begin",pl:"zaczynac"},{en:"finish",pl:"konczyc"},{en:"stop",pl:"zatrzymywac"},{en:"try",pl:"probowac"},{en:"help",pl:"pomagac"},{en:"wait",pl:"czekac"},{en:"stay",pl:"zostawac"},{en:"leave",pl:"wychodzic / opuszczac"},
+    {en:"like",pl:"lubic"},{en:"love",pl:"kochac"},{en:"hate",pl:"nienawidzic"},{en:"enjoy",pl:"cieszyc sie"},{en:"feel",pl:"czuc"},{en:"want",pl:"chciec"},{en:"need",pl:"potrzebowac"},{en:"prefer",pl:"wolec"},{en:"hope",pl:"miec nadzieje"},{en:"believe",pl:"wierzyc"},{en:"agree",pl:"zgadzac sie"},{en:"disagree",pl:"nie zgadzac sie"},{en:"meet",pl:"spotykac"},{en:"visit",pl:"odwiedzac"},
+    {en:"practice",pl:"cwiczyc"},{en:"pass",pl:"zdac"},{en:"fail",pl:"oblac"},{en:"prepare",pl:"przygotowywac"},{en:"check",pl:"sprawdzac"},{en:"correct",pl:"poprawiac"},{en:"choose",pl:"wybierac"},{en:"decide",pl:"decydowac"},{en:"plan",pl:"planowac"},
+    {en:"run",pl:"biegac"},{en:"walk",pl:"chodzic"},{en:"drive",pl:"prowadzic"},{en:"ride",pl:"jechac"},{en:"travel",pl:"podrozowac"},{en:"arrive",pl:"przyjezdzac"},{en:"return",pl:"wracac"},{en:"move",pl:"poruszac sie"},{en:"enter",pl:"wchodzic"},{en:"cross",pl:"przechodzic"},
+    {en:"live",pl:"mieszkac"},{en:"build",pl:"budowac"},{en:"clean",pl:"sprzatac"},{en:"cook",pl:"gotowac"},{en:"buy",pl:"kupowac"},{en:"sell",pl:"sprzedawac"},{en:"pay",pl:"placic"},{en:"order",pl:"zamawiac"},{en:"open",pl:"otwierac"},{en:"close",pl:"zamykac"},
+    {en:"hurt",pl:"bolec"},{en:"rest",pl:"odpoczywac"},{en:"exercise",pl:"cwiczyc"},{en:"sleep",pl:"spac"},{en:"wake up",pl:"budzic sie"},{en:"fall",pl:"upadac"},{en:"break",pl:"lamac"},{en:"cut",pl:"ciac"},
+    {en:"relax",pl:"relaksowac sie"},{en:"download",pl:"pobierac"},{en:"upload",pl:"wysylac"},{en:"send",pl:"wysylac"},{en:"receive",pl:"otrzymywac"},{en:"share",pl:"udostepniac"},{en:"search",pl:"szukac"}
+  ],
+  adjectives: [
+    {en:"happy",pl:"szczesliwy"},{en:"sad",pl:"smutny"},{en:"angry",pl:"zly"},{en:"tired",pl:"zmeczony"},{en:"bored",pl:"znudzony"},{en:"excited",pl:"podekscytowany"},{en:"nervous",pl:"zdenerwowany"},{en:"scared",pl:"przestraszony"},{en:"afraid",pl:"bojacy sie"},{en:"proud",pl:"dumny"},{en:"funny",pl:"zabawny"},{en:"interesting",pl:"interesujacy"},{en:"boring",pl:"nudny"},{en:"difficult",pl:"trudny"},{en:"easy",pl:"latwy"},
+    {en:"tall",pl:"wysoki"},{en:"short",pl:"niski / krotki"},{en:"big",pl:"duzy"},{en:"small",pl:"maly"},{en:"young",pl:"mlody"},{en:"old",pl:"stary"},{en:"beautiful",pl:"piekny"},{en:"handsome",pl:"przystojny"},{en:"pretty",pl:"ladna"},{en:"ugly",pl:"brzydki"},{en:"fat",pl:"gruby"},{en:"thin",pl:"chudy"},{en:"strong",pl:"silny"},{en:"weak",pl:"slaby"},{en:"friendly",pl:"przyjazny"},{en:"kind",pl:"mily"},{en:"mean",pl:"zlosliwy"},{en:"polite",pl:"uprzejmy"},{en:"rude",pl:"niegrzeczny"},
+    {en:"new",pl:"nowy"},{en:"clean",pl:"czysty"},{en:"dirty",pl:"brudny"},{en:"expensive",pl:"drogi"},{en:"cheap",pl:"tani"},{en:"fast",pl:"szybki"},{en:"slow",pl:"wolny"},{en:"hot",pl:"goracy"},{en:"cold",pl:"zimny"},{en:"warm",pl:"cieply"},{en:"cool",pl:"fajny / zimny"},
+    {en:"long",pl:"dlugi"},{en:"early",pl:"wczesny"},{en:"late",pl:"spozniony"},{en:"many",pl:"wiele"},{en:"much",pl:"duzo"},{en:"few",pl:"niewiele"},{en:"little",pl:"malo"},
+    {en:"good",pl:"dobry"},{en:"bad",pl:"zly"},{en:"right",pl:"poprawny / prawy"},{en:"wrong",pl:"bledny"},{en:"important",pl:"wazny"},{en:"fun",pl:"zabawny"}
+  ],
+  rest: [
+    {en:"I",pl:"ja"},{en:"you",pl:"ty / wy"},{en:"he",pl:"on"},{en:"she",pl:"ona"},{en:"it",pl:"ono / to"},{en:"we",pl:"my"},{en:"they",pl:"oni / one"},{en:"me",pl:"mnie / mi"},{en:"him",pl:"jego / mu"},{en:"her",pl:"jej"},{en:"us",pl:"nas / nam"},{en:"them",pl:"ich / im"},{en:"my",pl:"moj"},{en:"your",pl:"twoj / wasz"},{en:"his",pl:"jego"},{en:"its",pl:"jego / jej"},{en:"our",pl:"nasz"},{en:"their",pl:"ich"},
+    {en:"what",pl:"co"},{en:"which",pl:"ktory"},{en:"who",pl:"kto"},{en:"whom",pl:"kogo / komu"},{en:"whose",pl:"czyj"},{en:"where",pl:"gdzie"},{en:"when",pl:"kiedy"},{en:"why",pl:"dlaczego"},{en:"how",pl:"jak"},
+    {en:"in",pl:"w"},{en:"on",pl:"na"},{en:"at",pl:"przy / o"},{en:"to",pl:"do"},{en:"from",pl:"z / od"},{en:"with",pl:"z"},{en:"about",pl:"o"},{en:"for",pl:"dla / za"},{en:"of",pl:"czegos"},{en:"into",pl:"do wnetrza"},{en:"out",pl:"na zewnatrz"},{en:"up",pl:"w gore"},{en:"down",pl:"w dol"},{en:"between",pl:"miedzy"},{en:"among",pl:"wsrod"},{en:"over",pl:"nad"},{en:"under",pl:"pod"},{en:"behind",pl:"za"},{en:"next to",pl:"obok"},{en:"near",pl:"blisko"},
+    {en:"and",pl:"i"},{en:"but",pl:"ale"},{en:"or",pl:"lub"},{en:"because",pl:"poniewaz"},{en:"so",pl:"wiec"},{en:"if",pl:"jesli"},{en:"although",pl:"chociaz"},{en:"while",pl:"podczas gdy"},{en:"then",pl:"potem"},{en:"after",pl:"po"},{en:"before",pl:"przed"},
+    {en:"here",pl:"tutaj"},{en:"there",pl:"tam"},{en:"now",pl:"teraz"},{en:"always",pl:"zawsze"},{en:"usually",pl:"zazwyczaj"},{en:"sometimes",pl:"czasami"},{en:"never",pl:"nigdy"},{en:"also",pl:"takze"},{en:"too",pl:"tez"},{en:"very",pl:"bardzo"},{en:"quite",pl:"calkiem"},{en:"really",pl:"naprawde"},{en:"maybe",pl:"moze"},{en:"well",pl:"dobrze"}
+  ]
 };
 
-const ARENA_CONFIG = { 1:0, 2:1500, 3:4000, 4:8000, 5:15000 };
+let pool = [];
+let current = null;
+let wrong = JSON.parse(localStorage.getItem("wrong") || "[]");
+let sessionCorrect = 0;
+let sessionWrong = 0;
+let initialPoolSize = 0;
 
-const SHOP_ITEMS = [
-    {id:1, n:"Robot", i:"🤖", p:300, t:"av"}, {id:2, n:"Alien", i:"👽", p:600, t:"av"}, {id:3, n:"King", p:1500, i:"👑", t:"av"},
-    {id:4, n:"Ninja", i:"🥷", p:0, t:"av"}, {id:5, n:"Skull", i:"💀", p:1000, t:"av"}, {id:6, n:"Dragon", i:"🐲", p:5000, t:"av"},
-    {id:10, n:"Neon", i:"🟦", p:200, t:"cl", v:"#00f2ff"}, {id:11, n:"Gold", i:"🟨", p:2000, t:"cl", v:"#ffd700"}, {id:12, n:"Lava", i:"🟧", p:800, t:"cl", v:"#ff4500"},
-    {id:23, n:"Rich", i:"💎", p:10000, t:"av"}, {id:24, n:"Ghost", i:"👻", p:450, t:"av"}
-];
+const menu = document.getElementById("menu");
+const learn = document.getElementById("learn");
+const question = document.getElementById("question");
+const answer = document.getElementById("answer");
+const result = document.getElementById("result");
+const wrongCountText = document.getElementById("wrongCount");
+const statCorrectText = document.getElementById("statCorrect");
+const statWrongText = document.getElementById("statWrong");
+const progressText = document.getElementById("progressText");
 
-// --- STATE ---
-let state = JSON.parse(localStorage.getItem('cyber_v4')) || {
-    cups:0, coins:100, av:"🥷", col:"#00f2ff", inv:["🥷", "#00f2ff"]
-};
+wrongCountText.textContent = wrong.length;
 
-let game = { arena:1, pool:[], idx:0, score:0, errs:0, timer:null, time:60 };
+document.getElementById("startBtn").addEventListener("click", start);
+document.getElementById("checkBtn").addEventListener("click", check);
+document.getElementById("backArrow").addEventListener("click", backToMenu);
+document.getElementById("showErrorsBtn").addEventListener("click", () => {
+    const list = document.getElementById("errorsList");
+    list.style.display = list.style.display === 'none' ? 'block' : 'none';
+    list.innerHTML = wrong.length ? wrong.map(w => `<div>${w.en} — ${w.pl}</div>`).join('') : "Brak zapisanych błędów.";
+});
 
-// --- CORE FUNCTIONS ---
-function save() {
-    localStorage.setItem('cyber_v4', JSON.stringify(state));
-    document.getElementById('h-cups').innerText = state.cups;
-    document.getElementById('h-coins').innerText = state.coins;
-    document.getElementById('h-av').innerText = state.av;
-    document.getElementById('h-av').style.borderColor = state.col;
-    renderArenas();
-}
+document.getElementById("clearErrorsBtn").addEventListener("click", () => {
+    if(confirm("Czy na pewno chcesz usunąć wszystkie zapisane błędy?")) {
+        wrong = [];
+        localStorage.setItem("wrong", "[]");
+        wrongCountText.textContent = "0";
+        document.getElementById("errorsList").innerHTML = "Brak zapisanych błędów.";
+    }
+});
 
-function tab(name) {
-    document.querySelectorAll('.app > div:not(.hud):not(.navbar)').forEach(d => d.classList.add('hidden'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('scr-'+name).classList.remove('hidden');
-    if(document.getElementById('n-'+name)) document.getElementById('n-'+name).classList.add('active');
-    if(name === 'shop') renderShop();
-    if(name === 'locker') renderLocker();
-    if(name === 'dict') renderDict();
-}
+answer.addEventListener("keydown", e => { if (e.key === "Enter") check(); });
 
-// --- ENGINE: LEKCJA ---
-function initGame(lvl, lock) {
-    if(lock) { alert("Zdobądź więcej pucharów!"); return; }
+function start() {
+    const mode = document.getElementById("mode").value;
     
-    game.arena = lvl;
-    game.score = 0; game.errs = 0; game.idx = 0; game.time = 60;
-    game.pool = [...DB[lvl]].sort(() => 0.5 - Math.random());
-    
-    document.getElementById('g-score').innerText = "0";
-    document.getElementById('g-timer').innerText = "60s";
-    document.getElementById('correction-bar').innerText = "";
-    
-    tab('game');
-    
-    if(game.timer) clearInterval(game.timer);
-    game.timer = setInterval(() => {
-        game.time--;
-        document.getElementById('g-timer').innerText = game.time + "s";
-        if(game.time <= 0) finishMatch();
-    }, 1000);
-    
-    draw();
-}
-
-function draw() {
-    if(game.idx >= game.pool.length) { finishMatch(); return; }
-    document.getElementById('word-target').innerText = game.pool[game.idx].en;
-    document.getElementById('g-input').value = "";
-    document.getElementById('g-input').focus();
-}
-
-function handleInput() {
-    const input = document.getElementById('g-input').value.toLowerCase().trim();
-    const correct = game.pool[game.idx].pl.toLowerCase().split(' / ').map(t => t.trim());
-    
-    if(correct.includes(input)) {
-        game.score++;
-        document.getElementById('g-score').innerText = game.score;
-        document.getElementById('correction-bar').innerText = "BARDZO DOBRZE!";
-        document.getElementById('correction-bar').style.color = "var(--neon)";
-        game.idx++;
-        setTimeout(draw, 200);
+    if (mode === "wrong") {
+        pool = [...wrong];
+    } else if (mode === "all") {
+        pool = [...data.nouns, ...data.verbs, ...data.adjectives, ...data.rest];
     } else {
-        game.errs++;
-        const msg = game.pool[game.idx].pl.toUpperCase();
-        document.getElementById('correction-bar').innerText = "BŁĄD! POPRAWNIE: " + msg;
-        document.getElementById('correction-bar').style.color = "var(--red)";
+        pool = [...data[mode]];
+    }
+
+    if (pool.length === 0) {
+        alert("Pula słówek jest pusta!");
+        return;
+    }
+
+    initialPoolSize = pool.length;
+    sessionCorrect = 0;
+    sessionWrong = 0;
+    updateStats();
+
+    menu.style.display = "none";
+    learn.style.display = "block";
+    next();
+}
+
+function next() {
+    if (pool.length === 0) {
+        finishGame();
+        return;
+    }
+
+    const index = Math.floor(Math.random() * pool.length);
+    current = pool.splice(index, 1)[0];
+
+    question.textContent = document.getElementById("direction").checked ? current.en : current.pl;
+    answer.value = "";
+    answer.disabled = false;
+    result.textContent = "";
+    result.className = "result";
+    answer.focus();
+}
+
+function normalize(text) {
+    let t = text.toLowerCase().trim();
+    if (document.getElementById("noPolish").checked) {
+        const map = {'ą':'a','ć':'c','ę':'e','ł':'l','ń':'n','ó':'o','ś':'s','ź':'z','ż':'z'};
+        t = t.replace(/[ąćęłńóśźż]/g, m => map[m]);
+        t = t.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+    return t;
+}
+
+function check() {
+    if (!current || answer.disabled) return;
+
+    const userVal = normalize(answer.value);
+    const correctRaw = document.getElementById("direction").checked ? current.pl : current.en;
+    
+    const possibleAnswers = correctRaw.split(/[/,]/).map(a => normalize(a));
+
+    answer.disabled = true;
+
+    if (possibleAnswers.includes(userVal)) {
+        sessionCorrect++;
+        result.textContent = "✅ Dobrze!";
+        result.className = "result good";
+    } else {
+        sessionWrong++;
+        result.textContent = "❌ Błąd! Poprawnie: " + correctRaw;
+        result.className = "result bad";
         
-        // NEURAL: Dodaj na koniec kolejki
-        game.pool.push(game.pool[game.idx]);
-        game.idx++;
-        setTimeout(draw, 1500);
-    }
-}
-
-function finishMatch() {
-    clearInterval(game.timer);
-    let cups = game.score * 10;
-    let coins = game.score * 5;
-    state.cups += cups;
-    state.coins += coins;
-    alert(`FINISH!\nScore: ${game.score}\nRewards: +${cups} 🏆 | +${coins} 💰`);
-    save();
-    tab('home');
-}
-
-// --- ARENAS ---
-function renderArenas() {
-    let h = "";
-    for(let i=1; i<=5; i++) {
-        let lock = state.cups < ARENA_CONFIG[i];
-        h += `
-            <div class="arena-card ${lock?'locked':''}" onclick="initGame(${i}, ${lock})">
-                <div class="arena-title">
-                    <b>ARENA ${i}</b>
-                    <small>${lock ? 'LOCKED: '+(ARENA_CONFIG[i])+' 🏆' : 'READY'}</small>
-                </div>
-                <div>${lock ? '🔒' : '⚔️'}</div>
-            </div>
-        `;
-    }
-    document.getElementById('arenas-list').innerHTML = h;
-}
-
-// --- SHOP & LOCKER ---
-function renderShop() {
-    document.getElementById('shop-box').innerHTML = SHOP_ITEMS.map(i => {
-        let has = state.inv.includes(i.v || i.i);
-        return `
-            <div class="shop-item">
-                <span style="font-size:1.5rem; color:${i.v||'#fff'}">${i.i}</span><br>
-                <small>${i.n}</small><br>
-                ${has ? '✅' : `<div class="price-tag" onclick="buy(${i.id})">${i.p} 💰</div>`}
-            </div>
-        `;
-    }).join('');
-}
-
-function buy(id) {
-    let itm = SHOP_ITEMS.find(x => x.id === id);
-    if(state.coins >= itm.p) {
-        state.coins -= itm.p;
-        state.inv.push(itm.v || itm.i);
-        save(); renderShop();
-    } else alert("Brak CyberCoins!");
-}
-
-function renderLocker() {
-    document.getElementById('locker-box').innerHTML = state.inv.map(v => `
-        <div class="shop-item" onclick="equip('${v}')">
-            <span style="font-size:2rem; color:${v.startsWith('#')?v:'#fff'}">${v.startsWith('#')?'●':v}</span>
-        </div>
-    `).join('');
-}
-
-function equip(v) {
-    if(v.startsWith('#')) state.col = v; else state.av = v;
-    save(); alert("Equipped!");
-}
-
-// --- DICTIONARY ---
-function renderDict() {
-    let q = document.getElementById('dict-search').value.toLowerCase();
-    let h = "";
-    for(let a in DB) {
-        let filtered = DB[a].filter(w => w.en.toLowerCase().includes(q) || w.pl.toLowerCase().includes(q));
-        if(filtered.length > 0) {
-            h += `<b style="color:var(--neon)">ARENA ${a}</b><br>`;
-            filtered.forEach(w => h += `<div style="border-bottom:1px solid #111; padding:5px; font-size:0.8rem">${w.en} = ${w.pl}</div>`);
+        if (!wrong.some(w => w.en === current.en)) {
+            wrong.push(current);
+            localStorage.setItem("wrong", JSON.stringify(wrong));
+            wrongCountText.textContent = wrong.length;
         }
     }
-    document.getElementById('dict-results').innerHTML = h;
+
+    updateStats();
+    setTimeout(next, 1800);
 }
 
-// --- MULTI ---
-function showMulti() { document.getElementById('overlay-multi').classList.remove('hidden'); }
-function hideMulti() { document.getElementById('overlay-multi').classList.add('hidden'); }
-function hostMatch() {
-    let c = Math.floor(1000+Math.random()*9000);
-    document.getElementById('multi-setup').classList.add('hidden');
-    document.getElementById('multi-lobby').classList.remove('hidden');
-    document.getElementById('room-code-display').innerText = c;
+function updateStats() {
+    statCorrectText.textContent = sessionCorrect;
+    statWrongText.textContent = sessionWrong;
+    const completed = sessionCorrect + sessionWrong;
+    progressText.textContent = `${completed} / ${initialPoolSize}`;
+}
+
+function finishGame() {
+    question.textContent = "🎉 Koniec kategorii!";
+    answer.style.display = "none";
+    document.getElementById("checkBtn").style.display = "none";
+    result.innerHTML = `Wynik końcowy: ${sessionCorrect} / ${initialPoolSize}<br>Skuteczność: ${Math.round((sessionCorrect/initialPoolSize)*100)}%`;
+    result.className = "result good";
+    
     setTimeout(() => {
-        document.getElementById('room-status').innerText = "RYWAL DOŁĄCZYŁ!";
-        document.getElementById('btn-start-multi').classList.remove('hidden');
-    }, 2500);
+        backToMenu();
+        answer.style.display = "block";
+        document.getElementById("checkBtn").style.display = "block";
+    }, 4000);
 }
-function joinMatch() { if(document.getElementById('join-code').value.length === 4) beginMulti(); }
-function beginMulti() { hideMulti(); initGame(1, false); }
 
-function resetGame() { if(confirm("Wszystkie postępy zostaną usunięte. Kontynuować?")) { localStorage.clear(); location.reload(); } }
-
-// Enter Key
-document.getElementById('g-input').addEventListener('keypress', e => { if(e.key === 'Enter') handleInput(); });
-
-save();
+function backToMenu() {
+    learn.style.display = "none";
+    menu.style.display = "block";
+}
 </script>
 </body>
 </html>
